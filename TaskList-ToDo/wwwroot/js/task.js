@@ -1,10 +1,13 @@
 ﻿
-    const uri = 'api/TodoItems';
-    const uri1 = 'api/TodoItems/Tasks';
-    const uri2 = 'api/TodoSubItems';
+const uri = 'api/TodoItems';
+const uri1 = 'api/TodoItems/Tasks';
+const uri2 = 'api/TodoSubItems';
+
+$(document).ready(getItems())
 
     //GET ALL
     function getItems(filterOption, filterElement) {
+
 
         $("#output").empty();
 
@@ -369,7 +372,7 @@
     }
 
     //CREATE TASK HTML
-    function displayItems(data) {
+function displayItems(data) {
 
 
         data.forEach(item => {
