@@ -395,7 +395,7 @@ function displayItems(data) {
                                 </svg>
                             </div>
                             <div class="card-header bg-dark" id="taskHeading${item.todoItemID}">
-                                <img id="statusIcon${item.todoItemID}" class="float-left" height="80" width="8" src="lib/statusIcons/${item.taskStatus}.png" />
+                                <img id="statusIcon${item.todoItemID}" class="float-left" height="80" width="8" src="../lib/statusIcons/${item.taskStatus}.png" />
                                 <div class="mb-0 float-left" id="divTaskName${item.todoItemID}">
                                     <h5 onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1" id="taskNameHeader${item.todoItemID}">${item.taskName}</h5>
                                     <div class="input-group mb-3 d-none" id="areaInputNameChange${item.todoItemID}">
@@ -496,7 +496,7 @@ function displayItems(data) {
                     </svg>
                 </div>
                     <div class="card-header bg-dark border-0" id="subHeading${subItem.todoSubItemID}">
-                        <img id="subStatusIcon${subItem.todoSubItemID}" class="float-left" height="40" width="8" src="lib/statusIcons/${subItem.subTaskStatus}.png" />
+                        <img id="subStatusIcon${subItem.todoSubItemID}" class="float-left" height="40" width="8" src="../lib/statusIcons/${subItem.subTaskStatus}.png" />
                         <div class="mb-0 float-left" id="divTaskName${subItem.todoSubItemID}">
                             <p onclick="displayTaskInput('${item.todoItemID}', '${subItem.todoSubItemID}', true)" class="font-weight-light mx-2 mt-1" id="subTaskNameHeader${subItem.todoSubItemID}">${subItem.subTaskName}</p>
                         <div class="input-group mb-3 d-none" id="subAreaInputNameChange${subItem.todoSubItemID}">
