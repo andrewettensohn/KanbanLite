@@ -3,7 +3,12 @@ const uri = 'api/TodoItems';
 const uri1 = 'api/TodoItems/Tasks';
 const uri2 = 'api/TodoSubItems';
 
-$(document).ready(getItems())
+if ($("#taskBoard").length) {
+
+    getItems();
+
+}
+
 
     //GET ALL
     function getItems(filterOption, filterElement) {
@@ -182,20 +187,20 @@ $(document).ready(getItems())
                 if (newStatus == "In-Progress") {
 
                     $(`#statusDropDown${itemId}`).html(newStatus)
-                    $(`#statusIcon${itemId}`).attr("src", `lib/statusIcons/${newStatus}.png`)
+                    $(`#statusIcon${itemId}`).attr("src", `../lib/statusIcons/${newStatus}.png`)
                     $(`#hiddenTaskStatus${itemId}`).text(`${newStatus}`)
 
                 }
 
                 $(`#subStatusDropDown${subItemId}`).html(newStatus)
-                $(`#subStatusIcon${subItemId}`).attr("src", `lib/statusIcons/${newStatus}.png`)
+                $(`#subStatusIcon${subItemId}`).attr("src", `../lib/statusIcons/${newStatus}.png`)
                 $(`#subHiddenTaskStatus${subItemId}`).text(`${newStatus}`)
             }
 
             if (isSubTask == false) {
 
                 $(`#statusDropDown${itemId}`).html(newStatus)
-                $(`#statusIcon${itemId}`).attr("src", `lib/statusIcons/${newStatus}.png`)
+                $(`#statusIcon${itemId}`).attr("src", `../lib/statusIcons/${newStatus}.png`)
                 $(`#hiddenTaskStatus${itemId}`).text(`${newStatus}`)
 
             }

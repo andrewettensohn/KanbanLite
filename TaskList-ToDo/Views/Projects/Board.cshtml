@@ -1,11 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Boards";
 }
 
 <head>
     <meta charset="utf-8" />
-    <title>To Do</title>
-    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">*@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <style>
 
@@ -15,7 +13,7 @@
         }
     </style>
 </head>
-<body class="text-light">
+<body class="text-light" id="taskBoard">
     <div class="container">
         <div class="pt-3">
             <center>
@@ -74,8 +72,5 @@
 
     </div>
 </body>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/task.js" asp-append-version="true"></script>
 
 

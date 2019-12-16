@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TodoApi.Models;
 
 namespace TaskList_ToDo.Data
 {
@@ -12,5 +13,8 @@ namespace TaskList_ToDo.Data
             : base(options)
         {
         }
+
+        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoSubItem> TodoSubItems { get; set; }
     }
 }
