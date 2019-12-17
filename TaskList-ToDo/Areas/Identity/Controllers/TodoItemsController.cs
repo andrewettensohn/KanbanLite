@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TaskList_ToDo.Data;
 using TodoApi.Models;
 
 namespace ToDoApi.Controllers
 {
-    [Route("Projects/api/TodoItems")]
+    [Route("Projects/TodoItems")]
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
-        private readonly TodoContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TodoItemsController(TodoContext context)
+        public TodoItemsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -23,6 +25,8 @@ namespace ToDoApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
+            //var userId = ((ClaimsIdentity)User.Identity).FindFirst("UserId");
+
             return await _context.TodoItems.ToListAsync();
         }
 

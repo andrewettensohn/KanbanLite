@@ -12,6 +12,7 @@ using TaskList_ToDo.Models;
 
 namespace TaskList_ToDo.Controllers
 {
+    [Area("Identity")]
     [Authorize]
     public class ProjectsController : Controller
     {
