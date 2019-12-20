@@ -81,7 +81,7 @@
 
     const uri = 'Projects/api/TodoItems';
     const uri1 = 'Projects/api/TodoItems/Tasks';
-    const uri2 = 'Projects/pi/TodoSubItems';
+    const uri2 = 'Projects/api/TodoSubItems';
     @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
@@ -141,7 +141,7 @@
 
                 $('#loadingAnimationArea').toggleClass('d-none');
 
-                fetch(uri + `/Filter/${filterOption}`)
+                fetch(uri + `/Filter/${userId}/${filterOption}`)
                     .then(response => response.json())
                     .then(data => displayItems(data))
                     .catch(error => console.error('Unable to get items.', error));
@@ -150,7 +150,7 @@
 
                 $('#loadingAnimationArea').toggleClass('d-none');
 
-                fetch(uri1)
+                fetch(uri1 + `/${userId}`)
                     .then(response => response.json())
                     .then(data => displayItems(data))
                     .catch(error => console.error('Unable to get items.', error));
