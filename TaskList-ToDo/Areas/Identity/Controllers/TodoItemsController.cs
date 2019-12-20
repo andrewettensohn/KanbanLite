@@ -13,8 +13,6 @@ using TodoApi.Models;
 
 namespace ToDoApi.Controllers
 {
-    //[AllowAnonymous]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("Projects/api/TodoItems")]
     [ApiController]
     public class TodoItemsController : ControllerBase
@@ -34,7 +32,6 @@ namespace ToDoApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            //var userId = ((ClaimsIdentity)User.Identity).FindFirst("UserId");
           
 
             return await _context.TodoItems.ToListAsync();
@@ -200,15 +197,6 @@ namespace ToDoApi.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
         {
-
-            //var user = await _userManager.GetUserAsync(HttpContext.User);
-
-            //var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            //var userName = User.Identity.Name;
-
-            //todoItem.UserId = userName;
-
 
             if (todoItem.TaskName == "" || todoItem.TaskName is null)
             {

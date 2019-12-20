@@ -40,23 +40,11 @@ namespace TaskList_ToDo
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddControllers(config =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                                    .RequireAuthenticatedUser()
-                                    .Build();
-                                    config.Filters.Add(new AuthorizeFilter(policy));
-            });
+            services.AddControllers();
             services.AddAuthentication();
             services.AddAuthorization();
-            //services.AddAuthentication("ACE_AUTH")
-            //    .AddCookie("ACE_AUTH", options => {
-            //        options.AccessDeniedPath = "/api/Auth/Forbidden";
-            //        options.LoginPath = "/";
-            //        options.Cookie.Expiration = new TimeSpan(7, 0, 0, 0);
-            //    });
             services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
 
             services.AddCors();
 
@@ -93,20 +81,6 @@ namespace TaskList_ToDo
                    name: "default",
                    template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-            //    endpoints.MapRazorPages();
-
-            //    endpoints.MapControllerRoute(
-            //        name: "Identity",
-            //        pattern: "{area: exists}/{controller=Projects}/{action=Board}/{id?}");
-            //    endpoints.MapRazorPages();
-            //});
 
         }
     }

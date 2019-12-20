@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
 @inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Boards";
@@ -80,8 +81,9 @@
 
     const uri = 'Projects/api/TodoItems';
     const uri1 = 'Projects/api/TodoItems/Tasks';
-    const uri2 = 'api/TodoSubItems';
-    const userName = "@User.Identity.Name";
+    const uri2 = 'Projects/pi/TodoSubItems';
+    @*const userName = '@User.Identity.Name';*@
+    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
     if ($("#taskBoard").length) {
 
@@ -164,7 +166,7 @@
             const item = {
                 taskStatus: "Not Started",
                 taskName: addNameTextbox.value.trim(),
-                userId: userName
+                userId: userId
             };
 
             fetch(uri, {
@@ -190,7 +192,7 @@
             const item = {
 
                 todoItemID: parseInt(itemId, 10),
-                userId: userName,
+                userId: userId,
                 subTaskStatus: "Not Started",
                 subTaskName: ""
             };
@@ -224,14 +226,14 @@
 
                 var item = {
                     todoItemID: parseInt(itemId, 10),
-                    userId: userName,
+                    userId: userId,
                     taskName: parentTaskName,
                     taskStatus: parentTaskStatus,
                     todoSubItems: [
                         {
                             todoSubItemID: parseInt(subItemId, 10),
                             todoItemID: parseInt(itemId, 10),
-                            userId: userName,
+                            userId: userId,
                             subTaskName: itemTaskName,
                             subTaskStatus: newStatus,
                             subTaskDescription: subTaskDescription
@@ -246,7 +248,7 @@
 
                 var item = {
                     todoItemID: parseInt(itemId, 10),
-                    userId: userName,
+                    userId: userId,
                     taskName: itemTaskName,
                     taskStatus: newStatus
                 };
@@ -315,7 +317,7 @@
                 var item = {
                     todoSubItemID: parseInt(subItemId, 10),
                     todoItemID: parseInt(itemId, 10),
-                    userId: userName,
+                    userId: userId,
                     subTaskStatus: taskStatus,
                     subTaskName: newTaskName,
                     subTaskDescription: subTaskDescription
@@ -338,7 +340,7 @@
 
                 var item = {
                     todoItemID: parseInt(itemId, 10),
-                    userId: userName,
+                    userId: userId,
                     taskStatus: taskStatus,
                     taskName: newTaskName
                 };
@@ -427,7 +429,7 @@
 
                 todoSubItemID: parseInt(subItemId, 10),
                 todoItemID: parseInt(itemId, 10),
-                userId: userName,
+                userId: userId,
                 subTaskStatus: subTaskStatus,
                 subTaskName: subTaskName,
                 subTaskDescription: subTaskDescription
@@ -462,9 +464,6 @@
 
         //CREATE TASK HTML
         function displayItems(data) {
-
-            console.log(data)
-
 
             data.forEach(item => {
 
