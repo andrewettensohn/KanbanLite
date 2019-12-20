@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TaskList_ToDo.Migrations
 {
-    public partial class First : Migration
+    public partial class ToDo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,21 @@ namespace TaskList_ToDo.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TodoItems",
+                columns: table => new
+                {
+                    TodoItemID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: true),
+                    TaskName = table.Column<string>(nullable: true),
+                    TaskStatus = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TodoItems", x => x.TodoItemID);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,27 +168,6 @@ namespace TaskList_ToDo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TodoItems",
-                columns: table => new
-                {
-                    TodoItemID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(nullable: true),
-                    TaskName = table.Column<string>(nullable: true),
-                    TaskStatus = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TodoItems", x => x.TodoItemID);
-                    table.ForeignKey(
-                        name: "FK_TodoItems_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TodoSubItems",
                 columns: table => new
                 {
@@ -235,11 +229,6 @@ namespace TaskList_ToDo.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TodoItems_UserId",
-                table: "TodoItems",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TodoSubItems_TodoItemID",
                 table: "TodoSubItems",
                 column: "TodoItemID");
@@ -269,10 +258,10 @@ namespace TaskList_ToDo.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "TodoItems");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "TodoItems");
         }
     }
 }

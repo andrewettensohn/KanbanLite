@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskList_ToDo.Data;
@@ -10,15 +13,21 @@ using TodoApi.Models;
 
 namespace ToDoApi.Controllers
 {
-    [Route("Projects/TodoItems")]
+    //[AllowAnonymous]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("Projects/api/TodoItems")]
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
+
         private readonly ApplicationDbContext _context;
 
-        public TodoItemsController(ApplicationDbContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public TodoItemsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/TodoItems
@@ -26,11 +35,12 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
             //var userId = ((ClaimsIdentity)User.Identity).FindFirst("UserId");
+          
 
             return await _context.TodoItems.ToListAsync();
         }
 
-        // GET: api/TodoItems/5
+        // GET: Projects/TodoItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
         {
@@ -45,7 +55,7 @@ namespace ToDoApi.Controllers
             return todoItem;
         }
 
-        // GET: api/TodoItems/Tasks
+        // GET: Projects/TodoItems/Tasks
         [HttpGet("Tasks")]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems()
         {
@@ -69,7 +79,7 @@ namespace ToDoApi.Controllers
 
         }
 
-        // GET: api/TodoItems/Filter/Not Started
+        // GET: Projects/TodoItems/Filter/Not Started
         [HttpGet("Filter/{filterStatus}")]
         public async Task<ActionResult<List<TodoItem>>> GetTodoItemsInProgress(string filterStatus)
         {
@@ -92,7 +102,7 @@ namespace ToDoApi.Controllers
         }
 
 
-        // GET: api/TodoItems/1/2
+        // GET: Projects/TodoItems/1/2
         [HttpGet("{todoItemID}/{todoSubItemID}")]
         public async Task<ActionResult<TodoItem>> GetTodoItemAndSubItem(int todoItemID, int todoSubItemID)
         {
@@ -108,7 +118,7 @@ namespace ToDoApi.Controllers
             return todoItem;
         }
 
-        // PUT: api/TodoItems/1/2
+        // PUT: Projects/TodoItems/1/2
         [HttpPut("{todoItemID}/{todoSubItemID}")]
         public async Task<IActionResult> PutTodoItemAndSubItem(int todoItemID, int todoSubItemID, TodoItem todoItem)
         {
@@ -151,7 +161,7 @@ namespace ToDoApi.Controllers
             return NoContent();
         }
 
-        // PUT: api/TodoItems/5
+        // PUT: Projects/TodoItems/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
         {
@@ -186,11 +196,21 @@ namespace ToDoApi.Controllers
             return NoContent();
         }
 
-        // POST: api/TodoItems
+        // POST: Projects/TodoItems
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
         {
-            if(todoItem.TaskName == "" || todoItem.TaskName is null)
+
+            //var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            //var user = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            //var userName = User.Identity.Name;
+
+            //todoItem.UserId = userName;
+
+
+            if (todoItem.TaskName == "" || todoItem.TaskName is null)
             {
                 todoItem.TaskName = "Untitled";
             }
@@ -201,7 +221,7 @@ namespace ToDoApi.Controllers
             return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.TodoItemID }, todoItem);
         }
 
-        // DELETE: api/TodoItems/5
+        // DELETE: Projects/TodoItems/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<TodoItem>> DeleteTodoItem(int id)
         {

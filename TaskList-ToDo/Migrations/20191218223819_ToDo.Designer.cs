@@ -10,8 +10,8 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191217021053_First")]
-    partial class First
+    [Migration("20191218223819_ToDo")]
+    partial class ToDo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -235,11 +235,9 @@ namespace TaskList_ToDo.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TodoItemID");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("TodoItems");
                 });
@@ -319,13 +317,6 @@ namespace TaskList_ToDo.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TodoApi.Models.TodoItem", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("TodoApi.Models.TodoSubItem", b =>

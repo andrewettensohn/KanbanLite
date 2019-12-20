@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TaskList_ToDo.Models;
@@ -20,6 +21,7 @@ namespace TaskList_ToDo.Controllers
 
         public IActionResult Board()
         {
+
             return View();
         }
 

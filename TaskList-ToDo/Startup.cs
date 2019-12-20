@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using TodoApi.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace TaskList_ToDo
 {
@@ -45,12 +47,23 @@ namespace TaskList_ToDo
                                     .Build();
                                     config.Filters.Add(new AuthorizeFilter(policy));
             });
+            services.AddAuthentication();
+            services.AddAuthorization();
+            //services.AddAuthentication("ACE_AUTH")
+            //    .AddCookie("ACE_AUTH", options => {
+            //        options.AccessDeniedPath = "/api/Auth/Forbidden";
+            //        options.LoginPath = "/";
+            //        options.Cookie.Expiration = new TimeSpan(7, 0, 0, 0);
+            //    });
             services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddCors();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -67,10 +80,8 @@ namespace TaskList_ToDo
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseMvc();
-
-            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
