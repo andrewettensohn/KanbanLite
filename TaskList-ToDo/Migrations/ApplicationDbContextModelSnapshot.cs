@@ -259,6 +259,9 @@ namespace TaskList_ToDo.Migrations
                     b.Property<int>("TodoItemID")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("TodoSubItemID");
 
                     b.HasIndex("TodoItemID");

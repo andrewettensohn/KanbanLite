@@ -10,7 +10,7 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191218223819_ToDo")]
+    [Migration("20191220032024_ToDo")]
     partial class ToDo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -260,6 +260,9 @@ namespace TaskList_ToDo.Migrations
 
                     b.Property<int>("TodoItemID")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TodoSubItemID");
 

@@ -12,6 +12,8 @@ namespace TodoApi.Models
         public int TodoSubItemID { get; set; }
         public int TodoItemID { get; set; }
 
+        public string UserId { get; set; }
+
         public string SubTaskName { get; set; }
 
         public string SubTaskStatus { get; set; }

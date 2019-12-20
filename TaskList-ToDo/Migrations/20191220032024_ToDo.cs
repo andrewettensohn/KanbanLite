@@ -174,6 +174,7 @@ namespace TaskList_ToDo.Migrations
                     TodoSubItemID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TodoItemID = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
                     SubTaskName = table.Column<string>(nullable: true),
                     SubTaskStatus = table.Column<string>(nullable: true),
                     SubTaskDescription = table.Column<string>(nullable: true)
