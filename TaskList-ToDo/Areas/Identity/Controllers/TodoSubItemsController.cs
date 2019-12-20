@@ -5,17 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TaskList_ToDo.Data;
 using TodoApi.Models;
 
 namespace ToDoApi.Controllers
 {
-    [Route("api/TodoSubItems")]
+    [Route("Projects/api/TodoSubItems")]
     [ApiController]
     public class TodoSubItemsController : ControllerBase
     {
-        private readonly TodoContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TodoSubItemsController(TodoContext context)
+        public TodoSubItemsController(ApplicationDbContext context)
         {
             _context = context;
         }

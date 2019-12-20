@@ -2,31 +2,28 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TaskList_ToDo.Models;
 
+// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace TaskList_ToDo.Controllers
 {
-    [AllowAnonymous]
-    public class HomeController : Controller
+    [Area("Identity")]
+    [Authorize]
+    public class ProjectsController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<ProjectsController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public IActionResult Board()
         {
-            _logger = logger;
-        }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
             return View();
         }
 
