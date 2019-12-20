@@ -28,14 +28,14 @@ namespace ToDoApi.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/TodoItems
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
-        {
+        //// GET: api/TodoItems
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
+        //{
           
 
-            return await _context.TodoItems.ToListAsync();
-        }
+        //    return await _context.TodoItems.ToListAsync();
+        //}
 
         // GET: Projects/TodoItems/5
         [HttpGet("{id}")]
@@ -53,26 +53,36 @@ namespace ToDoApi.Controllers
         }
 
         // GET: Projects/TodoItems/Tasks
-        [HttpGet("Tasks")]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems()
+        [HttpGet("Tasks/{userId}")]
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(string userId)
         {
-            var todoItems = new List<TodoItem>();
+            var todoItemList = new List<TodoItem>();
 
-            while(todoItems.Count() <=  0)
+            while (todoItemList.Count() <=  0)
             {
 
-                todoItems = await _context.TodoItems.ToListAsync();
+                todoItemList = await _context.TodoItems.ToListAsync();
 
                 await _context.TodoSubItems.ToListAsync();
 
-                if(todoItems.Count() <= 0)
+                if(todoItemList.Count() <= 0)
                 {
                     System.Threading.Thread.Sleep(10000); 
                 }
-
             }
 
-            return todoItems;
+            var queryUserToDoItems = from TodoItem todoItem in todoItemList
+                                     where todoItem.UserId == userId
+                                     select todoItem;
+
+            var userTodoItems = new List<TodoItem>();
+
+            foreach (TodoItem t in queryUserToDoItems)
+            {
+                userTodoItems.Add(t);
+            }
+
+            return userTodoItems;
 
         }
 
