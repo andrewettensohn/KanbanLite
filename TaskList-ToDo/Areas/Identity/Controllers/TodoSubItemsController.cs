@@ -57,10 +57,10 @@ namespace ToDoApi.Controllers
                 todoSubItem.SubTaskName = "Untitled";
             }
 
-            //if (todoSubItem.SubTaskDescription == "" || todoSubItem.SubTaskDescription is null)
-            //{
-            //    todoSubItem.SubTaskDescription = "No Description";
-            //}
+            if (todoSubItem.SubTaskDescription is null)
+            {
+                todoSubItem.SubTaskDescription = "";
+            }
 
             _context.Entry(todoSubItem).State = EntityState.Modified;
 
