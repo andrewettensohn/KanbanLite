@@ -17,6 +17,8 @@
 </head>
 <body class="text-light" id="taskBoard">
     <div class="container">
+
+        <!-- Filter Button -->
         <div class="pt-3">
             <center>
                 <button class="btn mr-2" type="button" id="btnFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -58,11 +60,13 @@
                 </div>
                 <br />
 
+                <!--Loading Animation-->
                 <div id="loadingAnimationArea" class="d-none">
                     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
+
                 <!--Tasks Output-->
                 <div id="output">
 
@@ -80,12 +84,6 @@
     const uri2 = 'Projects/api/TodoSubItems';
     @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
-
-    //if ($("#taskBoard").length) {
-
-    //    setTimeout(getItems(), 3000);
-
-    //}
 
     $(window).load(getItems());
 
