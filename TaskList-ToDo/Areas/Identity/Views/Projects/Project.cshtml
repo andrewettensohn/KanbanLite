@@ -2,31 +2,33 @@
     ViewData["Title"] = "Projects";
 }
 <body>
-    <center>
-        <div class="mb-3">
-            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                Add project
-            </button>
-        </div>
-        <div class="collapse" id="collapseExample">
-            <div class="card card-body bg-dark border-secondary">
-                <div>
-                    <select class="custom-select mb-3" id="inputGroupSelect04">
-                        <option selected>Compact Kanban</option>
-                        <option value="1">Extended Kanban</option>
-                    </select>
-                    <select class="custom-select mb-3" id="inputGroupSelect04">
-                        <option selected>Quick Project</option>
-                        <option value="1">Scrum Project</option>
-                    </select>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="New Project Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <container>
+        <center>
+            <div class="mb-3">
+                <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseExample">
+                    + Create New Project
+                </button>
+            </div>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body bg-dark border-secondary">
+                    <div>
+                        <select class="custom-select-sm mb-3 col-sm-3" id="inputGroupSelect04">
+                            <option selected>Compact Kanban</option>
+                            <option value="1">Extended Kanban</option>
+                        </select>
+                        <select class="custom-select-sm mb-3 col-sm-3" id="inputGroupSelect04">
+                            <option selected>Quick Project</option>
+                            <option value="1">Scrum Project</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3 col-md-8">
+                        <input type="text" class="form-control" placeholder="New Project Name">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary text-white" type="button">Add Project</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </center>
+        </center>
+    </container>
 </body>
