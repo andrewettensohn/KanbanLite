@@ -546,6 +546,8 @@
             newDiv.innerHTML = taskHTML;
             document.getElementById("output").appendChild(newDiv);
 
+            console.log($(`#taskCollapse${item.todoItemID} > div`).length)
+
             if (item.todoSubItems != null) {
 
                 displaySubItems(item);
@@ -636,8 +638,6 @@
             var newDiv = document.createElement('div');
             newDiv.innerHTML = subTaskHTML;
             document.getElementById(`taskCollapse${item.todoItemID}`).appendChild(newDiv);
-
-            console.log(subItem.subTaskDescription)
 
             if (subItem.subTaskDescription != "") {
 
