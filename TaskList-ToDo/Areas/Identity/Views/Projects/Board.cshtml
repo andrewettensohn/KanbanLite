@@ -85,7 +85,7 @@
     @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
-    $(window).load(getItems());
+    $(document).ready(getItems())
 
     //GET ALL
     function getItems(filterOption, filterElement) {
@@ -152,6 +152,7 @@
                 .catch(error => console.error('Unable to get items.', error));
 
         }
+
     }
 
     //POST TASK
@@ -190,7 +191,8 @@
             todoItemID: parseInt(itemId, 10),
             userId: userId,
             subTaskStatus: "Not Started",
-            subTaskName: ""
+            subTaskName: "",
+            subTaskDescription: "",
         };
 
         fetch(uri2, {
@@ -213,9 +215,17 @@
 
             var uriType = uri + `/${itemId}`;
             var idToSend = subItemId;
-
             var subTaskDescription = $(`#subAreaTaskDescription${subItemId}`).val();
-            subTaskDescription = subTaskDescription.toString();
+
+            if (typeof subTaskDescription !== "undefined") {
+
+                subTaskDescription = subTaskDescription.toString();
+
+            } else {
+
+                subTaskDescription = "";
+
+            }
 
             var parentTaskName = $(`#taskNameHeader${itemId}`).text();
             var parentTaskStatus = $(`#hiddenTaskStatus${itemId}`).text();
@@ -299,7 +309,16 @@
             if (newTaskName == "") { newTaskName = "Untitled" }
 
             var subTaskDescription = $(`#subAreaTaskDescription${subItemId}`).val();
-            subTaskDescription = subTaskDescription.toString();
+
+            if (typeof subTaskDescription !== "undefined") {
+
+                subTaskDescription = subTaskDescription.toString();
+
+            } else {
+
+                subTaskDescription = "";
+
+            }
 
             var taskStatus = $(`#subHiddenTaskStatus${subItemId}`).text();
 
@@ -407,7 +426,6 @@
     function addSubTaskDescription(itemId, subItemId) {
 
         changeSubTaskDescription(itemId, subItemId, true);
-        $(`#i-chevron-bottom-sub${subItemId}`).removeClass('d-none');
         toggleCollapse(subItemId, true);
 
     }
@@ -448,10 +466,9 @@
             body: JSON.stringify(item)
         })
             .then(response => response.json())
-            .then(data => displaySubItems.createSubTaskDescriptionHTML(data))
+            .then(data => createSubTaskDescriptionHTML(data))
+            .then(() => toggleCollapse(subItemId, true))
             .catch(error => console.error('Unable to delete item.', error));
-
-
 
     }
 
@@ -509,9 +526,9 @@
                                         ${item.taskStatus}
                                     </a>
                                     <div class="dropdown-menu ml-3 mt-1" aria-labelledby="statusDropDown${item.todoItemID}">
-                                        <a class="dropdown-item" onclick="taskStatusChange('Not Started', '${item.todoItemID}', 'N/A', '${item.taskName}', false)" href="#">Not Started</a>
-                                        <a class="dropdown-item" onclick="taskStatusChange('In-Progress', '${item.todoItemID}', 'N/A', '${item.taskName}', false)" href="#">In-Progress</a>
-                                        <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', 'N/A', '${item.taskName}', false)" href="#">Completed</a>
+                                        <a class="dropdown-item" onclick="taskStatusChange('Not Started', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">Not Started</a>
+                                        <a class="dropdown-item" onclick="taskStatusChange('In-Progress', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">In-Progress</a>
+                                        <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">Completed</a>
                                     </div>
                                 </div>
                                 <div>
@@ -544,8 +561,6 @@
 
         if ('todoSubItems' in item) {
 
-            var caretHide = "d-none";
-
             item.todoSubItems.forEach(subItem => {
 
                 if (subItem.subTaskDescription != null) {
@@ -557,8 +572,6 @@
             });
 
         } else {
-
-            var caretHide = "d-none";
 
             $(`#i-chevron-bottom${item.todoItemID}`).removeClass('d-none');
 
@@ -576,7 +589,6 @@
 
         function createSubTaskHTML(subItem) {
 
-
             var subTaskHTML = `
 
             <div id="subAccordion${subItem.todoSubItemID}">
@@ -585,7 +597,7 @@
                         <svg class="float-left my-1" onclick="addSubTaskDescription('${item.todoItemID}', '${subItem.todoSubItemID}')" touchstart="addSubTaskDescription('${item.todoItemID}', '${subItem.todoSubItemID}')" id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="15" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                             <path d="M16 2 L16 30 M2 16 L30 16" />
                         </svg>
-                        <svg class="${caretHide} align-middle mr-2" onclick="toggleCollapse('${subItem.todoSubItemID}', true)" touchstart="toggleCollapse('${subItem.todoSubItemID}', true)" id="i-chevron-bottom-sub${subItem.todoSubItemID}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="15" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <svg class="d-none align-middle mr-2" onclick="toggleCollapse('${subItem.todoSubItemID}', true)" touchstart="toggleCollapse('${subItem.todoSubItemID}', true)" id="i-chevron-bottom-sub${subItem.todoSubItemID}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="15" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                             <path d="M30 10 L16 26 2 10 Z" />
                         </svg>
                         <svg class="float-right my-1" id="btnDeleteTask${subItem.todoSubItemID}" onclick="deleteTask(${item.todoItemID}, ${subItem.todoSubItemID}, true)" touchstart="deleteTask(${item.todoItemID}, ${subItem.todoSubItemID}, true)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="15" height="15" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -610,9 +622,9 @@
                                 ${subItem.subTaskStatus}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="statusDropDown${subItem.todoSubItemID}">
-                                <a class="dropdown-item" onclick="taskStatusChange('Not Started', '${item.todoItemID}', '${subItem.todoSubItemID}', '${subItem.subTaskName}', true)" href="#">Not Started</a>
-                                <a class="dropdown-item" onclick="taskStatusChange('In-Progress', '${item.todoItemID}', '${subItem.todoSubItemID}', '${subItem.subTaskName}', true)" href="#">In-Progress</a>
-                                <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', '${subItem.todoSubItemID}', '${subItem.subTaskName}', true)" href="#">Completed</a>
+                                <a class="dropdown-item" onclick="taskStatusChange('Not Started', '${item.todoItemID}', '${subItem.todoSubItemID}', '${subItem.subTaskName}', true)">Not Started</a>
+                                <a class="dropdown-item" onclick="taskStatusChange('In-Progress', '${item.todoItemID}', '${subItem.todoSubItemID}', '${subItem.subTaskName}', true)">In-Progress</a>
+                                <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', '${subItem.todoSubItemID}', '${subItem.subTaskName}', true)">Completed</a>
                             </div>
                         </div>
                     </div>
@@ -625,33 +637,37 @@
             newDiv.innerHTML = subTaskHTML;
             document.getElementById(`taskCollapse${item.todoItemID}`).appendChild(newDiv);
 
-            if (subItem.subTaskDescription != null) {
+            console.log(subItem.subTaskDescription)
+
+            if (subItem.subTaskDescription != "") {
 
                 createSubTaskDescriptionHTML(subItem);
 
             }
         }
+    }
 
-        function createSubTaskDescriptionHTML(subItem) {
+    function createSubTaskDescriptionHTML(subItem) {
 
-            var subTaskDescriptionHTML =
+        $(`#i-chevron-bottom-sub${subItem.todoSubItemID}`).removeClass('d-none')
 
-                `
-            <div id="subCollapse${subItem.todoSubItemID}" class="collapse bg-dark" data-parent="#subAccordion${subItem.todoSubItemID}">
-                <div class="form-group">
-                    <p class="form-control bg-dark text-white border-0 font-weight-bold text-left">Details:</p>
-                    <hr />
-                    <textarea id="subAreaTaskDescription${subItem.todoSubItemID}" class="bg-dark text-white form-control border-0" onfocusout="changeSubTaskDescription('${item.todoItemID}','${subItem.todoSubItemID}', false)">${subItem.subTaskDescription}</textarea>
-                </div class=form-group>
-            </div >
+        var subTaskDescriptionHTML =
 
-            `;
+            `
+        <div id="subCollapse${subItem.todoSubItemID}" class="collapse bg-dark" data-parent="#subAccordion${subItem.todoSubItemID}">
+            <div class="form-group">
+                <p class="form-control bg-dark text-white border-0 font-weight-bold text-left">Details:</p>
+                <hr />
+                <textarea id="subAreaTaskDescription${subItem.todoSubItemID}" class="bg-dark text-white form-control border-0" onfocusout="changeSubTaskDescription('${subItem.todoItemID}','${subItem.todoSubItemID}', false)">${subItem.subTaskDescription}</textarea>
+            </div class=form-group>
+        </div >
 
-            var newDiv = document.createElement('div');
-            newDiv.innerHTML = subTaskDescriptionHTML;
-            document.getElementById(`subTaskCard${subItem.todoSubItemID}`).appendChild(newDiv);
+        `;
 
-        }
+        var newDiv = document.createElement('div');
+        newDiv.innerHTML = subTaskDescriptionHTML;
+        document.getElementById(`subTaskCard${subItem.todoSubItemID}`).appendChild(newDiv);
+
     }
 
 </script>
