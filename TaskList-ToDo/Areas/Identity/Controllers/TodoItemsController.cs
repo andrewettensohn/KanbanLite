@@ -28,15 +28,6 @@ namespace ToDoApi.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/TodoItems
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
-        {
-
-
-            return await _context.TodoItems.ToListAsync();
-        }
-
         // GET: Projects/TodoItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
