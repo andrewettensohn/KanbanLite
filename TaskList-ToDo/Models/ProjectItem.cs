@@ -7,7 +7,7 @@ namespace TaskList_ToDo.Models
 {
     public class ProjectItem
     {
-        public int ProjectID { get; set; }
+        public int ProjectItemID { get; set; }
 
         public string UserId { get; set; }
         public string ProjectName { get; set; }
