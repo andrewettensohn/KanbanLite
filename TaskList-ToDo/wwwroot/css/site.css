@@ -46,9 +46,17 @@ html {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
+.border-dark {
+    border-color: #605e5c !important;
+}
+
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
+}
+
+textarea {
+    height: 200px !important;
 }
 
 /* Sticky footer styles
@@ -59,9 +67,12 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    background: #2c3136 !important;
+    color: white !important;
+    overflow-y: scroll !important;
 }
+
+
 .footer {
   position: absolute;
   bottom: 0;

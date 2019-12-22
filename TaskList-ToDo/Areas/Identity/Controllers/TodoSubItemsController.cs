@@ -42,9 +42,9 @@ namespace ToDoApi.Controllers
             return todoSubItem;
         }
 
-        // PUT api/<controller>/5
+        // PUT Projects/api/TodoSubItems/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoSubItem(int id, TodoSubItem todoSubItem)
+        public async Task<ActionResult<TodoSubItem>> PutTodoSubItem(int id, TodoSubItem todoSubItem)
         {
 
             if(id != todoSubItem.TodoSubItemID)
@@ -57,10 +57,10 @@ namespace ToDoApi.Controllers
                 todoSubItem.SubTaskName = "Untitled";
             }
 
-            if (todoSubItem.SubTaskDescription == "" || todoSubItem.SubTaskDescription is null)
-            {
-                todoSubItem.SubTaskDescription = "No Description";
-            }
+            //if (todoSubItem.SubTaskDescription == "" || todoSubItem.SubTaskDescription is null)
+            //{
+            //    todoSubItem.SubTaskDescription = "No Description";
+            //}
 
             _context.Entry(todoSubItem).State = EntityState.Modified;
 
@@ -80,7 +80,7 @@ namespace ToDoApi.Controllers
                 }
             }
 
-            return NoContent();
+            return todoSubItem;
         }
 
         // POST api/<controller>
@@ -93,10 +93,10 @@ namespace ToDoApi.Controllers
                 todoSubItem.SubTaskName = "Untitled";
             }
 
-            if (todoSubItem.SubTaskDescription == "" || todoSubItem.SubTaskDescription is null)
-            {
-                todoSubItem.SubTaskDescription = "No Description";
-            }
+            //if (todoSubItem.SubTaskDescription == "" || todoSubItem.SubTaskDescription is null)
+            //{
+            //    todoSubItem.SubTaskDescription = "No Description";
+            //}
 
                 _context.TodoSubItems.Add(todoSubItem);
             await _context.SaveChangesAsync();
