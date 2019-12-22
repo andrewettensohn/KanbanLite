@@ -13,6 +13,8 @@ namespace TodoApi.Models
 
         public string UserId { get; set; }
 
+        public int ProjectID { get; set; }
+
         public string TaskName { get; set; }
 
         public string TaskStatus { get; set; }
