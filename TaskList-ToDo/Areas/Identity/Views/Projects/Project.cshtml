@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject UserManager<IdentityUser> UserManager
+@{
     ViewData["Title"] = "Projects";
 }
 <body>
@@ -11,16 +14,6 @@
             </div>
             <div class="collapse" id="collapseExample">
                 <div class="card card-body bg-dark border-secondary">
-                    <div>
-                        <select class="custom-select-sm mb-3 col-sm-3" id="inputGroupSelect04">
-                            <option selected>Compact Kanban</option>
-                            <option value="1">Extended Kanban</option>
-                        </select>
-                        <select class="custom-select-sm mb-3 col-sm-3" id="inputGroupSelect04">
-                            <option selected>Quick Project</option>
-                            <option value="1">Scrum Project</option>
-                        </select>
-                    </div>
                     <div class="input-group mb-3 col-md-8">
                         <input type="text" class="form-control" placeholder="New Project Name">
                         <div class="input-group-append">
@@ -29,6 +22,26 @@
                     </div>
                 </div>
             </div>
+
+            <div id="output">
+
+            </div>
+
         </center>
     </container>
 </body>
+<script type="text/javascript">
+    const uri = "Projects/api/ProjectItems";
+    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+
+    //function getItems() {
+
+    //    fetch(uri + `/${userId}`)
+    //            .then(response => response.json())
+    //            .then(data => displayItems(data))
+    //            .catch(error => console.error('Unable to get items.', error));
+
+    //}
+    
+
+</script>

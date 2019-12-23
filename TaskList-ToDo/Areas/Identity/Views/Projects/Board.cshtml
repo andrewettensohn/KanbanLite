@@ -21,7 +21,7 @@
         <!-- Filter Button -->
         <div class="pt-3">
             <center>
-                <button class="btn mr-2" type="button" id="btnFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn mr-2" type="button" id="btnFilter" data-toggle="dropdown">
                     <svg id="i-filter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                         <path d="M2 5 C2 5 6 3 16 3 26 3 30 5 30 5 L19 18 19 27 13 30 13 18 2 5Z" />
                     </svg>
@@ -48,7 +48,7 @@
                     <div class="col">
                         <div class="collapse multi-collapse" id="multiCollapseCreateNewTask">
                             <div class="card card-body bg-dark border-secondary">
-                                <form action="javascript:void(0);" method="POST" onsubmit="addItem()" class="input-group mb-3">
+                                <form action="javascript:void(0);" method="POST" onsubmit="addItem()" class="input-group mb-3 col-md-8">
                                     <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="New Task Name" id="add-name">
                                     <div class="input-group-append">
                                         <button type="submit" value="Add" class="btn btn-outline-secondary text-white">Add Task</button>
