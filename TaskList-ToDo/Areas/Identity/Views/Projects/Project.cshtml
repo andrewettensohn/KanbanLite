@@ -14,16 +14,18 @@
             </div>
             <div class="collapse" id="collapseExample">
                 <div class="card card-body bg-dark border-secondary">
-                    <div class="input-group mb-3 col-md-8">
-                        <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                    <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                        <div class="input-group mb-3 col-md-8">
                             <input id="add-name" type="text" maxlength="25" autocomplete="off" class="form-control" placeholder="New Project Name">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary text-white" type="submit" value="add">Add Project</button>
+                                <button class="btn btn-outline-secondary text-white form-control" type="submit" value="add">Add Project</button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+
+            <br />
 
             <div id="output">
 
@@ -44,6 +46,8 @@
 
     function getItems() {
 
+        $("#output").empty();
+
         fetch(`api/ProjectItems/ProjectList/${userId}`)
                 .then(response => response.json())
                 .then(data => displayItems(data))
@@ -58,11 +62,11 @@
         const item = {
 
             userId: userId,
-            projectName: projectName
+            projectName: projectName.value.trim()
 
         };
 
-        fetch(uri, {
+        fetch("api/ProjectItems", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -74,7 +78,7 @@
             .then(() => getItems())
             .then(() => $("#add-name").focus())
             .then(() => {
-                addNameTextbox.value = '';
+                projectName.value = '';
             })
             .catch(error => console.error('Unable to add item.', error));
     }
@@ -101,7 +105,7 @@
                     </div>
                     <div id="projectItemHeading${item.projectItemID}" class="card-header bg-dark">
                         <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
-                            <h4 id="projectItemHeader${item.projectItemID}" onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1">${item.projectName}</h4>
+                            <h4 id="projectItemHeader${item.projectItemID}" onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1"><u>${item.projectName}</u></h4>
                             <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
                                 <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="taskNameChange('${item.todoItemID}', 'N/A', false)" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
@@ -135,6 +139,7 @@
                     </div>
                 </div>
             </div>
+            <br />
 
         `;
 
