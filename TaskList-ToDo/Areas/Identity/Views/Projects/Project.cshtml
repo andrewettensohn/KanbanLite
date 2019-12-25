@@ -37,7 +37,7 @@
 </body>
 <script type="text/javascript">
 
-    const uri = "Projects/api/ProjectItems";
+    const uri = "api/ProjectItems";
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
     $(document).ready(getItems())
@@ -82,7 +82,7 @@
     //DISPLAY COLLAPSABLE
     function toggleCollapse(itemId) {
 
-            $(`#subCollapse${itemId}`).collapse('toggle');
+            $(`#projectItemCollapse${itemId}`).collapse('toggle');
 
     }
 
@@ -99,9 +99,9 @@
                             <path d="M30 10 L16 26 2 10 Z" />
                         </svg>
                     </div>
-                    <div id="taskHeading${item.projectItemID}" class="card-header bg-dark">
-                        <div id="divTaskName${item.projectItemID}" class="mb-0 float-left">
-                            <h5 id="taskNameHeader${item.projectItemID}" onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1">${item.projectName}</h5>
+                    <div id="projectItemHeading${item.projectItemID}" class="card-header bg-dark">
+                        <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
+                            <h4 id="projectItemHeader${item.projectItemID}" onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1">${item.projectName}</h4>
                             <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
                                 <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="taskNameChange('${item.todoItemID}', 'N/A', false)" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
@@ -109,7 +109,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="taskCollapse${item.projectItemID}" class="collapse" item-parent="#taskAccordion">
+                    <div id="projectItemCollapse${item.projectItemID}" class="collapse" item-parent="#projectItemAccordion$">
                         <div class="p-2">
                             <textarea class="form-control bg-dark border-0 text-white">Description</textarea>
                             <hr />
