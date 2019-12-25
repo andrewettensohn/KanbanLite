@@ -10,6 +10,7 @@ namespace TaskList_ToDo.Models
         public int ProjectItemID { get; set; }
 
         public string UserId { get; set; }
+
         public string ProjectName { get; set; }
 
         public string ProjectDescription { get; set; }

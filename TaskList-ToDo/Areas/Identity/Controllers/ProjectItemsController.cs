@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using TaskList_ToDo.Data;
 using TaskList_ToDo.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace TaskList_ToDo.Areas.Identity.Controllers
+namespace ToDoApi.Controllers
 {
-    [Route("Projects/api/ProjectItems")]
+    [Area("Identity")]
+    [Route("Identity/Projects/api/ProjectItems")]
+    [ApiController]
     public class ProjectItemsController : ControllerBase
     {
 
@@ -23,8 +23,8 @@ namespace TaskList_ToDo.Areas.Identity.Controllers
         }
 
 
-        // GET: Projects/api/ProjectItems/UserId
-        [HttpGet("{userId}")]
+        // GET: Projects/api/ProjectItems/ProjectList/UserId
+        [HttpGet("ProjectList/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectItem>>> GetProjectItems(string userId)
         {
             var projectItemList = await _context.ProjectItems.ToListAsync();

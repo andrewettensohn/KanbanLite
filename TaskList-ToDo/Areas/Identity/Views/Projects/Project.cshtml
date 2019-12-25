@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Projects";
 }
-<body>
+<body class="text-white">
     <container>
         <center>
             <div class="mb-3">
@@ -15,10 +15,12 @@
             <div class="collapse" id="collapseExample">
                 <div class="card card-body bg-dark border-secondary">
                     <div class="input-group mb-3 col-md-8">
-                        <input type="text" class="form-control" placeholder="New Project Name">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary text-white" type="button">Add Project</button>
-                        </div>
+                        <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                            <input id="add-name" type="text" maxlength="25" autocomplete="off" class="form-control" placeholder="New Project Name">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary text-white" type="submit" value="add">Add Project</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -27,21 +29,120 @@
 
             </div>
 
+
+           
+
         </center>
     </container>
 </body>
 <script type="text/javascript">
+
     const uri = "Projects/api/ProjectItems";
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
-    //function getItems() {
+    $(document).ready(getItems())
 
-    //    fetch(uri + `/${userId}`)
-    //            .then(response => response.json())
-    //            .then(data => displayItems(data))
-    //            .catch(error => console.error('Unable to get items.', error));
+    function getItems() {
 
-    //}
-    
+        fetch(`api/ProjectItems/ProjectList/${userId}`)
+                .then(response => response.json())
+                .then(data => displayItems(data))
+                .catch(error => console.error('Unable to get items.', error));
+
+    }
+
+    function addItem() {
+
+        const projectName = document.getElementById('add-name');
+
+        const item = {
+
+            userId: userId,
+            projectName: projectName
+
+        };
+
+        fetch(uri, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(response => response.json())
+            .then(() => getItems())
+            .then(() => $("#add-name").focus())
+            .then(() => {
+                addNameTextbox.value = '';
+            })
+            .catch(error => console.error('Unable to add item.', error));
+    }
+
+    //DISPLAY COLLAPSABLE
+    function toggleCollapse(itemId) {
+
+            $(`#subCollapse${itemId}`).collapse('toggle');
+
+    }
+
+
+    function displayItems(data) {
+
+        data.forEach(item => {
+
+            var projectItemHTML = `
+            <div id="projectItemAccordion${item.projectItemID}">
+                <div id="projectItemCard${item.projectItemID}" class="card bg-dark border-secondary rounded-0">
+                    <div>
+                        <svg id="i-chevron-bottom${item.projectItemID}" class="align-middle mr-4" onclick="toggleCollapse('${item.projectItemID}')" touchstart="toggleCollapse('${item.projectItemID}', false)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <path d="M30 10 L16 26 2 10 Z" />
+                        </svg>
+                    </div>
+                    <div id="taskHeading${item.projectItemID}" class="card-header bg-dark">
+                        <div id="divTaskName${item.projectItemID}" class="mb-0 float-left">
+                            <h5 id="taskNameHeader${item.projectItemID}" onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1">${item.projectName}</h5>
+                            <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
+                                <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="taskNameChange('${item.todoItemID}', 'N/A', false)" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="taskCollapse${item.projectItemID}" class="collapse" item-parent="#taskAccordion">
+                        <div class="p-2">
+                            <textarea class="form-control bg-dark border-0 text-white">Description</textarea>
+                            <hr />
+                            <button class="btn" type="button">
+                                <svg id="i-clipboard" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M12 2 L12 6 20 6 20 2 12 2 Z M11 4 L6 4 6 30 26 30 26 4 21 4" />
+                                    <p class="text-white">Task Board</p>
+                                </svg>
+                            </button>
+                            <button class="btn" type="button">
+                                <svg id="i-book" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M16 7 C16 7 9 1 2 6 L2 28 C9 23 16 28 16 28 16 28 23 23 30 28 L30 6 C23 1 16 7 16 7 Z M16 7 L16 28" />
+                                    <p class="text-white">Project Stories</p>
+                                </svg>
+                            </button>
+                            <button class="btn" type="button">
+                                <svg id="i-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M2 20 L12 28 30 4" />
+                                    <p class="text-white">Finish Project</p>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        `;
+
+            var newDiv = document.createElement('div');
+            newDiv.innerHTML = projectItemHTML;
+            document.getElementById("output").appendChild(newDiv);
+        });
+
+    }
 
 </script>
