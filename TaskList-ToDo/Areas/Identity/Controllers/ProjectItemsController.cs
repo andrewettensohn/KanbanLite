@@ -57,15 +57,31 @@ namespace ToDoApi.Controllers
             return projectItem;
         }
 
-
         //POST Projects/api/ProjectItems
-       [HttpPost]
+        [HttpPost]
         public async Task<ActionResult<ProjectItem>> PostProjectItem(ProjectItem projectItem)
         {
             _context.ProjectItems.Add(projectItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetProjectItem), new { id = projectItem.ProjectItemID }, projectItem);
+        }
+
+        // DELETE: Projects/api/ProjectItems/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ProjectItem>> DeleteProjectItem(int id)
+        {
+            var projectItem = await _context.ProjectItems.FindAsync(id);
+
+            if (projectItem == null)
+            {
+                return NotFound();
+            }
+
+            _context.ProjectItems.Remove(projectItem);
+            await _context.SaveChangesAsync();
+
+            return projectItem;
         }
 
     }
