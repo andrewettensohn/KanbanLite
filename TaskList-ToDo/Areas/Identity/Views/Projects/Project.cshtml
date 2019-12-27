@@ -37,6 +37,7 @@
         </center>
     </container>
 </body>
+
 <script type="text/javascript">
 
     const uri = "api/ProjectItems";
@@ -55,6 +56,7 @@
 
     }
 
+    //POST PROJECT
     function addItem() {
 
         const projectName = document.getElementById('add-name');
@@ -83,8 +85,36 @@
             .catch(error => console.error('Unable to add item.', error));
     }
 
+    function changeProjectDescription(itemId) {
 
-    //DELETE TASK
+        var projectName = $(`#projectItemHeader${itemId}`).text();
+
+        var projectDescription = $(`#projectDescription${itemId}`).val().toString();
+
+        const item = {
+
+        projectItemID: parseInt(itemId, 10),
+        userId: userId,
+        projectName: projectName,
+        projectDescription: projectDescription,
+        projectIsActive: false
+
+        };
+
+        fetch(uri + `/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .catch(error => console.error('Unable to delete item.', error));
+
+    }
+
+
+    //DELETE PROJECT
     function deleteItem(itemId) {
 
        
@@ -96,14 +126,60 @@
 
     }
 
-    //DISPLAY COLLAPSABLE
+    //DISPLAY COLLAPSE
     function toggleCollapse(itemId) {
 
             $(`#projectItemCollapse${itemId}`).collapse('toggle');
 
     }
 
+         //DISPLAY TASK INPUT
+    function displayProjectNameInput(itemId) {
 
+        $(`#projectItemHeader${itemId}`).addClass('d-none');
+        var oldProjectName = $(`#projectItemHeader${itemId}`).text();
+        $(`#inputNameChange${itemId}`).val(oldProjectName);
+        $(`#areaInputNameChange${itemId}`).toggleClass('d-none');
+        $(`#inputNameChange${itemId}`).focus();
+
+    }
+
+    //PUT NAME CHANGE
+    function projectNameChange(itemId) {
+
+        var newProjectName = $(`#inputNameChange${itemId}`).val().toString();
+        if (newProjectName == "") { newProjectName = "Untitled" }
+
+        var projectNameElement = `projectItemHeader${itemId}`;
+        var inputAreaElement = `areaInputNameChange${itemId}`;
+
+        var projectDescription = $(`#projectDescription${itemId}`).val().toString();
+
+        var item = {
+
+                projectItemID: parseInt(itemId, 10),
+                userId: userId,
+                projectName: newProjectName,
+                projectDescription: projectDescription,
+                projectIsActive: false
+            };
+
+        fetch(uri + `/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(() => $(`#${projectNameElement}`).text(newProjectName))
+            .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
+            .then(() => $(`#${projectNameElement}`).toggleClass('d-none'))
+            .catch(error => console.error('Unable to delete item.', error));
+    }
+
+
+    //CREATE PROJECT HTML
     function displayItems(data) {
 
         data.forEach(item => {
@@ -118,17 +194,17 @@
                     </div>
                     <div id="projectItemHeading${item.projectItemID}" class="card-header bg-dark">
                         <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
-                            <h4 id="projectItemHeader${item.projectItemID}" onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1"><u>${item.projectName}</u></h4>
+                            <h5 id="projectItemHeader${item.projectItemID}" onclick="displayProjectNameInput('${item.projectItemID}')" class="mx-2 mt-1">${item.projectName}</h5>
                             <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
-                                <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="taskNameChange('${item.todoItemID}', 'N/A', false)" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
+                                <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="projectNameChange('${item.projectItemID}')" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="projectItemCollapse${item.projectItemID}" class="collapse" item-parent="#projectItemAccordion$">
+                    <div id="projectItemCollapse${item.projectItemID}" onfocusout="changeProjectDescription(${item.projectItemID})" class="collapse" item-parent="#projectItemAccordion$">
                         <div class="p-2">
-                            <textarea class="form-control bg-dark border-0 text-white">Description</textarea>
+                            <textarea id="projectDescription${item.projectItemID}" class="form-control bg-dark border-0 text-white">${item.projectDescription}</textarea>
                             <hr />
                             <button class="btn" type="button">
                                 <svg id="i-clipboard" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -162,5 +238,6 @@
         });
 
     }
+
 
 </script>

@@ -57,10 +57,42 @@ namespace ToDoApi.Controllers
             return projectItem;
         }
 
+        // PUT: Projects/api/ProjectItems/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProjectItem(int id, ProjectItem projectItem)
+        {
+            if (id != projectItem.ProjectItemID)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(projectItem).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         //POST Projects/api/ProjectItems
         [HttpPost]
         public async Task<ActionResult<ProjectItem>> PostProjectItem(ProjectItem projectItem)
         {
+            projectItem.ProjectDescription = "Enter a project description here...";
+
             _context.ProjectItems.Add(projectItem);
             await _context.SaveChangesAsync();
 
@@ -82,6 +114,11 @@ namespace ToDoApi.Controllers
             await _context.SaveChangesAsync();
 
             return projectItem;
+        }
+
+        private bool ProjectItemExists(int id)
+        {
+            return _context.ProjectItems.Any(e => e.ProjectItemID == id);
         }
 
     }
