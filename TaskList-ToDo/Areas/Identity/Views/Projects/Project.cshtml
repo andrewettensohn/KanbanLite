@@ -200,7 +200,7 @@
 
         console.log(item)
 
-        fetch(uri + `/SetActiveProject/${itemId}`, {
+        fetch(uri + `/SetActiveProject/${userId}/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

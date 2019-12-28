@@ -88,16 +88,25 @@ namespace ToDoApi.Controllers
             return NoContent();
         }
 
-        // PUT: Projects/api/ProjectItems/SetActiveProject/5
-        [HttpPut("SetActiveProject/{id}")]
-        public async Task<IActionResult> setActiveProject(int id, ProjectItem projectItem)
+        // PUT: Projects/api/ProjectItems/SetActiveProject/userId/5
+        [HttpPut("SetActiveProject/{userId}/{id}")]
+        public async Task<IActionResult> setActiveProject(string userId, int id, ProjectItem activeProjectItem)
         {
-            if (id != projectItem.ProjectItemID)
+            if (id != activeProjectItem.ProjectItemID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(projectItem).Property(a => a.ProjectIsActive).IsModified = true;
+            var projectsList = await _context.ProjectItems.Where(p => p.ProjectIsActive == true).ToListAsync();
+
+            foreach (var item in projectsList)
+            {
+                item.ProjectIsActive = false;
+            }
+
+            await _context.SaveChangesAsync();
+
+            _context.Entry(activeProjectItem).State = EntityState.Modified;
 
             try
             {
@@ -114,7 +123,7 @@ namespace ToDoApi.Controllers
                     throw;
                 }
             }
-     
+
             return NoContent();
         }
 
