@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TaskList_ToDo.Migrations
 {
-    public partial class ToDo : Migration
+    public partial class todo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,7 +55,7 @@ namespace TaskList_ToDo.Migrations
                     UserId = table.Column<string>(nullable: true),
                     ProjectName = table.Column<string>(nullable: true),
                     ProjectDescription = table.Column<string>(nullable: true),
-                    ProjectIsActive = table.Column<bool>(nullable: false)
+                    ProjectIsActive = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {

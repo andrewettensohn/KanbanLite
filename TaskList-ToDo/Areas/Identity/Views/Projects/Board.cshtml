@@ -13,44 +13,80 @@
         body {
             font-family: Helvetica;
         }
+
     </style>
 </head>
 <body class="text-light" id="taskBoard">
     <div class="container">
 
-        <!-- Filter Button -->
+        <!-- Options -->
         <div class="pt-3">
             <center>
-                <button class="btn mr-2 border-secondary" type="button" id="btnFilter" data-toggle="dropdown">
-                    <svg class="float-left" id="i-filter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                        <path d="M2 5 C2 5 6 3 16 3 26 3 30 5 30 5 L19 18 19 27 13 30 13 18 2 5Z" />
-                    </svg>
-                    <p class="float-right pl-1 text-white">Filter</p>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" id="filterNotStarted" onclick="getItems('Not Started', 'filterNotStarted')">Not Started</a>
-                    <a class="dropdown-item" href="#" id="filterInProgress" onclick="getItems('In-Progress', 'filterInProgress')">In-Progress</a>
-                    <a class="dropdown-item" href="#" id="filterCompleted" onclick="getItems('Completed', 'filterCompleted')">Completed</a>
+                <div class="d-flex justify-content-center">
+                    <div class="dropdown">
+                        <button class="btn border-secondary" type="button" id="btnFilter" data-toggle="dropdown">
+                            <svg class="float-left" id="i-filter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M2 5 C2 5 6 3 16 3 26 3 30 5 30 5 L19 18 19 27 13 30 13 18 2 5Z" />
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" id="filterNotStarted" onclick="getItems('Not Started', 'filterNotStarted')">Not Started</a>
+                            <a class="dropdown-item" href="#" id="filterInProgress" onclick="getItems('In-Progress', 'filterInProgress')">In-Progress</a>
+                            <a class="dropdown-item" href="#" id="filterCompleted" onclick="getItems('Completed', 'filterCompleted')">Completed</a>
+                        </div>
+                    </div>
+                    <button class="btn border-secondary text-white" data-toggle="collapse"
+                            href="#multiCollapseCreateNewTask" role="button"
+                            aria-expanded="false">
+                        + Create New Task
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn border-secondary" type="button" id="btnSelectProject" data-toggle="dropdown">
+                            <svg id="i-options" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M28 6 L4 6 M28 16 L4 16 M28 26 L4 26 M24 3 L24 9 M8 13 L8 19 M20 23 L20 29" />
+                            </svg>
+                        </button>
+                        <form>
+                            <div id="dropdownChooseProject" class="dropdown-menu">
+                                @*<hr />
+                                <button class="btn border-dark ml-2" data-toggle="collapse" href="#collapseSearchProjects" role="button">Search Projects</button>*@
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <button class="btn btn-success" data-toggle="collapse"
-                        href="#multiCollapseCreateNewTask" role="button"
-                        aria-expanded="false" aria-controls="multiCollapseCreateNewTask">
-                    + Create New Task
-                </button>
             </center>
         </div>
+
+        @*Hidden Active Project*@
+        <p id="hiddenActiveProjectID" class="d-none"></p>
 
         <div>
             <br />
             <center>
 
-                <!-- Inside Collapsable | Create New Task Collapsable -->
+                <!-- Inside Collapse | Create New Task -->
                 <div class="row">
                     <div class="col">
                         <div class="collapse multi-collapse" id="multiCollapseCreateNewTask">
                             <div class="card card-body bg-dark border-secondary">
                                 <form action="javascript:void(0);" method="POST" onsubmit="addItem()" class="input-group mb-3 col-md-8">
                                     <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="New Task Name" id="add-name">
+                                    <div class="input-group-append">
+                                        <button type="submit" value="Add" class="btn btn-outline-secondary text-white">Add Task</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inside Collapse | Create New Project -->
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="collapseSearchProjects">
+                            <div class="card card-body bg-dark border-secondary">
+                                <form action="javascript:void(0);" method="POST" onsubmit="addItem()" class="input-group mb-3 col-md-8">
+                                    <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="Search for a Project" id="inputSearchProjects">
                                     <div class="input-group-append">
                                         <button type="submit" value="Add" class="btn btn-outline-secondary text-white">Add Task</button>
                                     </div>
@@ -69,9 +105,7 @@
                 </div>
 
                 <!--Tasks Output-->
-                <div id="output">
-
-                </div>
+                <div id="output"></div>
 
             </center>
         </div>
@@ -83,14 +117,52 @@
     const uri = 'api/TodoItems';
     const uri1 = 'api/TodoItems/Tasks';
     const uri2 = 'api/TodoSubItems';
+    const uriProject = 'api/ProjectItems/ProjectList';
     @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
-    $(document).ready(getItems())
+    $(document).ready(chooseProjectDropdownOptions());
+
+    function chooseProjectDropdownOptions() {
+
+        fetch(uriProject + `/${userId}`)
+            .then(response => response.json())
+            .then(data => displayProjectDropdownOptions(data))
+            .catch(error => console.error('Unable to get items.', error));
+
+        function displayProjectDropdownOptions(data) {
+
+            data.forEach(projectItem => {
+
+                if (projectItem.projectIsActive) {
+
+                    $(`#hiddenActiveProjectID`).text(projectItem.projectItemID);
+
+                }
+
+                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getItems('undefined', 'undefined', ${projectItem.projectItemID})">${projectItem.projectName}</a>`
+                    
+
+                var newDiv = document.createElement('div');
+                newDiv.innerHTML = projectOptionHTML;
+                document.getElementById("dropdownChooseProject").appendChild(newDiv);
+
+
+            });
+
+            getItems();
+
+        }
+
+    }
+
 
     //GET ALL
     function getItems(filterOption, filterElement) {
 
+        var projectID = $(`#hiddenActiveProjectID`).text();    
+
+        console.log(projectID)
 
         $("#output").empty();
 
@@ -147,7 +219,7 @@
 
             $('#loadingAnimationArea').toggleClass('d-none');
 
-            fetch(uri1 + `/${userId}`)
+            fetch(uri1 + `/${userId}/${projectID}`)
                 .then(response => response.json())
                 .then(data => displayItems(data))
                 .catch(error => console.error('Unable to get items.', error));
@@ -160,11 +232,13 @@
     function addItem() {
 
         const addNameTextbox = document.getElementById('add-name');
+        var projectID = $(`#hiddenActiveProjectID`).text();   
 
         const item = {
             taskStatus: "Not Started",
             taskName: addNameTextbox.value.trim(),
-            userId: userId
+            userId: userId,
+            projectID: parseInt(projectID, 10)
         };
 
         fetch(uri, {
@@ -176,6 +250,7 @@
             body: JSON.stringify(item)
         })
             .then(response => response.json())
+            .then((data) => console.log(data))
             .then(() => getItems())
             .then(() => $("#add-name").focus())
             .then(() => {
@@ -230,9 +305,11 @@
 
             var parentTaskName = $(`#taskNameHeader${itemId}`).text();
             var parentTaskStatus = $(`#hiddenTaskStatus${itemId}`).text();
+            var projectID = $(`#hiddenActiveProjectID`).text();   
 
             var item = {
                 todoItemID: parseInt(itemId, 10),
+                projectID: parseInt(projectID, 10),
                 userId: userId,
                 taskName: parentTaskName,
                 taskStatus: parentTaskStatus,
@@ -252,12 +329,14 @@
 
             var uriType = uri;
             var idToSend = itemId;
+            var projectID = $(`#hiddenActiveProjectID`).text();   
 
             var item = {
                 todoItemID: parseInt(itemId, 10),
                 userId: userId,
                 taskName: itemTaskName,
-                taskStatus: newStatus
+                taskStatus: newStatus,
+                projectID: parseInt(projectID, 10)
             };
 
         }
@@ -347,6 +426,7 @@
             if (newTaskName == "") { newTaskName = "Untitled" }
 
             var taskStatus = $(`#hiddenTaskStatus${itemId}`).text();
+            var projectID = $(`#hiddenActiveProjectID`).text();   
 
             var taskNameElement = `taskNameHeader${itemId}`;
             var inputAreaElement = `areaInputNameChange${itemId}`;
@@ -358,7 +438,8 @@
                 todoItemID: parseInt(itemId, 10),
                 userId: userId,
                 taskStatus: taskStatus,
-                taskName: newTaskName
+                taskName: newTaskName,
+                projectID: parseInt(projectID, 10)
             };
 
         }
@@ -546,8 +627,6 @@
             var newDiv = document.createElement('div');
             newDiv.innerHTML = taskHTML;
             document.getElementById("output").appendChild(newDiv);
-
-            console.log($(`#taskCollapse${item.todoItemID} > div`).length)
 
             if (item.todoSubItems != null) {
 

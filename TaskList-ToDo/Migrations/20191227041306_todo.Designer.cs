@@ -10,8 +10,8 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191222184255_ToDo")]
-    partial class ToDo
+    [Migration("20191227041306_todo")]
+    partial class todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -231,7 +231,7 @@ namespace TaskList_ToDo.Migrations
                     b.Property<string>("ProjectDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("ProjectIsActive")
+                    b.Property<bool?>("ProjectIsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("ProjectName")

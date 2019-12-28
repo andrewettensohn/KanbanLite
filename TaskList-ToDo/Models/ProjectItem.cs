@@ -15,7 +15,7 @@ namespace TaskList_ToDo.Models
 
         public string ProjectDescription { get; set; }
 
-        public bool ProjectIsActive { get; set; }
+        public bool? ProjectIsActive { get; set; }
 
         //public string ProjectTemplate { get; set; }
 

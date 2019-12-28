@@ -85,11 +85,13 @@
             .catch(error => console.error('Unable to add item.', error));
     }
 
+    //PUT PROJECT DESCRIPTION
     function changeProjectDescription(itemId) {
 
         var projectName = $(`#projectItemHeader${itemId}`).text();
 
         var projectDescription = $(`#projectDescription${itemId}`).val().toString();
+        var projectActivationState = $(`#hiddenProjectStatus`).text();
 
         const item = {
 
@@ -97,7 +99,7 @@
         userId: userId,
         projectName: projectName,
         projectDescription: projectDescription,
-        projectIsActive: false
+        projectIsActive: projectActivationState
 
         };
 
@@ -133,7 +135,7 @@
 
     }
 
-         //DISPLAY TASK INPUT
+    //DISPLAY TASK INPUT
     function displayProjectNameInput(itemId) {
 
         $(`#projectItemHeader${itemId}`).addClass('d-none');
@@ -154,6 +156,7 @@
         var inputAreaElement = `areaInputNameChange${itemId}`;
 
         var projectDescription = $(`#projectDescription${itemId}`).val().toString();
+        var projectActivationState = $(`#hiddenProjectStatus`).text();
 
         var item = {
 
@@ -161,7 +164,7 @@
                 userId: userId,
                 projectName: newProjectName,
                 projectDescription: projectDescription,
-                projectIsActive: false
+                projectIsActive: projectActivationState
             };
 
         fetch(uri + `/${itemId}`, {
@@ -176,6 +179,38 @@
             .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
             .then(() => $(`#${projectNameElement}`).toggleClass('d-none'))
             .catch(error => console.error('Unable to delete item.', error));
+    }
+
+    //PUT ACTIVE PROJECT STATUS
+    function setActiveProject(itemId) {
+
+        var projectName = $(`#projectItemHeader${itemId}`).text();
+
+        var projectDescription = $(`#projectDescription${itemId}`).text();
+
+        const item = {
+
+            projectItemID: parseInt(itemId, 10),
+            userId: userId,
+            projectName: projectName,
+            projectIsActive: true,
+            projectDescription: projectDescription
+
+        };
+
+        console.log(item)
+
+        fetch(uri + `/SetActiveProject/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .catch(error => console.error('Unable to delete item.', error));
+
+
     }
 
 
@@ -202,11 +237,11 @@
                             </div>
                         </div>
                     </div>
-                    <div id="projectItemCollapse${item.projectItemID}" onfocusout="changeProjectDescription(${item.projectItemID})" class="collapse" item-parent="#projectItemAccordion$">
+                    <div id="projectItemCollapse${item.projectItemID}" class="collapse" item-parent="#projectItemAccordion$">
                         <div class="p-2">
-                            <textarea id="projectDescription${item.projectItemID}" class="form-control bg-dark border-0 text-white">${item.projectDescription}</textarea>
+                            <textarea id="projectDescription${item.projectItemID}" onfocusout="changeProjectDescription(${item.projectItemID})" class="form-control bg-dark border-0 text-white">${item.projectDescription}</textarea>
                             <hr />
-                            <button class="btn" type="button">
+                            <button class="btn" type="button" onclick="setActiveProject(${item.projectItemID})">
                                 <svg id="i-clipboard" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M12 2 L12 6 20 6 20 2 12 2 Z M11 4 L6 4 6 30 26 30 26 4 21 4" />
                                     <p class="text-white">Task Board</p>
@@ -229,6 +264,8 @@
                 </div>
             </div>
             <br />
+            
+            <div id="hiddenProjectStatus${item.projectItemID}" class="d-none">${item.projectIsActive}</div>
 
         `;
 

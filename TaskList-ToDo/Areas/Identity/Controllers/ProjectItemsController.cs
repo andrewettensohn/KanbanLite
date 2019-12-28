@@ -82,8 +82,39 @@ namespace ToDoApi.Controllers
                 {
                     throw;
                 }
+
             }
 
+            return NoContent();
+        }
+
+        // PUT: Projects/api/ProjectItems/SetActiveProject/5
+        [HttpPut("SetActiveProject/{id}")]
+        public async Task<IActionResult> setActiveProject(int id, ProjectItem projectItem)
+        {
+            if (id != projectItem.ProjectItemID)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(projectItem).Property(a => a.ProjectIsActive).IsModified = true;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+     
             return NoContent();
         }
 

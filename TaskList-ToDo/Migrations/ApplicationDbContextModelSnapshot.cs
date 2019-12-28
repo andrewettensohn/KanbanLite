@@ -229,7 +229,7 @@ namespace TaskList_ToDo.Migrations
                     b.Property<string>("ProjectDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("ProjectIsActive")
+                    b.Property<bool?>("ProjectIsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("ProjectName")

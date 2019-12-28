@@ -44,9 +44,9 @@ namespace ToDoApi.Controllers
             return todoItem;
         }
 
-        // GET: Projects/TodoItems/Tasks/userId
-        [HttpGet("Tasks/{userId}")]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(string userId)
+        // GET: Projects/TodoItems/Tasks/userId/7
+        [HttpGet("Tasks/{userId}/{projectID}")]
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(string userId, int projectID)
         {
             var todoItemList = new List<TodoItem>();
 
@@ -64,7 +64,7 @@ namespace ToDoApi.Controllers
             }
 
             var queryUserToDoItems = from TodoItem todoItem in todoItemList
-                                     where todoItem.UserId == userId
+                                     where todoItem.UserId == userId && todoItem.ProjectID == projectID
                                      select todoItem;
 
             var userTodoItems = new List<TodoItem>();
