@@ -141,12 +141,10 @@
                 }
 
                 var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getItems('undefined', 'undefined', ${projectItem.projectItemID})">${projectItem.projectName}</a>`
-                    
 
                 var newDiv = document.createElement('div');
                 newDiv.innerHTML = projectOptionHTML;
                 document.getElementById("dropdownChooseProject").appendChild(newDiv);
-
 
             });
 

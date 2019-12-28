@@ -97,7 +97,7 @@ namespace ToDoApi.Controllers
                 return BadRequest();
             }
 
-            var projectsList = await _context.ProjectItems.Where(p => p.ProjectIsActive == true).ToListAsync();
+            var projectsList = await _context.ProjectItems.Where(p => p.ProjectIsActive == true && p.UserId == userId).ToListAsync();
 
             foreach (var item in projectsList)
             {
