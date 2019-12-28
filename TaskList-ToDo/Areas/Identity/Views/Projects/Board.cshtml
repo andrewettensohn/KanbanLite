@@ -42,8 +42,8 @@
                     </button>
                     <div class="dropdown">
                         <button class="btn border-secondary" type="button" id="btnSelectProject" data-toggle="dropdown">
-                            <svg id="i-options" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                                <path d="M28 6 L4 6 M28 16 L4 16 M28 26 L4 26 M24 3 L24 9 M8 13 L8 19 M20 23 L20 29" />
+                            <svg id="i-folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M2 26 L30 26 30 7 14 7 10 4 2 4 Z M30 12 L2 12" />
                             </svg>
                         </button>
                         <form>
@@ -123,7 +123,12 @@
 
     $(document).ready(chooseProjectDropdownOptions());
 
-    function chooseProjectDropdownOptions() {
+    //GET AND DISPLAY Project Options
+    function chooseProjectDropdownOptions(newActiveProjectID) {
+
+        var projectChange = false;
+
+        $(`#dropdownChooseProject`).empty();
 
         fetch(uriProject + `/${userId}`)
             .then(response => response.json())
@@ -131,6 +136,34 @@
             .catch(error => console.error('Unable to get items.', error));
 
         function displayProjectDropdownOptions(data) {
+
+            if (newActiveProjectID != null) {
+
+                 data.forEach(projectItem => {
+
+                    if (newActiveProjectID == projectItem.projectItemID) {
+
+                        projectItem.projectIsActive = true;
+                        projectChange = true;
+
+                        fetch(`api/ProjectItems/SetActiveProject/${userId}/${newActiveProjectID}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(projectItem)
+                        })
+                            .catch(error => console.error('Unable to delete item.', error));
+
+                    } else {
+
+                        projectItem.projectIsActive = false;
+                    }
+
+                });
+
+            }
 
             data.forEach(projectItem => {
 
@@ -140,7 +173,7 @@
 
                 }
 
-                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getItems('undefined', 'undefined', ${projectItem.projectItemID})">${projectItem.projectName}</a>`
+                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getItems(null, null, ${projectItem.projectItemID})">${projectItem.projectName}</a>`
 
                 var newDiv = document.createElement('div');
                 newDiv.innerHTML = projectOptionHTML;
@@ -148,7 +181,11 @@
 
             });
 
-            getItems();
+            if (!projectChange) {
+
+                getItems();
+
+            }
 
         }
 
@@ -156,15 +193,25 @@
 
 
     //GET ALL
-    function getItems(filterOption, filterElement) {
+    function getItems(filterOption, filterElement, newProjectID) {
 
-        var projectID = $(`#hiddenActiveProjectID`).text();    
+        if (typeof newProjectID !== "undefined") {
+
+            var projectID = newProjectID;
+            chooseProjectDropdownOptions(newProjectID);
+
+        } else {
+
+            var projectID = $(`#hiddenActiveProjectID`).text(); 
+
+        }
+  
 
         console.log(projectID)
 
         $("#output").empty();
 
-        if (typeof filterOption !== "undefined") {
+        if (typeof filterOption !== "undefined" && filterOption != null) {
 
             if ($(`#${filterElement}`).hasClass('active')) {
 
