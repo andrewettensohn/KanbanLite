@@ -139,9 +139,9 @@ namespace ToDoApi.Controllers
             return CreatedAtAction(nameof(GetProjectItem), new { id = projectItem.ProjectItemID }, projectItem);
         }
 
-        // DELETE: Projects/api/ProjectItems/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ProjectItem>> DeleteProjectItem(int id)
+        // DELETE: Projects/api/ProjectItems/userId/5
+        [HttpDelete("{userId}/{id}")]
+        public async Task<ActionResult<ProjectItem>> DeleteProjectItem(int id, string userId)
         {
             var projectItem = await _context.ProjectItems.FindAsync(id);
 
@@ -151,6 +151,21 @@ namespace ToDoApi.Controllers
             }
 
             _context.ProjectItems.Remove(projectItem);
+
+            var todoItemList = await _context.TodoItems.Where(p => p.ProjectID == id && p.UserId == userId).ToListAsync();
+
+            foreach (var todoItem in todoItemList)
+            {
+                _context.TodoItems.Remove(todoItem);
+
+                var todoSubItemList = await _context.TodoSubItems.Where(p => p.TodoItemID == todoItem.TodoItemID && p.UserId == userId).ToListAsync();
+
+                foreach (var todoSubItem in todoSubItemList)
+                {
+                    _context.TodoSubItems.Remove(todoSubItem);
+                }
+            }
+
             await _context.SaveChangesAsync();
 
             return projectItem;

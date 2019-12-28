@@ -120,7 +120,7 @@
     function deleteItem(itemId) {
 
        
-            fetch(uri + `/${itemId}`, {
+            fetch(uri + `/${userId}/${itemId}`, {
                 method: 'DELETE'
             })
                 .then(() => $(`#projectItemAccordion${itemId}`).remove())
