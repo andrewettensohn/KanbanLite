@@ -42,6 +42,7 @@
 
     const uri = "api/ProjectItems";
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+    const boardUrl = "@Url.Content("~/Identity/Projects/Board")";
 
     $(document).ready(getItems())
 
@@ -208,8 +209,8 @@
             },
             body: JSON.stringify(item)
         })
+            .then(() => window.location.href = boardUrl)
             .catch(error => console.error('Unable to delete item.', error));
-
 
     }
 
