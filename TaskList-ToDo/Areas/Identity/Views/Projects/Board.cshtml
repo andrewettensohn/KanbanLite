@@ -35,7 +35,7 @@
                             <a class="dropdown-item" href="#" id="filterCompleted" onclick="getItems('Completed', 'filterCompleted')">Completed</a>
                         </div>
                     </div>
-                    <button class="btn border-secondary text-white" data-toggle="collapse"
+                    <button id="btnCreateNewTask" class="btn border-secondary text-white" data-toggle="collapse"
                             href="#multiCollapseCreateNewTask" role="button"
                             aria-expanded="false">
                         + Create New Task
@@ -104,6 +104,18 @@
                     </div>
                 </div>
 
+                <div id="noProjectsFoundArea" class="d-none">
+                    <h3>No projects found.</h3>
+                    <p>Go to the project page to start.</p>
+                    <hr />
+                </div>
+
+                <div id="noTasksFoundArea" class="d-none">
+                    <h4>No tasks found.</h4>
+                    <p>Make a new task, check your filters, or select a different project.</p>
+
+                </div>
+
                 <!--Tasks Output-->
                 <div id="output"></div>
 
@@ -135,7 +147,24 @@
             .then(data => displayProjectDropdownOptions(data))
             .catch(error => console.error('Unable to get items.', error));
 
+
         function displayProjectDropdownOptions(data) {
+
+            if (data.length == 0) {
+
+                $("#noProjectsFoundArea").removeClass("d-none");
+                $("#btnFilter").prop("disabled", true);
+                $("#btnCreateNewTask").prop("disabled", true);
+                $("#btnSelectProject").prop("disabled", true);
+                return;
+            }
+
+            if (data.length == 1) {
+
+                data[0].projectIsActive = true;
+                var newActiveProjectID = data[0].projectID;
+
+            }
 
             if (newActiveProjectID != null) {
 
@@ -601,8 +630,8 @@
         if (isSubTask == true) {
 
             $(`#subCollapse${itemId}`).collapse('toggle');
-        }
-        else if (isSubTask == false) {
+
+        } else if (isSubTask == false) {
 
             $(`#taskCollapse${itemId}`).collapse('toggle');
         }
@@ -611,6 +640,18 @@
 
     //CREATE TASK HTML
     function displayItems(data) {
+
+        console.log(data)
+
+        if (data.status == 400 || data.length == 0) {
+
+            $("#noTasksFoundArea").removeClass('d-none');
+            $('#loadingAnimationArea').toggleClass('d-none');
+            return;
+
+        }
+
+        $("#noTasksFoundArea").addClass('d-none');
 
         data.forEach(item => {
 
