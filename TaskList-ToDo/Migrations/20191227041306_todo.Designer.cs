@@ -10,8 +10,8 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191220032024_ToDo")]
-    partial class ToDo
+    [Migration("20191227041306_todo")]
+    partial class todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -221,12 +221,39 @@ namespace TaskList_ToDo.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TaskList_ToDo.Models.ProjectItem", b =>
+                {
+                    b.Property<int>("ProjectItemID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ProjectDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("ProjectIsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProjectItemID");
+
+                    b.ToTable("ProjectItems");
+                });
+
             modelBuilder.Entity("TodoApi.Models.TodoItem", b =>
                 {
                     b.Property<int>("TodoItemID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ProjectID")
+                        .HasColumnType("int");
 
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");

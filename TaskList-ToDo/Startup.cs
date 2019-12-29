@@ -75,7 +75,7 @@ namespace TaskList_ToDo
             {
                 routes.MapRoute(
                   name: "Identity",
-                  template: "{area:exists}/{controller=Projects}/{action=Board}/{id?}");
+                  template: "{area:exists}/{controller=Projects}/{action}/{id?}");
 
                 routes.MapRoute(
                    name: "default",

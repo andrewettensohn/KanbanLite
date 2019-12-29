@@ -1,0 +1,279 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Projects";
+}
+<body class="text-white">
+    <container>
+        <center>
+            <div class="mb-3">
+                <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseExample">
+                    + Create New Project
+                </button>
+            </div>
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body bg-dark border-secondary">
+                    <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                        <div class="input-group mb-3 col-md-8">
+                            <input id="add-name" type="text" maxlength="25" autocomplete="off" class="form-control" placeholder="New Project Name">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary text-white form-control" type="submit" value="add">Add Project</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <br />
+
+            <div id="output">
+
+            </div>
+
+
+           
+
+        </center>
+    </container>
+</body>
+
+<script type="text/javascript">
+
+    const uri = "api/ProjectItems";
+    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+    const boardUrl = "@Url.Content("~/Identity/Projects/Board")";
+
+    $(document).ready(getItems())
+
+    function getItems() {
+
+        $("#output").empty();
+
+        fetch(`api/ProjectItems/ProjectList/${userId}`)
+                .then(response => response.json())
+                .then(data => displayItems(data))
+                .catch(error => console.error('Unable to get items.', error));
+
+    }
+
+    //POST PROJECT
+    function addItem() {
+
+        const projectName = document.getElementById('add-name');
+
+        const item = {
+
+            userId: userId,
+            projectName: projectName.value.trim()
+
+        };
+
+        fetch(uri, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(response => response.json())
+            .then(() => getItems())
+            .then(() => $("#add-name").focus())
+            .then(() => {
+                projectName.value = '';
+            })
+            .catch(error => console.error('Unable to add item.', error));
+    }
+
+    //PUT PROJECT DESCRIPTION
+    function changeProjectDescription(itemId) {
+
+        var projectName = $(`#projectItemHeader${itemId}`).text();
+
+        var projectDescription = $(`#projectDescription${itemId}`).val().toString();
+        var projectActivationState = $(`#hiddenProjectStatus`).text();
+
+        const item = {
+
+        projectItemID: parseInt(itemId, 10),
+        userId: userId,
+        projectName: projectName,
+        projectDescription: projectDescription,
+        projectIsActive: projectActivationState
+
+        };
+
+        fetch(uri + `/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .catch(error => console.error('Unable to delete item.', error));
+
+    }
+
+
+    //DELETE PROJECT
+    function deleteItem(itemId) {
+
+       
+            fetch(uri + `/${userId}/${itemId}`, {
+                method: 'DELETE'
+            })
+                .then(() => $(`#projectItemAccordion${itemId}`).remove())
+                .catch(error => console.error('Unable to delete item.', error));
+
+    }
+
+    //DISPLAY COLLAPSE
+    function toggleCollapse(itemId) {
+
+            $(`#projectItemCollapse${itemId}`).collapse('toggle');
+
+    }
+
+    //DISPLAY TASK INPUT
+    function displayProjectNameInput(itemId) {
+
+        $(`#projectItemHeader${itemId}`).addClass('d-none');
+        var oldProjectName = $(`#projectItemHeader${itemId}`).text();
+        $(`#inputNameChange${itemId}`).val(oldProjectName);
+        $(`#areaInputNameChange${itemId}`).toggleClass('d-none');
+        $(`#inputNameChange${itemId}`).focus();
+
+    }
+
+    //PUT NAME CHANGE
+    function projectNameChange(itemId) {
+
+        var newProjectName = $(`#inputNameChange${itemId}`).val().toString();
+        if (newProjectName == "") { newProjectName = "Untitled" }
+
+        var projectNameElement = `projectItemHeader${itemId}`;
+        var inputAreaElement = `areaInputNameChange${itemId}`;
+
+        var projectDescription = $(`#projectDescription${itemId}`).val().toString();
+        var projectActivationState = $(`#hiddenProjectStatus`).text();
+
+        var item = {
+
+                projectItemID: parseInt(itemId, 10),
+                userId: userId,
+                projectName: newProjectName,
+                projectDescription: projectDescription,
+                projectIsActive: projectActivationState
+            };
+
+        fetch(uri + `/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(() => $(`#${projectNameElement}`).text(newProjectName))
+            .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
+            .then(() => $(`#${projectNameElement}`).toggleClass('d-none'))
+            .catch(error => console.error('Unable to delete item.', error));
+    }
+
+    //PUT ACTIVE PROJECT STATUS
+    function setActiveProject(itemId) {
+
+        var projectName = $(`#projectItemHeader${itemId}`).text();
+
+        var projectDescription = $(`#projectDescription${itemId}`).text();
+
+        const item = {
+
+            projectItemID: parseInt(itemId, 10),
+            userId: userId,
+            projectName: projectName,
+            projectIsActive: true,
+            projectDescription: projectDescription
+
+        };
+
+        fetch(uri + `/SetActiveProject/${userId}/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(() => window.location.href = boardUrl)
+            .catch(error => console.error('Unable to delete item.', error));
+
+    }
+
+
+    //CREATE PROJECT HTML
+    function displayItems(data) {
+
+        data.forEach(item => {
+
+            var projectItemHTML = `
+            <div id="projectItemAccordion${item.projectItemID}">
+                <div id="projectItemCard${item.projectItemID}" class="card bg-dark border-secondary rounded-0">
+                    <div>
+                        <svg id="i-chevron-bottom${item.projectItemID}" class="align-middle mr-4" onclick="toggleCollapse('${item.projectItemID}')" touchstart="toggleCollapse('${item.projectItemID}', false)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <path d="M30 10 L16 26 2 10 Z" />
+                        </svg>
+                    </div>
+                    <div id="projectItemHeading${item.projectItemID}" class="card-header bg-dark">
+                        <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
+                            <h5 id="projectItemHeader${item.projectItemID}" onclick="displayProjectNameInput('${item.projectItemID}')" class="mx-2 mt-1">${item.projectName}</h5>
+                            <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
+                                <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="projectNameChange('${item.projectItemID}')" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="projectItemCollapse${item.projectItemID}" class="collapse" item-parent="#projectItemAccordion$">
+                        <div class="p-2">
+                            <textarea id="projectDescription${item.projectItemID}" onfocusout="changeProjectDescription(${item.projectItemID})" class="form-control bg-dark border-0 text-white">${item.projectDescription}</textarea>
+                            <hr />
+                            <button class="btn" type="button" onclick="setActiveProject(${item.projectItemID})">
+                                <svg id="i-clipboard" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M12 2 L12 6 20 6 20 2 12 2 Z M11 4 L6 4 6 30 26 30 26 4 21 4" />
+                                    <p class="text-white">Task Board</p>
+                                </svg>
+                            </button>
+                            <button class="btn" type="button">
+                                <svg id="i-book" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M16 7 C16 7 9 1 2 6 L2 28 C9 23 16 28 16 28 16 28 23 23 30 28 L30 6 C23 1 16 7 16 7 Z M16 7 L16 28" />
+                                    <p class="text-white">Project Stories</p>
+                                </svg>
+                            </button>
+                            <button class="btn" type="button" onclick="deleteItem(${item.projectItemID})">
+                                <svg id="i-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M2 20 L12 28 30 4" />
+                                    <p class="text-white">Finish Project</p>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            
+            <div id="hiddenProjectStatus${item.projectItemID}" class="d-none">${item.projectIsActive}</div>
+
+        `;
+
+            var newDiv = document.createElement('div');
+            newDiv.innerHTML = projectItemHTML;
+            document.getElementById("output").appendChild(newDiv);
+        });
+
+    }
+
+
+</script>

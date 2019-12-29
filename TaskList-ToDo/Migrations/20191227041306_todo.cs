@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TaskList_ToDo.Migrations
 {
-    public partial class ToDo : Migration
+    public partial class todo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,12 +47,29 @@ namespace TaskList_ToDo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProjectItems",
+                columns: table => new
+                {
+                    ProjectItemID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: true),
+                    ProjectName = table.Column<string>(nullable: true),
+                    ProjectDescription = table.Column<string>(nullable: true),
+                    ProjectIsActive = table.Column<bool>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectItems", x => x.ProjectItemID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TodoItems",
                 columns: table => new
                 {
                     TodoItemID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: true),
+                    ProjectID = table.Column<int>(nullable: false),
                     TaskName = table.Column<string>(nullable: true),
                     TaskStatus = table.Column<string>(nullable: true)
                 },
@@ -251,6 +268,9 @@ namespace TaskList_ToDo.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ProjectItems");
 
             migrationBuilder.DropTable(
                 name: "TodoSubItems");

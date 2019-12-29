@@ -10,7 +10,8 @@ using TodoApi.Models;
 
 namespace ToDoApi.Controllers
 {
-    [Route("Projects/api/TodoSubItems")]
+    [Area("Identity")]
+    [Route("Identity/Projects/api/TodoSubItems")]
     [ApiController]
     public class TodoSubItemsController : ControllerBase
     {
