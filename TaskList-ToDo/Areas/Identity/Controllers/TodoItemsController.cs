@@ -78,39 +78,18 @@ namespace ToDoApi.Controllers
 
         }
 
-        // GET: Projects/TodoItems/Filter/UserId/Not Started
-        [HttpGet("Filter/{userId}/{filterStatus}")]
-        public async Task<ActionResult<List<TodoItem>>> GetTodoItemsInProgress(string userId, string filterStatus)
+        // GET: Projects/TodoItems/Filter/UserId/11/Not Started
+        [HttpGet("Filter/{userId}/{projectID}/{filterStatus}")]
+        public async Task<ActionResult<List<TodoItem>>> GetTodoItemsInProgress(string userId, int projectID, string filterStatus)
         {
-            var todoItems = await _context.TodoItems.ToListAsync();
 
-            await _context.TodoSubItems.ToListAsync();
+            var todoItemsFiltered = await _context.TodoItems.Where(t => 
+                t.ProjectID == projectID && 
+                t.UserId == userId && 
+                t.TaskStatus == filterStatus
+            ).ToListAsync();
 
-
-            var todoItemsFiltered = new List<TodoItem>();
-
-            foreach(var item in todoItems)
-            {
-                if(item.TaskStatus == filterStatus)
-                {
-                    todoItemsFiltered.Add(item);
-                }
-            }
-
-            var queryUserToDoItemsFiltered = from TodoItem todoItem in todoItemsFiltered
-                                             where todoItem.UserId == userId
-                                             select todoItem;
-
-            var userTodoItemsFiltered = new List<TodoItem>();
-
-            foreach (TodoItem t in queryUserToDoItemsFiltered)
-            {
-                userTodoItemsFiltered.Add(t);
-            }
-
-
-
-            return userTodoItemsFiltered;
+            return todoItemsFiltered;
         }
 
 

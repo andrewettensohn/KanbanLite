@@ -255,7 +255,7 @@
 
             $('#loadingAnimationArea').toggleClass('d-none');
 
-            fetch(uri + `/Filter/${userId}/${filterOption}`)
+            fetch(uri + `/Filter/${userId}/${projectID}/${filterOption}`)
                 .then(response => response.json())
                 .then(data => displayItems(data))
                 .catch(error => console.error('Unable to get items.', error));
