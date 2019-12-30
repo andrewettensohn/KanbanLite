@@ -128,10 +128,21 @@ namespace ToDoApi.Controllers
         }
 
         //POST Projects/api/ProjectItems
-        [HttpPost]
-        public async Task<ActionResult<ProjectItem>> PostProjectItem(ProjectItem projectItem)
+        [HttpPost("{userId}")]
+        public async Task<ActionResult<ProjectItem>> PostProjectItem(string userId, ProjectItem projectItem)
         {
             projectItem.ProjectDescription = "Enter a project description here...";
+
+            //projectItem.ProjectCreationTime = new DateTime
+
+            var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
+
+            if(projectItemList.Count() == 1)
+            {
+                await setActiveProject(userId, projectItem.ProjectItemID, projectItem);
+            }
+
+
 
             _context.ProjectItems.Add(projectItem);
             await _context.SaveChangesAsync();
