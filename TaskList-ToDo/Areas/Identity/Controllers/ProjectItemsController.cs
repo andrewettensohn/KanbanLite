@@ -27,20 +27,25 @@ namespace ToDoApi.Controllers
         [HttpGet("ProjectList/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectItem>>> GetProjectItems(string userId)
         {
-            var projectItemList = await _context.ProjectItems.ToListAsync();
+            var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
-            var queryUserProjectItems = from ProjectItem projectItem in projectItemList
-                                        where projectItem.UserId == userId
-                                        select projectItem;
+            //var noActiveProject = true;
 
-            var userProjectItems = new List<ProjectItem>();
+            //foreach (var project in projectsList)
+            //{
+            //    if (project.ProjectIsActive == true)
+            //    {
+            //        noActiveProject = false;
+            //    }
 
-            foreach (ProjectItem t in queryUserProjectItems)
-            {
-                userProjectItems.Add(t);
-            }
+            //}
 
-            return userProjectItems;
+            //if(noActiveProject == true)
+            //{
+
+            //}
+
+            return projectsList;
         }
 
         //GET: Projects/api/ProjectItems/5
@@ -137,9 +142,10 @@ namespace ToDoApi.Controllers
 
             var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
-            if(projectItemList.Count() == 1)
+            if(projectItemList.Count() == 0)
             {
-                await setActiveProject(userId, projectItem.ProjectItemID, projectItem);
+                //await setActiveProject(userId, projectItem.ProjectItemID, projectItem);
+                projectItem.ProjectIsActive = true;
             }
 
 
