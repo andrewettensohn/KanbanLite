@@ -48,33 +48,10 @@ namespace ToDoApi.Controllers
         [HttpGet("Tasks/{userId}/{projectID}")]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(string userId, int projectID)
         {
-            var todoItemList = new List<TodoItem>();
 
-            while (todoItemList.Count() <=  0)
-            {
+            var projectItemList = await _context.TodoItems.Where(p => p.UserId == userId && p.ProjectID == projectID).ToListAsync();
 
-                todoItemList = await _context.TodoItems.ToListAsync();
-
-                await _context.TodoSubItems.ToListAsync();
-
-                if(todoItemList.Count() <= 0)
-                {
-                    System.Threading.Thread.Sleep(10000); 
-                }
-            }
-
-            var queryUserToDoItems = from TodoItem todoItem in todoItemList
-                                     where todoItem.UserId == userId && todoItem.ProjectID == projectID
-                                     select todoItem;
-
-            var userTodoItems = new List<TodoItem>();
-
-            foreach (TodoItem t in queryUserToDoItems)
-            {
-                userTodoItems.Add(t);
-            }
-
-            return userTodoItems;
+            return projectItemList;
 
         }
 

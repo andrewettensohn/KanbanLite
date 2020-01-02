@@ -133,10 +133,10 @@
     @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
-    $(document).ready(chooseProjectDropdownOptions());
+    $(document).ready(getProjectInfo());
 
     //GET AND DISPLAY Project Options
-    function chooseProjectDropdownOptions(newActiveProjectID) {
+    function getProjectInfo(newActiveProjectID) {
 
         var projectChange = false;
 
@@ -227,7 +227,7 @@
         if (typeof newProjectID !== "undefined") {
 
             var projectID = newProjectID;
-            chooseProjectDropdownOptions(newProjectID);
+            getProjectInfo(newProjectID);
 
         } else {
 
@@ -321,7 +321,7 @@
             body: JSON.stringify(item)
         })
             .then(response => response.json())
-            .then(() => getItems())
+            .then(() => getProjectInfo())
             .then(() => $("#add-name").focus())
             .then(() => {
                 addNameTextbox.value = '';
