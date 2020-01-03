@@ -129,20 +129,20 @@
     const uri = 'api/TodoItems';
     const uri1 = 'api/TodoItems/Tasks';
     const uri2 = 'api/TodoSubItems';
-    const uriProject = 'api/ProjectItems/ProjectList';
+    const uriProject = 'api/ProjectItems';
     @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
     $(document).ready(getProjectInfo());
 
     //GET AND DISPLAY Project Options
-    function getProjectInfo(newActiveProjectID) {
+    function getProjectInfo() {
 
-        var projectChange = false;
+        //var projectChange = false;
 
         $(`#dropdownChooseProject`).empty();
 
-        fetch(uriProject + `/${userId}`)
+        fetch(uriProject + `/ProjectList/${userId}`)
             .then(response => response.json())
             .then(data => displayProjectDropdownOptions(data))
             .catch(error => console.error('Unable to get items.', error));
@@ -165,10 +165,13 @@
                 if (projectItem.projectIsActive) {
 
                     $(`#hiddenActiveProjectID`).text(projectItem.projectItemID);
+                    var activeProjectID = projectItem.projectItemID;
 
                 }
 
-                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getProjectInfo(${projectItem.projectItemID})">${projectItem.projectName}</a>`
+                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="setActiveProject(${projectItem.projectItemID})">${projectItem.projectName}</a>
+                                         <p class="d-none" id=hiddenProjectDescription${projectItem.projectItemID}></p>
+                                        `
 
                 var newDiv = document.createElement('div');
                 newDiv.innerHTML = projectOptionHTML;
@@ -176,67 +179,48 @@
 
             });
 
+            getItems(null, null, activeProjectID);
+
         }
+    }
 
-        $(`#hiddenActiveProjectID`).text(activeProject);
+    //PUT ACTIVE PROJECT STATUS
+    function setActiveProject(projectItemId) {
 
+        var projectName = $(`#projectOption${projectItemId}`).text();
 
-        if (newActiveProjectID > 0) {
+        var projectDescription = $(`#hiddenProjectDescription${projectItemId}`).val();
 
+        const item = {
 
-            $(`#hiddenActiveProjectID`).text(); 
-        }
+            projectItemID: parseInt(projectItemId, 10),
+            userId: userId,
+            projectName: projectName,
+            projectIsActive: true,
+            projectDescription: projectDescription
 
-            //if (data.length == 1) {
+        };
 
-            //    data[0].projectIsActive = true;
-            //    var newActiveProjectID = data[0].projectID;
+        fetch(uriProject + `/SetActiveProject/${userId}/${projectItemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(() => getProjectInfo())
+            .catch(error => console.error('Unable to delete item.', error));
 
-            //}
-
-            //if (newActiveProjectID !== null) {
-
-            //     data.forEach(projectItem => {
-
-            //        if (newActiveProjectID == projectItem.projectItemID) {
-
-            //            projectItem.projectIsActive = true;
-            //            projectChange = true;
-
-            //            fetch(`api/ProjectItems/SetActiveProject/${userId}/${newActiveProjectID}`, {
-            //                method: 'PUT',
-            //                headers: {
-            //                    'Accept': 'application/json',
-            //                    'Content-Type': 'application/json'
-            //                },
-            //                body: JSON.stringify(projectItem)
-            //            })
-            //                .catch(error => console.error('Unable to delete item.', error));
-
-            //        } else {
-
-            //            projectItem.projectIsActive = false;
-            //        }
-
-            //    });
     }
 
 
     //GET ALL
-    function getItems(filterOption, filterElement) {
+    function getItems(filterOption, filterElement, projectID) {
 
-        //if (typeof newProjectID !== "undefined") {
+        //var projectID = $(`#hiddenActiveProjectID`).text();
 
-        //    var projectID = newProjectID;
-        //    getProjectInfo(newProjectID);
-
-        //} else {
-
-        //    var projectID = $(`#hiddenActiveProjectID`).text(); 
-
-        //}
-
-        var projectID = $(`#hiddenActiveProjectID`).text();
+        console.log(projectID)
 
         $("#output").empty();
 

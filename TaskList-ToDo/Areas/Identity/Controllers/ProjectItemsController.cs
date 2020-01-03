@@ -129,6 +129,7 @@ namespace ToDoApi.Controllers
                 }
             }
 
+            _context.Entry(activeProjectItem).State = EntityState.Detached;
             return NoContent();
         }
 
