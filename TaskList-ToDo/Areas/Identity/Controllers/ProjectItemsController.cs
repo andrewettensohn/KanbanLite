@@ -138,17 +138,17 @@ namespace ToDoApi.Controllers
         {
             projectItem.ProjectDescription = "Enter a project description here...";
 
-            //projectItem.ProjectCreationTime = new DateTime
-
             var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
-            if(projectItemList.Count() == 0)
+            if (projectItemList.Count() == 0)
             {
-                //await setActiveProject(userId, projectItem.ProjectItemID, projectItem);
                 projectItem.ProjectIsActive = true;
             }
 
-
+            if (projectItem.ProjectName == null || projectItem.ProjectName == "" )
+            {
+                projectItem.ProjectName = "Untitled";
+            }
 
             _context.ProjectItems.Add(projectItem);
             await _context.SaveChangesAsync();
