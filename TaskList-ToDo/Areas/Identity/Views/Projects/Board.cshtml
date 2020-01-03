@@ -147,7 +147,6 @@
             .then(data => displayProjectDropdownOptions(data))
             .catch(error => console.error('Unable to get items.', error));
 
-
         function displayProjectDropdownOptions(data) {
 
             console.log(data)
@@ -161,41 +160,6 @@
                 return;
             }
 
-            if (data.length == 1) {
-
-                data[0].projectIsActive = true;
-                var newActiveProjectID = data[0].projectID;
-
-            }
-
-            if (newActiveProjectID != null) {
-
-                 data.forEach(projectItem => {
-
-                    if (newActiveProjectID == projectItem.projectItemID) {
-
-                        projectItem.projectIsActive = true;
-                        projectChange = true;
-
-                        fetch(`api/ProjectItems/SetActiveProject/${userId}/${newActiveProjectID}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(projectItem)
-                        })
-                            .catch(error => console.error('Unable to delete item.', error));
-
-                    } else {
-
-                        projectItem.projectIsActive = false;
-                    }
-
-                });
-
-            }
-
             data.forEach(projectItem => {
 
                 if (projectItem.projectIsActive) {
@@ -204,7 +168,7 @@
 
                 }
 
-                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getItems(null, null, ${projectItem.projectItemID})">${projectItem.projectName}</a>`
+                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getProjectInfo(${projectItem.projectItemID})">${projectItem.projectName}</a>`
 
                 var newDiv = document.createElement('div');
                 newDiv.innerHTML = projectOptionHTML;
@@ -212,30 +176,67 @@
 
             });
 
-            if (!projectChange) {
-
-                getItems();
-
-            }
-
         }
 
+        $(`#hiddenActiveProjectID`).text(activeProject);
+
+
+        if (newActiveProjectID > 0) {
+
+
+            $(`#hiddenActiveProjectID`).text(); 
+        }
+
+            //if (data.length == 1) {
+
+            //    data[0].projectIsActive = true;
+            //    var newActiveProjectID = data[0].projectID;
+
+            //}
+
+            //if (newActiveProjectID !== null) {
+
+            //     data.forEach(projectItem => {
+
+            //        if (newActiveProjectID == projectItem.projectItemID) {
+
+            //            projectItem.projectIsActive = true;
+            //            projectChange = true;
+
+            //            fetch(`api/ProjectItems/SetActiveProject/${userId}/${newActiveProjectID}`, {
+            //                method: 'PUT',
+            //                headers: {
+            //                    'Accept': 'application/json',
+            //                    'Content-Type': 'application/json'
+            //                },
+            //                body: JSON.stringify(projectItem)
+            //            })
+            //                .catch(error => console.error('Unable to delete item.', error));
+
+            //        } else {
+
+            //            projectItem.projectIsActive = false;
+            //        }
+
+            //    });
     }
 
 
     //GET ALL
-    function getItems(filterOption, filterElement, newProjectID) {
+    function getItems(filterOption, filterElement) {
 
-        if (typeof newProjectID !== "undefined") {
+        //if (typeof newProjectID !== "undefined") {
 
-            var projectID = newProjectID;
-            getProjectInfo(newProjectID);
+        //    var projectID = newProjectID;
+        //    getProjectInfo(newProjectID);
 
-        } else {
+        //} else {
 
-            var projectID = $(`#hiddenActiveProjectID`).text(); 
+        //    var projectID = $(`#hiddenActiveProjectID`).text(); 
 
-        }
+        //}
+
+        var projectID = $(`#hiddenActiveProjectID`).text();
 
         $("#output").empty();
 
