@@ -19,7 +19,7 @@ namespace TaskList_ToDo.Models
 
         public string ProjectCreationTime { get; set; }
 
-        //public int ProjectTotalTasks { get; set; }
+        public int ProjectTotalTasks { get; set; }
 
         //public string ProjectTemplate { get; set; }
 

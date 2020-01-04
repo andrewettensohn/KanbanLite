@@ -176,6 +176,12 @@ namespace ToDoApi.Controllers
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
+            var projectItem = await _context.ProjectItems.FindAsync(todoItem.ProjectID);
+            projectItem.ProjectTotalTasks++;
+
+            _context.Entry(projectItem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.TodoItemID }, todoItem);
         }
 

@@ -238,6 +238,9 @@ namespace TaskList_ToDo.Migrations
                     b.Property<string>("ProjectName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProjectTotalTasks")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
