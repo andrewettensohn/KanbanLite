@@ -138,8 +138,6 @@
     //GET AND DISPLAY Project Options
     function getProjectInfo() {
 
-        //var projectChange = false;
-
         $(`#dropdownChooseProject`).empty();
 
         fetch(uriProject + `/ProjectList/${userId}`)
@@ -165,7 +163,6 @@
                 if (projectItem.projectIsActive) {
 
                     $(`#hiddenActiveProjectID`).text(projectItem.projectItemID);
-                    var activeProjectID = projectItem.projectItemID;
 
                 }
 
@@ -179,7 +176,7 @@
 
             });
 
-            getItems(null, null, activeProjectID);
+            getItems();
 
         }
     }
@@ -216,9 +213,9 @@
 
 
     //GET ALL
-    function getItems(filterOption, filterElement, projectID) {
+    function getItems(filterOption, filterElement) {
 
-        //var projectID = $(`#hiddenActiveProjectID`).text();
+        var projectID = $(`#hiddenActiveProjectID`).text();
 
         console.log(projectID)
 

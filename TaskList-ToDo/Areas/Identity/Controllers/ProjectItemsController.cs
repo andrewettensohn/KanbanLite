@@ -29,22 +29,6 @@ namespace ToDoApi.Controllers
         {
             var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
-            //var noActiveProject = true;
-
-            //foreach (var project in projectsList)
-            //{
-            //    if (project.ProjectIsActive == true)
-            //    {
-            //        noActiveProject = false;
-            //    }
-
-            //}
-
-            //if(noActiveProject == true)
-            //{
-
-            //}
-
             return projectsList;
         }
 
@@ -102,10 +86,15 @@ namespace ToDoApi.Controllers
                 return BadRequest();
             }
 
-            var projectsList = await _context.ProjectItems.Where(p => p.ProjectIsActive == true && p.UserId == userId).ToListAsync();
+            var lastActiveProject = await _context.ProjectItems.Where(p => p.ProjectIsActive == true && p.UserId == userId).ToListAsync();
 
-            foreach (var item in projectsList)
+            foreach (var item in lastActiveProject)
             {
+                if(item.ProjectItemID == activeProjectItem.ProjectItemID && item.ProjectIsActive == true)
+                {
+                    return NoContent();
+                }
+
                 item.ProjectIsActive = false;
             }
 
