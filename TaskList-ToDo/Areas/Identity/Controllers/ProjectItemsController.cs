@@ -127,6 +127,7 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<ProjectItem>> PostProjectItem(string userId, ProjectItem projectItem)
         {
             projectItem.ProjectDescription = "Enter a project description here...";
+            projectItem.ProjectCreationTime = DateTime.Now.ToLongDateString();
 
             var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 

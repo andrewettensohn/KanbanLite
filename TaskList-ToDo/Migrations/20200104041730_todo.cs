@@ -55,7 +55,8 @@ namespace TaskList_ToDo.Migrations
                     UserId = table.Column<string>(nullable: true),
                     ProjectName = table.Column<string>(nullable: true),
                     ProjectDescription = table.Column<string>(nullable: true),
-                    ProjectIsActive = table.Column<bool>(nullable: true)
+                    ProjectIsActive = table.Column<bool>(nullable: true),
+                    ProjectCreationTime = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

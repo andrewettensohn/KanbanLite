@@ -10,7 +10,7 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191227041306_todo")]
+    [Migration("20200104041730_todo")]
     partial class todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,9 @@ namespace TaskList_ToDo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ProjectCreationTime")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectDescription")
                         .HasColumnType("nvarchar(max)");

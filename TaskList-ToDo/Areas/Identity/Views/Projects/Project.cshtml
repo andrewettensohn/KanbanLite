@@ -227,13 +227,19 @@
                         </svg>
                     </div>
                     <div id="projectItemHeading${item.projectItemID}" class="card-header bg-dark">
-                        <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
-                            <h5 id="projectItemHeader${item.projectItemID}" onclick="displayProjectNameInput('${item.projectItemID}')" class="mx-2 mt-1">${item.projectName}</h5>
-                            <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
-                                <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="projectNameChange('${item.projectItemID}')" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
+                        <div class="d-flex flex-row">
+                            <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
+                                <h5 id="projectItemHeader${item.projectItemID}" onclick="displayProjectNameInput('${item.projectItemID}')" class="mx-2 mt-1">${item.projectName}</h5>
+                                <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
+                                    <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="projectNameChange('${item.projectItemID}')" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                    </div>
                                 </div>
                             </div>
+                            <div class="ml-auto pr-5">Start Date</div>
+                        </div>
+                        <div class="d-flex flex-row-reverse">
+                            <div>${item.projectCreationTime}</div>
                         </div>
                     </div>
                     <div id="projectItemCollapse${item.projectItemID}" class="collapse" item-parent="#projectItemAccordion$">

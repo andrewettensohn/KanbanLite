@@ -17,6 +17,10 @@ namespace TaskList_ToDo.Models
 
         public bool? ProjectIsActive { get; set; }
 
+        public string ProjectCreationTime { get; set; }
+
+        //public int ProjectTotalTasks { get; set; }
+
         //public string ProjectTemplate { get; set; }
 
         //public bool ProjectHasStories { get; set; }
