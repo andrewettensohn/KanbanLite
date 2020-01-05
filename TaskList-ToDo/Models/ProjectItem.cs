@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,9 +22,18 @@ namespace TaskList_ToDo.Models
 
         public int ProjectTotalTasks { get; set; }
 
-        //public string ProjectTemplate { get; set; }
-
-        //public bool ProjectHasStories { get; set; }
+        [NotMapped]
+        public Dictionary<string,int> ProjectStatusStats { get; set; }
 
     }
+
+    //public class ProjectStats
+    //{
+    //    public int NotStarted { get; set; }
+
+    //    public int InProgress { get; set; }
+
+    //    public int Completed { get; set; }
+    //}
+
 }

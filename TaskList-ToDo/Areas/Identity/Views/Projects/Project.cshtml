@@ -212,7 +212,6 @@
 
     }
 
-
     //CREATE PROJECT HTML
     function displayItems(data) {
 
@@ -241,6 +240,12 @@
                         <div class="d-flex flex-row">
                             <div class="mr-auto pl-2">${item.projectTotalTasks} Tasks</div>
                             <div class="ml-auto pl-5">${item.projectCreationTime}</div>
+                        </div>
+                        <br />
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: ${item.projectStatusStats["Not Started"]}%"></div>
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: ${item.projectStatusStats["In-Progress"]}%"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: ${item.projectStatusStats["Completed"]}%"></div>
                         </div>
                     </div>
                     <div id="projectItemCollapse${item.projectItemID}" class="collapse" item-parent="#projectItemAccordion$">

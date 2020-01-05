@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TaskList_ToDo.Migrations
 {
-    public partial class todfo : Migration
+    public partial class Todo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

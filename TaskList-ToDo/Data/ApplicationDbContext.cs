@@ -19,5 +19,6 @@ namespace TaskList_ToDo.Data
         public DbSet<TodoSubItem> TodoSubItems { get; set; }
 
         public DbSet<ProjectItem> ProjectItems { get; set; }
+        //public DbSet<ProjectStats> ProjectStats { get; set; }
     }
 }

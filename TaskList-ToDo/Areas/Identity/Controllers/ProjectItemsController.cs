@@ -29,6 +29,8 @@ namespace ToDoApi.Controllers
         {
             var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
+            projectsList = ProjectTaskStatsCalculator(projectsList);
+
             return projectsList;
         }
 
@@ -128,6 +130,7 @@ namespace ToDoApi.Controllers
         {
             projectItem.ProjectDescription = "Enter a project description here...";
             projectItem.ProjectCreationTime = DateTime.Now.ToLongDateString();
+            //projectItem.ProjectTaskStatusStats = ProjectTaskStatusStatsHandler();
 
             var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
@@ -182,6 +185,68 @@ namespace ToDoApi.Controllers
         private bool ProjectItemExists(int id)
         {
             return _context.ProjectItems.Any(e => e.ProjectItemID == id);
+        }
+
+        private List<ProjectItem> ProjectTaskStatsCalculator(List<ProjectItem> projectList)
+        {
+
+            var projectListWithStats = new List<ProjectItem>();
+
+            foreach (ProjectItem projectItem in projectList)
+            {
+
+                var todoItemList = _context.TodoItems.Where(todoItem => todoItem.ProjectID == projectItem.ProjectItemID).ToList();
+                var notStartedCount = 0;
+                var inProgressCount = 0;
+                var completedCount = 0;
+
+
+                foreach (var todoItem in todoItemList)
+                {
+                    if (todoItem.TaskStatus == "Not Started")
+                    {
+                        notStartedCount++;
+                    }
+                    else if (todoItem.TaskStatus == "In-Progress")
+                    {
+                        inProgressCount++;
+                    }
+                    else if (todoItem.TaskStatus == "Completed")
+                    {
+                        completedCount++;
+                    }
+
+                }
+
+                var taskCountTotal = notStartedCount + inProgressCount + completedCount;
+
+                var projectStatusStatsCalculated = new Dictionary<string, int>
+
+                    {
+                        { "Not Started", 0 },
+                        { "In-Progress", 0 },
+                        { "Completed", 0 }
+                    };
+
+                if (taskCountTotal <= 0)
+                {
+                    projectItem.ProjectStatusStats = projectStatusStatsCalculated;
+                    projectListWithStats.Add(projectItem);
+                } 
+                else
+                {
+
+                    projectStatusStatsCalculated["Not Started"] = (int)Math.Round((double)(100 * notStartedCount) / taskCountTotal);
+                    projectStatusStatsCalculated["In-Progress"] = (int)Math.Round((double)(100 * inProgressCount) / taskCountTotal);
+                    projectStatusStatsCalculated["Completed"] = (int)Math.Round((double)(100 * completedCount) / taskCountTotal);
+
+                    projectItem.ProjectStatusStats = projectStatusStatsCalculated;
+
+                    projectListWithStats.Add(projectItem);
+                }
+            }
+
+            return projectListWithStats;
         }
 
     }

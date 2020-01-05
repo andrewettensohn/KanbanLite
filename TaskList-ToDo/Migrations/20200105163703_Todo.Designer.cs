@@ -10,8 +10,8 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200104041916_todfo")]
-    partial class todfo
+    [Migration("20200105163703_Todo")]
+    partial class Todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
