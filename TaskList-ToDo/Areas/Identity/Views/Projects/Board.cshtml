@@ -97,6 +97,12 @@
                 </div>
                 <br />
 
+                <!--Active Project Header-->
+                <div id="activeProjectHeaderArea">
+                    <h2 class="display-6" id="activeProjectHeader"></h2>
+                    <hr />
+                </div>
+
                 <!--Loading Animation-->
                 <div id="loadingAnimationArea" class="d-none">
                     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
@@ -147,8 +153,6 @@
 
         function displayProjectDropdownOptions(data) {
 
-            console.log(data)
-
             if (data.length == 0) {
 
                 $("#noProjectsFoundArea").removeClass("d-none");
@@ -163,6 +167,7 @@
                 if (projectItem.projectIsActive) {
 
                     $(`#hiddenActiveProjectID`).text(projectItem.projectItemID);
+                    $(`#activeProjectHeader`).text(projectItem.projectName);
 
                 }
 
