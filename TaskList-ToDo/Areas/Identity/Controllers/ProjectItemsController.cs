@@ -48,11 +48,26 @@ namespace ToDoApi.Controllers
             return projectItem;
         }
 
-        // PUT: Projects/api/ProjectItems/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProjectItem(int id, ProjectItem projectItem)
+        // PUT: Projects/api/ProjectItems/userId/UpdateName/5
+        [HttpPut("{userId}/{updateType}/{id}")]
+        public async Task<IActionResult> PutProjectItem(string updateType, int id, ProjectItem sentProjectItem)
         {
-            if (id != projectItem.ProjectItemID)
+            if (id != sentProjectItem.ProjectItemID)
+            {
+                return BadRequest();
+            }
+
+            var projectItem = await _context.ProjectItems.FindAsync(id);
+
+            if(updateType == "UpdateDescription")
+            {
+                projectItem.ProjectDescription = sentProjectItem.ProjectDescription;
+            }
+            else if(updateType == "UpdateName")
+            {
+                projectItem.ProjectName = sentProjectItem.ProjectName;
+            }
+            else
             {
                 return BadRequest();
             }
@@ -81,12 +96,15 @@ namespace ToDoApi.Controllers
 
         // PUT: Projects/api/ProjectItems/SetActiveProject/userId/5
         [HttpPut("SetActiveProject/{userId}/{id}")]
-        public async Task<IActionResult> setActiveProject(string userId, int id, ProjectItem activeProjectItem)
+        public async Task<IActionResult> setActiveProject(string userId, int id, ProjectItem sentProjectItem)
         {
-            if (id != activeProjectItem.ProjectItemID)
+            if (id != sentProjectItem.ProjectItemID)
             {
                 return BadRequest();
             }
+
+            var activeProjectItem = await _context.ProjectItems.FindAsync(id);
+            activeProjectItem.ProjectIsActive = true;
 
             var lastActiveProject = await _context.ProjectItems.Where(p => p.ProjectIsActive == true && p.UserId == userId).ToListAsync();
 

@@ -189,17 +189,10 @@
     //PUT ACTIVE PROJECT STATUS
     function setActiveProject(projectItemId) {
 
-        var projectName = $(`#projectOption${projectItemId}`).text();
-
-        var projectDescription = $(`#hiddenProjectDescription${projectItemId}`).val();
-
         const item = {
 
             projectItemID: parseInt(projectItemId, 10),
             userId: userId,
-            projectName: projectName,
-            projectIsActive: true,
-            projectDescription: projectDescription
 
         };
 

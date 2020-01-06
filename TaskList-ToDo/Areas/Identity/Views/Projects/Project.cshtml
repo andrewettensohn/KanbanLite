@@ -89,24 +89,17 @@
     //PUT PROJECT DESCRIPTION
     function changeProjectDescription(itemId) {
 
-        var projectName = $(`#projectItemHeader${itemId}`).text();
-
         var projectDescription = $(`#projectDescription${itemId}`).val().toString();
-        var projectActivationState = $(`#hiddenProjectStatus`).text();
-        var projectCreationTime = $(`creationTime${itemId}`).text();
 
         const item = {
 
             projectItemID: parseInt(itemId, 10),
             userId: userId,
-            projectName: projectName,
-            projectDescription: projectDescription,
-            projectIsActive: projectActivationState,
-            projectCreationTime: projectCreationTime
+            projectDescription: projectDescription
 
         };
 
-        fetch(uri + `/${itemId}`, {
+        fetch(uri + `/${userId}/UpdateDescription/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -158,22 +151,15 @@
         var projectNameElement = `projectItemHeader${itemId}`;
         var inputAreaElement = `areaInputNameChange${itemId}`;
 
-        var projectDescription = $(`#projectDescription${itemId}`).val().toString();
-        var projectActivationState = $(`#hiddenProjectStatus`).text();
-        var projectCreationTime = $(`creationTime${itemId}`).text();
-
         var item = {
 
             projectItemID: parseInt(itemId, 10),
             userId: userId,
             projectName: newProjectName,
-            projectDescription: projectDescription,
-            projectIsActive: projectActivationState,
-            projectCreationTime: projectCreationTime
 
             };
 
-        fetch(uri + `/${itemId}`, {
+        fetch(uri + `/${userId}/UpdateName/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -190,18 +176,10 @@
     //PUT ACTIVE PROJECT STATUS
     function setActiveProject(itemId) {
 
-        var projectName = $(`#projectItemHeader${itemId}`).text();
-
-        var projectDescription = $(`#projectDescription${itemId}`).text();
-
         const item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId,
-            projectName: projectName,
-            projectIsActive: true,
-            projectDescription: projectDescription
-
+            userId: userId
         };
 
         fetch(uri + `/SetActiveProject/${userId}/${itemId}`, {
