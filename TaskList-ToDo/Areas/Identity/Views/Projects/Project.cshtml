@@ -89,22 +89,17 @@
     //PUT PROJECT DESCRIPTION
     function changeProjectDescription(itemId) {
 
-        var projectName = $(`#projectItemHeader${itemId}`).text();
-
         var projectDescription = $(`#projectDescription${itemId}`).val().toString();
-        var projectActivationState = $(`#hiddenProjectStatus`).text();
 
         const item = {
 
-        projectItemID: parseInt(itemId, 10),
-        userId: userId,
-        projectName: projectName,
-        projectDescription: projectDescription,
-        projectIsActive: projectActivationState
+            projectItemID: parseInt(itemId, 10),
+            userId: userId,
+            projectDescription: projectDescription
 
         };
 
-        fetch(uri + `/${itemId}`, {
+        fetch(uri + `/${userId}/UpdateDescription/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -156,19 +151,15 @@
         var projectNameElement = `projectItemHeader${itemId}`;
         var inputAreaElement = `areaInputNameChange${itemId}`;
 
-        var projectDescription = $(`#projectDescription${itemId}`).val().toString();
-        var projectActivationState = $(`#hiddenProjectStatus`).text();
-
         var item = {
 
-                projectItemID: parseInt(itemId, 10),
-                userId: userId,
-                projectName: newProjectName,
-                projectDescription: projectDescription,
-                projectIsActive: projectActivationState
+            projectItemID: parseInt(itemId, 10),
+            userId: userId,
+            projectName: newProjectName,
+
             };
 
-        fetch(uri + `/${itemId}`, {
+        fetch(uri + `/${userId}/UpdateName/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -185,18 +176,10 @@
     //PUT ACTIVE PROJECT STATUS
     function setActiveProject(itemId) {
 
-        var projectName = $(`#projectItemHeader${itemId}`).text();
-
-        var projectDescription = $(`#projectDescription${itemId}`).text();
-
         const item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId,
-            projectName: projectName,
-            projectIsActive: true,
-            projectDescription: projectDescription
-
+            userId: userId
         };
 
         fetch(uri + `/SetActiveProject/${userId}/${itemId}`, {
@@ -212,11 +195,12 @@
 
     }
 
-
     //CREATE PROJECT HTML
     function displayItems(data) {
 
         data.forEach(item => {
+
+            console.log(item.projectStatusStats)
 
             var projectItemHTML = `
             <div id="projectItemAccordion${item.projectItemID}">
@@ -227,13 +211,26 @@
                         </svg>
                     </div>
                     <div id="projectItemHeading${item.projectItemID}" class="card-header bg-dark">
-                        <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
-                            <h5 id="projectItemHeader${item.projectItemID}" onclick="displayProjectNameInput('${item.projectItemID}')" class="mx-2 mt-1">${item.projectName}</h5>
-                            <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
-                                <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="projectNameChange('${item.projectItemID}')" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
+                        <div class="d-flex flex-row">
+                            <div id="divProjectItemName${item.projectItemID}" class="mb-0 float-left">
+                                <h5 id="projectItemHeader${item.projectItemID}" onclick="displayProjectNameInput('${item.projectItemID}')" class="mx-2 mt-1">${item.projectName}</h5>
+                                <div id="areaInputNameChange${item.projectItemID}" class="input-group mb-3 d-none">
+                                    <input id="inputNameChange${item.projectItemID}" maxlength="25" onfocusout="projectNameChange('${item.projectItemID}')" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                    </div>
                                 </div>
                             </div>
+                            <div class="ml-auto pr-5">Start Date</div>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div id="creationTime${item.projectItemID}" class="mr-auto pl-2">${item.projectTotalTasks} Tasks</div>
+                            <div class="ml-auto pl-5">${item.projectCreationTime}</div>
+                        </div>
+                        <br />
+                        <div class="progress">
+                            <div class="progress-bar bg-danger text-dark font-weight-bold" role="progressbar" style="width: ${item.projectStatusStats["Not Started Percent"]}%">${item.projectStatusStats["Not Started Count"]} Tasks</div>
+                            <div class="progress-bar bg-warning text-dark font-weight-bold" role="progressbar" style="width: ${item.projectStatusStats["In-Progress Percent"]}%">${item.projectStatusStats["In-Progress Count"]} Tasks</div>
+                            <div class="progress-bar bg-success text-dark font-weight-bold" role="progressbar" style="width: ${item.projectStatusStats["Completed Percent"]}%">${item.projectStatusStats["Completed Count"]} Tasks</div>
                         </div>
                     </div>
                     <div id="projectItemCollapse${item.projectItemID}" class="collapse" item-parent="#projectItemAccordion$">

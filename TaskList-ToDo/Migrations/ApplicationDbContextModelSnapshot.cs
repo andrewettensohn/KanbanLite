@@ -226,6 +226,9 @@ namespace TaskList_ToDo.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ProjectCreationTime")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProjectDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -234,6 +237,9 @@ namespace TaskList_ToDo.Migrations
 
                     b.Property<string>("ProjectName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProjectTotalTasks")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");

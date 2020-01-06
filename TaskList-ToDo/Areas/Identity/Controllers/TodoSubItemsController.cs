@@ -94,12 +94,7 @@ namespace ToDoApi.Controllers
                 todoSubItem.SubTaskName = "Untitled";
             }
 
-            //if (todoSubItem.SubTaskDescription == "" || todoSubItem.SubTaskDescription is null)
-            //{
-            //    todoSubItem.SubTaskDescription = "No Description";
-            //}
-
-                _context.TodoSubItems.Add(todoSubItem);
+            _context.TodoSubItems.Add(todoSubItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetToDoSubItem), new { id = todoSubItem.TodoSubItemID }, todoSubItem);

@@ -35,7 +35,6 @@ namespace ToDoApi.Controllers
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
 
-
             if (todoItem == null)
             {
                 return NotFound();
@@ -49,9 +48,11 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(string userId, int projectID)
         {
 
-            var projectItemList = await _context.TodoItems.Where(p => p.UserId == userId && p.ProjectID == projectID).ToListAsync();
+            var todoItems = await _context.TodoItems.Where(project => project.UserId == userId && project.ProjectID == projectID).ToListAsync();
 
-            return projectItemList;
+            var todoSubItems = await _context.TodoSubItems.Where(todoItem => todoItem.UserId == userId).ToListAsync();
+
+            return todoItems;
 
         }
 
@@ -177,6 +178,12 @@ namespace ToDoApi.Controllers
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
+            var projectItem = await _context.ProjectItems.FindAsync(todoItem.ProjectID);
+            projectItem.ProjectTotalTasks++;
+
+            _context.Entry(projectItem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.TodoItemID }, todoItem);
         }
 
@@ -204,6 +211,12 @@ namespace ToDoApi.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
+
+            var projectItem = await _context.ProjectItems.FindAsync(todoItem.ProjectID);
+            projectItem.ProjectTotalTasks--;
+
+            _context.Entry(projectItem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
             return todoItem;
         }

@@ -97,6 +97,12 @@
                 </div>
                 <br />
 
+                <!--Active Project Header-->
+                <div id="activeProjectHeaderArea">
+                    <h2 class="display-6" id="activeProjectHeader"></h2>
+                    <hr />
+                </div>
+
                 <!--Loading Animation-->
                 <div id="loadingAnimationArea" class="d-none">
                     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
@@ -129,24 +135,21 @@
     const uri = 'api/TodoItems';
     const uri1 = 'api/TodoItems/Tasks';
     const uri2 = 'api/TodoSubItems';
-    const uriProject = 'api/ProjectItems/ProjectList';
+    const uriProject = 'api/ProjectItems';
     @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
     $(document).ready(getProjectInfo());
 
     //GET AND DISPLAY Project Options
-    function getProjectInfo(newActiveProjectID) {
-
-        var projectChange = false;
+    function getProjectInfo() {
 
         $(`#dropdownChooseProject`).empty();
 
-        fetch(uriProject + `/${userId}`)
+        fetch(uriProject + `/ProjectList/${userId}`)
             .then(response => response.json())
             .then(data => displayProjectDropdownOptions(data))
             .catch(error => console.error('Unable to get items.', error));
-
 
         function displayProjectDropdownOptions(data) {
 
@@ -159,50 +162,18 @@
                 return;
             }
 
-            if (data.length == 1) {
-
-                data[0].projectIsActive = true;
-                var newActiveProjectID = data[0].projectID;
-
-            }
-
-            if (newActiveProjectID != null) {
-
-                 data.forEach(projectItem => {
-
-                    if (newActiveProjectID == projectItem.projectItemID) {
-
-                        projectItem.projectIsActive = true;
-                        projectChange = true;
-
-                        fetch(`api/ProjectItems/SetActiveProject/${userId}/${newActiveProjectID}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(projectItem)
-                        })
-                            .catch(error => console.error('Unable to delete item.', error));
-
-                    } else {
-
-                        projectItem.projectIsActive = false;
-                    }
-
-                });
-
-            }
-
             data.forEach(projectItem => {
 
                 if (projectItem.projectIsActive) {
 
                     $(`#hiddenActiveProjectID`).text(projectItem.projectItemID);
+                    $(`#activeProjectHeader`).text(projectItem.projectName);
 
                 }
 
-                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="getItems(null, null, ${projectItem.projectItemID})">${projectItem.projectName}</a>`
+                var projectOptionHTML = `<a class="dropdown-item" href="#" id="projectOption${projectItem.projectItemID}" onclick="setActiveProject(${projectItem.projectItemID})">${projectItem.projectName}</a>
+                                         <p class="d-none" id=hiddenProjectDescription${projectItem.projectItemID}></p>
+                                        `
 
                 var newDiv = document.createElement('div');
                 newDiv.innerHTML = projectOptionHTML;
@@ -210,30 +181,41 @@
 
             });
 
-            if (!projectChange) {
-
-                getItems();
-
-            }
+            getItems();
 
         }
+    }
+
+    //PUT ACTIVE PROJECT STATUS
+    function setActiveProject(projectItemId) {
+
+        const item = {
+
+            projectItemID: parseInt(projectItemId, 10),
+            userId: userId,
+
+        };
+
+        fetch(uriProject + `/SetActiveProject/${userId}/${projectItemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(() => getProjectInfo())
+            .catch(error => console.error('Unable to delete item.', error));
 
     }
 
 
     //GET ALL
-    function getItems(filterOption, filterElement, newProjectID) {
+    function getItems(filterOption, filterElement) {
 
-        if (typeof newProjectID !== "undefined") {
+        var projectID = $(`#hiddenActiveProjectID`).text();
 
-            var projectID = newProjectID;
-            getProjectInfo(newProjectID);
-
-        } else {
-
-            var projectID = $(`#hiddenActiveProjectID`).text(); 
-
-        }
+        console.log(projectID)
 
         $("#output").empty();
 

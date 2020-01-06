@@ -10,6 +10,7 @@ namespace TodoApi.Models
     public class TodoSubItem
     {
         public int TodoSubItemID { get; set; }
+
         public int TodoItemID { get; set; }
 
         public string UserId { get; set; }

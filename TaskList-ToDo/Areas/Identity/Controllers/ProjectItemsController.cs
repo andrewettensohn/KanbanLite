@@ -27,20 +27,11 @@ namespace ToDoApi.Controllers
         [HttpGet("ProjectList/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectItem>>> GetProjectItems(string userId)
         {
-            var projectItemList = await _context.ProjectItems.ToListAsync();
+            var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
-            var queryUserProjectItems = from ProjectItem projectItem in projectItemList
-                                        where projectItem.UserId == userId
-                                        select projectItem;
+            projectsList = ProjectTaskStatsCalculator(projectsList);
 
-            var userProjectItems = new List<ProjectItem>();
-
-            foreach (ProjectItem t in queryUserProjectItems)
-            {
-                userProjectItems.Add(t);
-            }
-
-            return userProjectItems;
+            return projectsList;
         }
 
         //GET: Projects/api/ProjectItems/5
@@ -57,11 +48,26 @@ namespace ToDoApi.Controllers
             return projectItem;
         }
 
-        // PUT: Projects/api/ProjectItems/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProjectItem(int id, ProjectItem projectItem)
+        // PUT: Projects/api/ProjectItems/userId/UpdateName/5
+        [HttpPut("{userId}/{updateType}/{id}")]
+        public async Task<IActionResult> PutProjectItem(string updateType, int id, ProjectItem sentProjectItem)
         {
-            if (id != projectItem.ProjectItemID)
+            if (id != sentProjectItem.ProjectItemID)
+            {
+                return BadRequest();
+            }
+
+            var projectItem = await _context.ProjectItems.FindAsync(id);
+
+            if(updateType == "UpdateDescription")
+            {
+                projectItem.ProjectDescription = sentProjectItem.ProjectDescription;
+            }
+            else if(updateType == "UpdateName")
+            {
+                projectItem.ProjectName = sentProjectItem.ProjectName;
+            }
+            else
             {
                 return BadRequest();
             }
@@ -90,17 +96,25 @@ namespace ToDoApi.Controllers
 
         // PUT: Projects/api/ProjectItems/SetActiveProject/userId/5
         [HttpPut("SetActiveProject/{userId}/{id}")]
-        public async Task<IActionResult> setActiveProject(string userId, int id, ProjectItem activeProjectItem)
+        public async Task<IActionResult> setActiveProject(string userId, int id, ProjectItem sentProjectItem)
         {
-            if (id != activeProjectItem.ProjectItemID)
+            if (id != sentProjectItem.ProjectItemID)
             {
                 return BadRequest();
             }
 
-            var projectsList = await _context.ProjectItems.Where(p => p.ProjectIsActive == true && p.UserId == userId).ToListAsync();
+            var activeProjectItem = await _context.ProjectItems.FindAsync(id);
+            activeProjectItem.ProjectIsActive = true;
 
-            foreach (var item in projectsList)
+            var lastActiveProject = await _context.ProjectItems.Where(p => p.ProjectIsActive == true && p.UserId == userId).ToListAsync();
+
+            foreach (var item in lastActiveProject)
             {
+                if (item.ProjectItemID == activeProjectItem.ProjectItemID && item.ProjectIsActive == true)
+                {
+                    return NoContent();
+                }
+
                 item.ProjectIsActive = false;
             }
 
@@ -124,6 +138,7 @@ namespace ToDoApi.Controllers
                 }
             }
 
+            _context.Entry(activeProjectItem).State = EntityState.Detached;
             return NoContent();
         }
 
@@ -132,17 +147,19 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<ProjectItem>> PostProjectItem(string userId, ProjectItem projectItem)
         {
             projectItem.ProjectDescription = "Enter a project description here...";
-
-            //projectItem.ProjectCreationTime = new DateTime
+            projectItem.ProjectCreationTime = DateTime.Now.ToLongDateString();
 
             var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
-            if(projectItemList.Count() == 1)
+            if (projectItemList.Count() == 0)
             {
-                await setActiveProject(userId, projectItem.ProjectItemID, projectItem);
+                projectItem.ProjectIsActive = true;
             }
 
-
+            if (projectItem.ProjectName == null || projectItem.ProjectName == "" )
+            {
+                projectItem.ProjectName = "Untitled";
+            }
 
             _context.ProjectItems.Add(projectItem);
             await _context.SaveChangesAsync();
@@ -185,6 +202,73 @@ namespace ToDoApi.Controllers
         private bool ProjectItemExists(int id)
         {
             return _context.ProjectItems.Any(e => e.ProjectItemID == id);
+        }
+
+        private List<ProjectItem> ProjectTaskStatsCalculator(List<ProjectItem> projectList)
+        {
+
+            var projectListWithStats = new List<ProjectItem>();
+
+            foreach (ProjectItem projectItem in projectList)
+            {
+
+                var todoItemList = _context.TodoItems.Where(todoItem => todoItem.ProjectID == projectItem.ProjectItemID).ToList();
+                var notStartedCount = 0;
+                var inProgressCount = 0;
+                var completedCount = 0;
+
+
+                foreach (var todoItem in todoItemList)
+                {
+                    if (todoItem.TaskStatus == "Not Started")
+                    {
+                        notStartedCount++;
+                    }
+                    else if (todoItem.TaskStatus == "In-Progress")
+                    {
+                        inProgressCount++;
+                    }
+                    else if (todoItem.TaskStatus == "Completed")
+                    {
+                        completedCount++;
+                    }
+
+                }
+
+                var taskCountTotal = notStartedCount + inProgressCount + completedCount;
+
+                var projectStatusStatsCalculated = new Dictionary<string, int>
+
+                    {
+                        { "Not Started Count", 0 },
+                        { "Not Started Percent", 0 },
+                        { "In-Progress Count", 0 },
+                        { "In-Progress Percent", 0 },
+                        { "Completed Count", 0 },
+                        { "Completed Percent", 0 }
+                    };
+
+                if (taskCountTotal <= 0)
+                {
+                    projectItem.ProjectStatusStats = projectStatusStatsCalculated;
+                    projectListWithStats.Add(projectItem);
+                } 
+                else
+                {
+                    projectStatusStatsCalculated["Not Started Count"] = notStartedCount;
+                    projectStatusStatsCalculated["Not Started Percent"] = (int)Math.Round((double)(100 * notStartedCount) / taskCountTotal);
+                    projectStatusStatsCalculated["In-Progress Count"] = inProgressCount;
+                    projectStatusStatsCalculated["In-Progress Percent"] = (int)Math.Round((double)(100 * inProgressCount) / taskCountTotal);
+                    projectStatusStatsCalculated["Completed Count"] = completedCount;
+                    projectStatusStatsCalculated["Completed Percent"] = (int)Math.Round((double)(100 * completedCount) / taskCountTotal);
+
+                    projectItem.ProjectStatusStats = projectStatusStatsCalculated;
+
+                    projectListWithStats.Add(projectItem);
+                }
+            }
+
+            return projectListWithStats;
         }
 
     }
