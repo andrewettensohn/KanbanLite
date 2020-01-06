@@ -92,7 +92,7 @@ namespace ToDoApi.Controllers
 
             foreach (var item in lastActiveProject)
             {
-                if(item.ProjectItemID == activeProjectItem.ProjectItemID && item.ProjectIsActive == true)
+                if (item.ProjectItemID == activeProjectItem.ProjectItemID && item.ProjectIsActive == true)
                 {
                     return NoContent();
                 }
@@ -130,7 +130,6 @@ namespace ToDoApi.Controllers
         {
             projectItem.ProjectDescription = "Enter a project description here...";
             projectItem.ProjectCreationTime = DateTime.Now.ToLongDateString();
-            //projectItem.ProjectTaskStatusStats = ProjectTaskStatusStatsHandler();
 
             var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
@@ -223,9 +222,12 @@ namespace ToDoApi.Controllers
                 var projectStatusStatsCalculated = new Dictionary<string, int>
 
                     {
-                        { "Not Started", 0 },
-                        { "In-Progress", 0 },
-                        { "Completed", 0 }
+                        { "Not Started Count", 0 },
+                        { "Not Started Percent", 33 },
+                        { "In-Progress Count", 0 },
+                        { "In-Progress Percent", 33 },
+                        { "Completed Count", 0 },
+                        { "Completed Percent", 33 }
                     };
 
                 if (taskCountTotal <= 0)
@@ -235,9 +237,11 @@ namespace ToDoApi.Controllers
                 } 
                 else
                 {
-
+                    projectStatusStatsCalculated["Not Started Count"] = notStartedCount;
                     projectStatusStatsCalculated["Not Started"] = (int)Math.Round((double)(100 * notStartedCount) / taskCountTotal);
+                    projectStatusStatsCalculated["In-Progress Count"] = inProgressCount;
                     projectStatusStatsCalculated["In-Progress"] = (int)Math.Round((double)(100 * inProgressCount) / taskCountTotal);
+                    projectStatusStatsCalculated["Completed Count"] = completedCount;
                     projectStatusStatsCalculated["Completed"] = (int)Math.Round((double)(100 * completedCount) / taskCountTotal);
 
                     projectItem.ProjectStatusStats = projectStatusStatsCalculated;

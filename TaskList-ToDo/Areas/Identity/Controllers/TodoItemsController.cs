@@ -210,6 +210,12 @@ namespace ToDoApi.Controllers
                 }
             }
 
+            var projectItem = await _context.ProjectItems.FindAsync(todoItem.ProjectID);
+            projectItem.ProjectTotalTasks--;
+
+            _context.Entry(projectItem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
             return todoItem;
         }
 
