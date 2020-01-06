@@ -48,9 +48,11 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(string userId, int projectID)
         {
 
-            var projectItemList = await _context.TodoItems.Where(p => p.UserId == userId && p.ProjectID == projectID).ToListAsync();
+            var todoItems = await _context.TodoItems.Where(project => project.UserId == userId && project.ProjectID == projectID).ToListAsync();
 
-            return projectItemList;
+            var todoSubItems = await _context.TodoSubItems.Where(todoItem => todoItem.UserId == userId).ToListAsync();
+
+            return todoItems;
 
         }
 
