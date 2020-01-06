@@ -241,11 +241,11 @@ namespace ToDoApi.Controllers
 
                     {
                         { "Not Started Count", 0 },
-                        { "Not Started Percent", 33 },
+                        { "Not Started Percent", 0 },
                         { "In-Progress Count", 0 },
-                        { "In-Progress Percent", 33 },
+                        { "In-Progress Percent", 0 },
                         { "Completed Count", 0 },
-                        { "Completed Percent", 33 }
+                        { "Completed Percent", 0 }
                     };
 
                 if (taskCountTotal <= 0)
@@ -256,11 +256,11 @@ namespace ToDoApi.Controllers
                 else
                 {
                     projectStatusStatsCalculated["Not Started Count"] = notStartedCount;
-                    projectStatusStatsCalculated["Not Started"] = (int)Math.Round((double)(100 * notStartedCount) / taskCountTotal);
+                    projectStatusStatsCalculated["Not Started Percent"] = (int)Math.Round((double)(100 * notStartedCount) / taskCountTotal);
                     projectStatusStatsCalculated["In-Progress Count"] = inProgressCount;
-                    projectStatusStatsCalculated["In-Progress"] = (int)Math.Round((double)(100 * inProgressCount) / taskCountTotal);
+                    projectStatusStatsCalculated["In-Progress Percent"] = (int)Math.Round((double)(100 * inProgressCount) / taskCountTotal);
                     projectStatusStatsCalculated["Completed Count"] = completedCount;
-                    projectStatusStatsCalculated["Completed"] = (int)Math.Round((double)(100 * completedCount) / taskCountTotal);
+                    projectStatusStatsCalculated["Completed Percent"] = (int)Math.Round((double)(100 * completedCount) / taskCountTotal);
 
                     projectItem.ProjectStatusStats = projectStatusStatsCalculated;
 
