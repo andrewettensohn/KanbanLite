@@ -20,7 +20,7 @@ namespace TodoApi.Models
 
         public string TaskStatus { get; set; }
 
-        public List<Label> LabelList { get; set; }
+        public string LabelName { get; set; }
 
         public List<TodoSubItem> TodoSubItems { get; set; }
 
