@@ -256,6 +256,9 @@ namespace TaskList_ToDo.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("LabelName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProjectID")
                         .HasColumnType("int");
 
@@ -279,6 +282,9 @@ namespace TaskList_ToDo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LabelName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubTaskDescription")
                         .HasColumnType("nvarchar(max)");

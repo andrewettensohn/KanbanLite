@@ -73,7 +73,8 @@ namespace TaskList_ToDo.Migrations
                     UserId = table.Column<string>(nullable: true),
                     ProjectID = table.Column<int>(nullable: false),
                     TaskName = table.Column<string>(nullable: true),
-                    TaskStatus = table.Column<string>(nullable: true)
+                    TaskStatus = table.Column<string>(nullable: true),
+                    LabelName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -196,7 +197,8 @@ namespace TaskList_ToDo.Migrations
                     UserId = table.Column<string>(nullable: true),
                     SubTaskName = table.Column<string>(nullable: true),
                     SubTaskStatus = table.Column<string>(nullable: true),
-                    SubTaskDescription = table.Column<string>(nullable: true)
+                    SubTaskDescription = table.Column<string>(nullable: true),
+                    LabelName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
