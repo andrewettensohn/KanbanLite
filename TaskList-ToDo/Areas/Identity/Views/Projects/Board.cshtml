@@ -122,6 +122,24 @@
 
                 </div>
 
+                <!--Task Deletion Modal-->
+                <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Task Deletion</h5>
+                            </div>
+                            <div class="modal-body bg-dark">
+                                This action will delete the task. Are you sure?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
+                                <button id="btnDeleteTask" type="button" class="btn btn-danger">Delete Task</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!--Tasks Output-->
                 <div id="output"></div>
 
@@ -214,8 +232,6 @@
     function getItems(filterOption, filterElement) {
 
         var projectID = $(`#hiddenActiveProjectID`).text();
-
-        console.log(projectID)
 
         $("#output").empty();
 
@@ -535,25 +551,31 @@
     //DELETE TASK
     function deleteTask(itemId, subItemId, isSubTask) {
 
-        if (isSubTask == true) {
+        $("#btnDeleteTask").on("click", function () {
 
-            fetch(`${uri2}/${subItemId}`, {
-                method: 'DELETE'
-            })
-                .then(() => $(`#subAccordion${subItemId}`).remove())
-                .catch(error => console.error('Unable to delete item.', error));
+            if (isSubTask == true) {
+
+                fetch(`${uri2}/${subItemId}`, {
+                    method: 'DELETE'
+                })
+                    .then(() => $(`#subAccordion${subItemId}`).remove())
+                    .then(() => $("#deleteConfirmationModal").modal('toggle'))
+                    .catch(error => console.error('Unable to delete item.', error));
 
 
 
-        }
-        else if (isSubTask == false) {
+            }
+            else if (isSubTask == false) {
 
-            fetch(`${uri}/${itemId}`, {
-                method: 'DELETE'
-            })
-                .then(() => $(`#taskAccordion${itemId}`).remove())
-                .catch(error => console.error('Unable to delete item.', error));
-        }
+                fetch(`${uri}/${itemId}`, {
+                    method: 'DELETE'
+                })
+                    .then(() => $(`#taskAccordion${itemId}`).remove())
+                    .then(() => $("#deleteConfirmationModal").modal('toggle'))
+                    .then(() => getItems())
+                    .catch(error => console.error('Unable to delete item.', error));
+            }
+        });
     }
 
     //DISPLAY SUB TASK DESCRIPTION
@@ -623,8 +645,6 @@
     //CREATE TASK HTML
     function displayItems(data) {
 
-        console.log(data)
-
         if (data.status == 400 || data.length == 0) {
 
             $("#noTasksFoundArea").removeClass('d-none');
@@ -650,7 +670,7 @@
                                 <svg class="${cheveronHide} align-middle mr-4" onclick="toggleCollapse('${item.todoItemID}', false)" touchstart="toggleCollapse('${item.todoItemID}', false)" id="i-chevron-bottom${item.todoItemID}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M30 10 L16 26 2 10 Z" />
                                 </svg>
-                                <svg class="float-right my-1" id="btnDeleteTask${item.todoItemID}" onclick="deleteTask(${item.todoItemID}, 'N/A', false)" touchstart="deleteTask(${item.todoItemID}, 'N/A', false)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <svg class="float-right my-1" id="btnDeleteTask${item.todoItemID}" onclick="deleteTask(${item.todoItemID}, 'N/A', false)" data-toggle="modal" data-target="#deleteConfirmationModal" touchstart="deleteTask(${item.todoItemID}, 'N/A', false)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M2 30 L30 2 M30 30 L2 2" />
                                 </svg>
                             </div>
@@ -746,7 +766,7 @@
                         <svg class="d-none align-middle mr-2" onclick="toggleCollapse('${subItem.todoSubItemID}', true)" touchstart="toggleCollapse('${subItem.todoSubItemID}', true)" id="i-chevron-bottom-sub${subItem.todoSubItemID}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="15" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                             <path d="M30 10 L16 26 2 10 Z" />
                         </svg>
-                        <svg class="float-right my-1" id="btnDeleteTask${subItem.todoSubItemID}" onclick="deleteTask(${item.todoItemID}, ${subItem.todoSubItemID}, true)" touchstart="deleteTask(${item.todoItemID}, ${subItem.todoSubItemID}, true)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="15" height="15" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <svg class="float-right my-1" id="btnDeleteSubTask${subItem.todoSubItemID}" onclick="deleteTask(${item.todoItemID}, ${subItem.todoSubItemID}, true)" data-toggle="modal" data-target="#deleteConfirmationModal" touchstart="deleteTask(${item.todoItemID}, ${subItem.todoSubItemID}, true)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="15" height="15" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                             <path d="M2 30 L30 2 M30 30 L2 2" />
                         </svg>
                     </div>
@@ -764,7 +784,7 @@
                             <p id="subHiddenTaskStatus${subItem.todoSubItemID}">${subItem.subTaskStatus}</p>
                         </div>
                         <div class="dropdown show">
-                            <a class="btn text-white dropdown-toggle float-left" href="#" role="button" id="subStatusDropDown${subItem.todoSubItemID}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn text-white dropdown-toggle float-left" href="#" role="button" id="subStatusDropDown${subItem.todoSubItemID}" data-toggle="dropdown">
                                 ${subItem.subTaskStatus}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="statusDropDown${subItem.todoSubItemID}">
