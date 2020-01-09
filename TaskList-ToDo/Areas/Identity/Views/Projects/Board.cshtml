@@ -662,50 +662,61 @@
             var taskHTML = `
 
                 <div id="taskAccordion${item.todoItemID}">
-                        <div id="taskCard${item.todoItemID}" class="card bg-dark border-secondary rounded-0">
+                    <div id="taskCard${item.todoItemID}" class="card bg-dark border-secondary rounded-0">
+                        <div class="d-flex flex-row justify-content-end my-2">
                             <div>
-                                <svg class="float-left my-1" onclick="addSubItem(${item.todoItemID})" touchstart="addSubItem(${item.todoItemID})"  id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <svg class="" onclick="addSubItem(${item.todoItemID})" touchstart="addSubItem(${item.todoItemID})" id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M16 2 L16 30 M2 16 L30 16" />
                                 </svg>
-                                <svg class="${cheveronHide} align-middle mr-4" onclick="toggleCollapse('${item.todoItemID}', false)" touchstart="toggleCollapse('${item.todoItemID}', false)" id="i-chevron-bottom${item.todoItemID}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            </div>
+                            <div>
+                                <svg class="" id="i-tag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <circle cx="24" cy="8" r="2" />
+                                    <path d="M2 18 L18 2 30 2 30 14 14 30 Z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="${cheveronHide}" onclick="toggleCollapse('${item.todoItemID}', false)" touchstart="toggleCollapse('${item.todoItemID}', false)" id="i-chevron-bottom${item.todoItemID}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M30 10 L16 26 2 10 Z" />
                                 </svg>
-                                <svg class="float-right my-1" id="btnDeleteTask${item.todoItemID}" onclick="deleteTask(${item.todoItemID}, 'N/A', false)" data-toggle="modal" data-target="#deleteConfirmationModal" touchstart="deleteTask(${item.todoItemID}, 'N/A', false)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            </div>
+                            <div class="mr-auto">
+                                <svg id="btnDeleteTask${item.todoItemID}" onclick="deleteTask(${item.todoItemID}, 'N/A', false)" data-toggle="modal" data-target="#deleteConfirmationModal" touchstart="deleteTask(${item.todoItemID}, 'N/A', false)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M2 30 L30 2 M30 30 L2 2" />
                                 </svg>
                             </div>
-                            <div class="card-header bg-dark" id="taskHeading${item.todoItemID}">
-                                <img id="statusIcon${item.todoItemID}" class="float-left" height="80" width="8" src="../../lib/statusIcons/${item.taskStatus}.png" />
-                                <div class="mb-0 float-left" id="divTaskName${item.todoItemID}">
-                                    <h5 onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1" id="taskNameHeader${item.todoItemID}">${item.taskName}</h5>
-                                    <div class="input-group mb-3 d-none" id="areaInputNameChange${item.todoItemID}">
-                                        <input id="inputNameChange${item.todoItemID}" maxlength="25" onfocusout="taskNameChange('${item.todoItemID}', 'N/A', false)" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                        </div>
+                        </div>
+                        <div class="card-header bg-dark" id="taskHeading${item.todoItemID}">
+                            <img id="statusIcon${item.todoItemID}" class="float-left" height="80" width="8" src="../../lib/statusIcons/${item.taskStatus}.png" />
+                            <div class="mb-0 float-left" id="divTaskName${item.todoItemID}">
+                                <h5 onclick="displayTaskInput('${item.todoItemID}', 'N/A', false)" class="mx-2 mt-1" id="taskNameHeader${item.todoItemID}">${item.taskName}</h5>
+                                <div class="input-group mb-3 d-none" id="areaInputNameChange${item.todoItemID}">
+                                    <input id="inputNameChange${item.todoItemID}" maxlength="25" onfocusout="taskNameChange('${item.todoItemID}', 'N/A', false)" type="text" class="form-control bg-dark text-white border-0" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
                                     </div>
-                                </div>
-                                <div class="d-none">
-                                    <p id="hiddenTaskStatus${item.todoItemID}">${item.taskStatus}</p>
-                                </div>
-                                <div class="dropdown show">
-                                    <a class="btn text-white dropdown-toggle float-left" href="#" role="button" id="statusDropDown${item.todoItemID}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        ${item.taskStatus}
-                                    </a>
-                                    <div class="dropdown-menu ml-3 mt-1" aria-labelledby="statusDropDown${item.todoItemID}">
-                                        <a class="dropdown-item" onclick="taskStatusChange('Not Started', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">Not Started</a>
-                                        <a class="dropdown-item" onclick="taskStatusChange('In-Progress', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">In-Progress</a>
-                                        <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">Completed</a>
-                                    </div>
-                                </div>
-                                <div>
                                 </div>
                             </div>
-                            <div id="taskCollapse${item.todoItemID}" class="collapse bg-secondary" aria-labelledby="taskHeading${item.todoItemID}" item-parent="#taskAccordion${item.todoItemID}">
+                            <div class="d-none">
+                                <p id="hiddenTaskStatus${item.todoItemID}">${item.taskStatus}</p>
+                            </div>
+                            <div class="dropdown show">
+                                <a class="btn text-white dropdown-toggle float-left" href="#" role="button" id="statusDropDown${item.todoItemID}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    ${item.taskStatus}
+                                </a>
+                                <div class="dropdown-menu ml-3 mt-1" aria-labelledby="statusDropDown${item.todoItemID}">
+                                    <a class="dropdown-item" onclick="taskStatusChange('Not Started', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">Not Started</a>
+                                    <a class="dropdown-item" onclick="taskStatusChange('In-Progress', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">In-Progress</a>
+                                    <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">Completed</a>
+                                </div>
+                            </div>
+                            <h4><span class="badge badge-danger float-right">Danger</span></h4>
+                        </div>
+                        <div id="taskCollapse${item.todoItemID}" class="collapse bg-secondary" aria-labelledby="taskHeading${item.todoItemID}" item-parent="#taskAccordion${item.todoItemID}">
 
-                            </div>
                         </div>
                     </div>
-                    <br />
+                </div>
+                <br />
                 `;
 
             var newDiv = document.createElement('div');
@@ -793,6 +804,7 @@
                                 <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', '${subItem.todoSubItemID}', '${subItem.subTaskName}', true)">Completed</a>
                             </div>
                         </div>
+                    <span class="badge badge-danger float-right">Danger</span>
                     </div>
                 </div>
             </div>
