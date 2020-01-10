@@ -134,7 +134,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
-                                <button id="btnDeleteTask" type="button" class="btn btn-danger">Delete Task</button>
+                                <button id="btnDeleteTask" type="button" class="btn btn-danger" data-dismiss="modal">Delete Task</button>
                             </div>
                         </div>
                     </div>
@@ -153,6 +153,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
+                                <a class="btn btn-info" href="@Url.Action("Tags","Projects")">Edit Tags</a>
                             </div>
                         </div>
                     </div>
@@ -577,7 +578,6 @@
                     method: 'DELETE'
                 })
                     .then(() => $(`#subAccordion${subItemId}`).remove())
-                    .then(() => $("#deleteConfirmationModal").modal('toggle'))
                     .catch(error => console.error('Unable to delete item.', error));
 
 
@@ -589,7 +589,6 @@
                     method: 'DELETE'
                 })
                     .then(() => $(`#taskAccordion${itemId}`).remove())
-                    .then(() => $("#deleteConfirmationModal").modal('toggle'))
                     .catch(error => console.error('Unable to delete item.', error));
             }
         });
