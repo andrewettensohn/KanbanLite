@@ -122,12 +122,12 @@
 
                 </div>
 
-                <!--Task Deletion Modal-->
+                <!--Deletion Modal-->
                 <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content bg-dark">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Task Deletion</h5>
+                                <h5 class="modal-title" id="deleteConfirmationModalTitle">Task Deletion</h5>
                             </div>
                             <div class="modal-body bg-dark">
                                 This action will delete the task. Are you sure?
@@ -135,6 +135,24 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
                                 <button id="btnDeleteTask" type="button" class="btn btn-danger">Delete Task</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Tag Modal-->
+                <div class="modal fade" id="tagModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Tags</h5>
+                            </div>
+                            <div class="modal-body bg-dark">
+                                <a href="#" class="list-group-item list-group-item-action list-group-item-primary">Primary</a>
+                                <a href="#" class="list-group-item list-group-item-action list-group-item-secondary">Secondary</a>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -641,8 +659,12 @@
 
     }
 
-    function showAddTag(itemId) {
+    //ADD TAG
+    function addTag(itemId, subTaskId, isSubTask) {
 
+        $("#btnDeleteTask").on("click", function () {
+
+        });
 
     }
 
@@ -671,6 +693,12 @@
                             <div>
                                 <svg class="" onclick="addSubItem(${item.todoItemID})" touchstart="addSubItem(${item.todoItemID})" id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M16 2 L16 30 M2 16 L30 16" />
+                                </svg>
+                            </div>
+                            <div>
+                                <svg id="btnAddTaskTag${item.todoItemID}" data-toggle="modal" data-target="#tagModal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <circle cx="24" cy="8" r="2" />
+                                    <path d="M2 18 L18 2 30 2 30 14 14 30 Z" />
                                 </svg>
                             </div>
                             <div class="flex-fill mx-auto">
@@ -707,7 +735,6 @@
                                     <a class="dropdown-item" onclick="taskStatusChange('Completed', '${item.todoItemID}', 'N/A', '${item.taskName}', false)">Completed</a>
                                 </div>
                             </div>
-
                         </div>
                         <div id="taskCollapse${item.todoItemID}" class="collapse bg-secondary" aria-labelledby="taskHeading${item.todoItemID}" item-parent="#taskAccordion${item.todoItemID}">
 
