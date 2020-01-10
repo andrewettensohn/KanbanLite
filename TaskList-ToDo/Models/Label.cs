@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace TaskList_ToDo.Models
 {
-    public class Label
+    public class Tag
     {
 
-        public int LabelID { get; set; }
+        public int TagID { get; set; }
 
-        public string LabelName { get; set; }
+        public string TagName { get; set; }
 
     }
 }

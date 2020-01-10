@@ -10,7 +10,7 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200107023000_Todo")]
+    [Migration("20200110015532_Todo")]
     partial class Todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,6 +243,9 @@ namespace TaskList_ToDo.Migrations
                     b.Property<int>("ProjectTotalTasks")
                         .HasColumnType("int");
 
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -258,11 +261,11 @@ namespace TaskList_ToDo.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("LabelName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ProjectID")
                         .HasColumnType("int");
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");

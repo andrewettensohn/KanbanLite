@@ -20,20 +20,13 @@ namespace TaskList_ToDo.Models
 
         public string ProjectCreationTime { get; set; }
 
+        public string TagName { get; set; }
+
         public int ProjectTotalTasks { get; set; }
 
         [NotMapped]
         public Dictionary<string,int> ProjectStatusStats { get; set; }
 
     }
-
-    //public class ProjectStats
-    //{
-    //    public int NotStarted { get; set; }
-
-    //    public int InProgress { get; set; }
-
-    //    public int Completed { get; set; }
-    //}
 
 }
