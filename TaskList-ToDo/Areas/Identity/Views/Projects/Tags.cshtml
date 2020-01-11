@@ -9,18 +9,13 @@
 
 <body>
     <center>
+        <br />
+        @{
+            var counter = 0;
+            await Html.PartialAsync("_ViewTags", counter)
 
-        <div class="container">
-            <table>
-                <thead>Hello</thead>
-            </table>
-            <h2><span class="badge badge-primary">Primary</span></h2>
-            <h2><span class="badge badge-primary">Primary</span></h2>
-            <h2><span class="badge badge-primary">Primary</span></h2>
-            <h2><span class="badge badge-primary">Primary</span></h2>
-            <h2><span class="badge badge-primary">Primary</span></h2>
-            <h2><span class="badge badge-primary">Primary</span></h2>
-        </div>
+        }
+
 
     </center>
 </body>
