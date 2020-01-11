@@ -10,7 +10,7 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200110234130_Todo")]
+    [Migration("20200111160107_Todo")]
     partial class Todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -252,6 +252,24 @@ namespace TaskList_ToDo.Migrations
                     b.HasKey("ProjectItemID");
 
                     b.ToTable("ProjectItems");
+                });
+
+            modelBuilder.Entity("TaskList_ToDo.Models.Tag", b =>
+                {
+                    b.Property<int>("TagID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagID");
+
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("TodoApi.Models.TodoItem", b =>

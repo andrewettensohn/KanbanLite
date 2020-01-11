@@ -10,12 +10,66 @@
 <body>
     <center>
         <br />
-        @{
-            var counter = 0;
-            await Html.PartialAsync("_ViewTags", counter)
 
-        }
+        <!--Create New Project-->
+        <div class="mb-3">
+            <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseExample">
+                + Create New Tag
+            </button>
+        </div>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body bg-dark border-secondary">
+                <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                    <div class="input-group mb-3 col-md-8">
+                        <input id="add-name" type="text" maxlength="25" autocomplete="off" class="form-control" placeholder="New Tag Name">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary text-white form-control" type="submit" value="add">Add Tag</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <br />
+
+
+         @await Html.PartialAsync("TagList")
+
+
+
+
+
 
 
     </center>
 </body>
+
+<script>
+
+    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+
+        //POST PROJECT
+    function addItem() {
+
+        const tagName = document.getElementById('add-name');
+
+        const item = {
+
+            userId: userId,
+            tagName: tagName.value.trim()
+
+        };
+
+        fetch("api/Tags", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Unable to add item.', error));
+    }
+
+</script>

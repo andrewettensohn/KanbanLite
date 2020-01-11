@@ -10,7 +10,8 @@ using TaskList_ToDo.Models;
 
 namespace TaskList_ToDo.Areas.Identity.Controllers
 {
-    [Route("api/[controller]")]
+    [Area("Identity")]
+    [Route("Identity/Projects/api/Tags")]
     [ApiController]
     public class TagsController : ControllerBase
     {

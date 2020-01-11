@@ -10,6 +10,8 @@ namespace TaskList_ToDo.Models
 
         public int TagID { get; set; }
 
+        public string UserId { get; set; }
+
         public string TagName { get; set; }
 
     }

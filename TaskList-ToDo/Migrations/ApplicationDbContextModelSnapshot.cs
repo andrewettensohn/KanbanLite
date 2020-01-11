@@ -252,6 +252,24 @@ namespace TaskList_ToDo.Migrations
                     b.ToTable("ProjectItems");
                 });
 
+            modelBuilder.Entity("TaskList_ToDo.Models.Tag", b =>
+                {
+                    b.Property<int>("TagID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagID");
+
+                    b.ToTable("Tag");
+                });
+
             modelBuilder.Entity("TodoApi.Models.TodoItem", b =>
                 {
                     b.Property<int>("TodoItemID")

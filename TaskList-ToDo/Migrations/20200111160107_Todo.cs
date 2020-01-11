@@ -66,6 +66,20 @@ namespace TaskList_ToDo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tag",
+                columns: table => new
+                {
+                    TagID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: true),
+                    TagName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tag", x => x.TagID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TodoItems",
                 columns: table => new
                 {
@@ -276,6 +290,9 @@ namespace TaskList_ToDo.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectItems");
+
+            migrationBuilder.DropTable(
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "TodoSubItems");

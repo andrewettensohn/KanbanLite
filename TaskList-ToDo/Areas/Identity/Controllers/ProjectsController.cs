@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TaskList_ToDo.Models;
+using TaskList_ToDo.Data;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TaskList_ToDo.Controllers
 {
@@ -20,6 +21,8 @@ namespace TaskList_ToDo.Controllers
     public class ProjectsController : Controller
     {
         private readonly ILogger<ProjectsController> _logger;
+
+        private readonly ApplicationDbContext _context;
 
         public IActionResult Board()
         {
@@ -35,7 +38,19 @@ namespace TaskList_ToDo.Controllers
 
         public IActionResult Tags()
         {
+
             return View();
+
+        }
+
+        public IActionResult TagList()
+        {
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var tagList = _context.Tag.Where(t => t.UserId == userId).ToList();
+
+            return PartialView("_ViewTags", tagList);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
