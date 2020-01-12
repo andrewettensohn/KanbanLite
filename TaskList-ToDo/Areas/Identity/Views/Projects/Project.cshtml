@@ -14,6 +14,7 @@
                     + Create New Project
                 </button>
                 <a class="btn border-secondary text-white" href="@Url.Content("~/Identity/Projects/ArchivedProject")">
+                    Archive
                     <svg id="i-archive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                         <path d="M4 10 L4 28 28 28 28 10 M2 4 L2 10 30 10 30 4 Z M12 15 L20 15" />
                     </svg>
@@ -328,7 +329,7 @@
                             <button class="btn" type="button" onclick="archiveItem(${item.projectItemID})" type="button" data-toggle="modal" data-target="#archiveConfirmationModal">
                                 <svg id="i-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M2 20 L12 28 30 4" />
-                                    <p class="text-white">Finish Project</p>
+                                    <p class="text-white">Archive Project</p>
                                 </svg>
                             </button>
                             <button class="btn" type="button" onclick="deleteItem(${item.projectItemID})" type="button" data-toggle="modal" data-target="#deleteConfirmationModal">
