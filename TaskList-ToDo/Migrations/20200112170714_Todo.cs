@@ -91,9 +91,6 @@ namespace TaskList_ToDo.Migrations
                     ProjectID = table.Column<int>(nullable: false),
                     TaskName = table.Column<string>(nullable: true),
                     TaskStatus = table.Column<string>(nullable: true),
-                    TaskCreationTime = table.Column<string>(nullable: true),
-                    TaskInProgressTime = table.Column<string>(nullable: true),
-                    TaskCompletionTime = table.Column<string>(nullable: true),
                     TagName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

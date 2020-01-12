@@ -13,11 +13,11 @@
                 <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseExample">
                     + Create New Project
                 </button>
-                <button class="btn border-secondary text-white">
+                <a class="btn border-secondary text-white" href="@Url.Content("~/Identity/Projects/ArchivedProject")">
                     <svg id="i-archive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                         <path d="M4 10 L4 28 28 28 28 10 M2 4 L2 10 30 10 30 4 Z M12 15 L20 15" />
                     </svg>
-                </button>
+                </a>
             </div>
             <div class="collapse" id="collapseExample">
                 <div class="card card-body bg-dark border-secondary">
@@ -51,6 +51,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!--Project Archive Modal-->
             <div class="modal fade" id="archiveConfirmationModal" tabindex="-1" role="dialog">
@@ -255,7 +256,7 @@
             userId: userId
             };
 
-            fetch(uri + `/ArchiveProject/${userId}/${itemId}`, {
+            fetch(uri + `/archiveProject/${userId}/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',

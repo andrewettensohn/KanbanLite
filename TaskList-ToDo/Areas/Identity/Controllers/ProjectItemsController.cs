@@ -143,8 +143,8 @@ namespace ToDoApi.Controllers
         }
 
         //PUT Projects/api/ProjectItems/ArchiveProject/UserId/5
-        [HttpPut("ArchiveProject/{userId}/{id}")]
-        public async Task<ActionResult<ProjectItem>> ArchiveProjectItem(string userId, int id, ProjectItem sentProjectItem)
+        [HttpPut("{state}/{userId}/{id}")]
+        public async Task<ActionResult<ProjectItem>> ArchiveProjectItem(string state, string userId, int id, ProjectItem sentProjectItem)
         {
 
             if(id != sentProjectItem.ProjectItemID || userId != sentProjectItem.UserId)
@@ -154,9 +154,16 @@ namespace ToDoApi.Controllers
 
             var projectToArchive = await _context.ProjectItems.FindAsync(id);
 
-            projectToArchive.ProjectIsArchived = true;
+            if(state == "archiveProject")
+            {
+                projectToArchive.ProjectIsArchived = true;
 
-            projectToArchive.ProjectCompletionTime = DateTime.Now.ToLongDateString();
+                projectToArchive.ProjectCompletionTime = DateTime.Now.ToLongDateString();
+            }
+            else if(state == "unarchiveProject")
+            {
+                projectToArchive.ProjectIsArchived = false;
+            }
 
             _context.Entry(projectToArchive).State = EntityState.Modified;
 
