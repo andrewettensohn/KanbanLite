@@ -20,9 +20,14 @@ namespace TaskList_ToDo.Controllers
     [Authorize]
     public class ProjectsController : Controller
     {
-        private readonly ILogger<ProjectsController> _logger;
+        //private readonly ILogger<ProjectsController> _logger;
 
         private readonly ApplicationDbContext _context;
+
+        public ProjectsController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public IActionResult Board()
         {
@@ -39,7 +44,11 @@ namespace TaskList_ToDo.Controllers
         public IActionResult Tags()
         {
 
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var model = _context.Tag.Where(t => t.UserId == userId).ToList();
+
+            return View(model);
 
         }
 
