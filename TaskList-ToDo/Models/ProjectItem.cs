@@ -18,7 +18,13 @@ namespace TaskList_ToDo.Models
 
         public bool? ProjectIsActive { get; set; }
 
+        public bool ProjectIsArchived { get; set; }
+
         public string ProjectCreationTime { get; set; }
+
+        public string ProjectCompletionTime { get; set; }
+
+        public string TagName { get; set; }
 
         public int ProjectTotalTasks { get; set; }
 
@@ -26,14 +32,5 @@ namespace TaskList_ToDo.Models
         public Dictionary<string,int> ProjectStatusStats { get; set; }
 
     }
-
-    //public class ProjectStats
-    //{
-    //    public int NotStarted { get; set; }
-
-    //    public int InProgress { get; set; }
-
-    //    public int Completed { get; set; }
-    //}
 
 }

@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TaskList_ToDo.Models;
+using TaskList_ToDo.Data;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TaskList_ToDo.Controllers
 {
@@ -19,7 +20,14 @@ namespace TaskList_ToDo.Controllers
     [Authorize]
     public class ProjectsController : Controller
     {
-        private readonly ILogger<ProjectsController> _logger;
+        //private readonly ILogger<ProjectsController> _logger;
+
+        private readonly ApplicationDbContext _context;
+
+        public ProjectsController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public IActionResult Board()
         {
@@ -32,6 +40,34 @@ namespace TaskList_ToDo.Controllers
 
             return View();
         }
+
+        public IActionResult ArchivedProject()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var model = _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsArchived == true).ToList();
+
+            return View(model);
+        }
+
+        public IActionResult Tags()
+        {
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var model = _context.Tag.Where(t => t.UserId == userId).ToList();
+
+            return View(model);
+
+        }
+
+
+        public IActionResult Story()
+        {
+            return View();
+        }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

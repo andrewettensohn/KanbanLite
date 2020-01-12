@@ -1,0 +1,149 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Tags";
+}
+
+<h1>Tags</h1>
+
+<body>
+    <center>
+        <br />
+
+        <!--Create New Project-->
+        <div class="mb-3">
+            <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseCreateTag">
+                + Create New Tag
+            </button>
+        </div>
+        <div class="collapse" id="collapseCreateTag">
+            <div class="card card-body bg-dark border-secondary">
+                <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                    <div class="input-group mb-3 col-md-8">
+                        <input id="add-name" type="text" maxlength="25" autocomplete="off" class="form-control" placeholder="New Tag Name">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary text-white form-control" type="submit" value="add">Add Tag</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <br />
+        @{
+
+            foreach (var tag in Model)
+            {
+
+                    <div class="card bg-dark border-secondary">
+                        <div class="card-header bg-dark" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn float-left" type="button" data-toggle="collapse" data-target="#collapse@(tag.TagID)">
+                                    <h4>
+                                        <span class="badge badge-danger">@tag.TagName</span>
+                                        <svg id="i-edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                            <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z" />
+                                        </svg>
+                                    </h4>
+                                </button>
+                                <button class="btn btn-danger float-right" onclick="deleteItem(@(tag.TagID))">Delete Tag</button>
+                            </h2>
+                        </div>
+
+                        <div id="collapse@(tag.TagID)" class="collapse" aria-labelledby="headingOne">
+                            <div class="card-body">
+                                <div class="d-flex flex-row">
+                                    <div class="col-sm-3">
+                                        <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="New Tag Name" />
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="dropdown">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                                                Dropdown button
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">sdfsd</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                </div>
+                                <button class="btn btn-success float-right ml-3">Save Changes</button>
+                                <button class="btn border-secondary float-right text-white">Cancel</button>
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                <br />
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+        @*@await Html.PartialAsync("TagList")*@
+
+
+
+
+
+
+
+    </center>
+</body>
+
+<script>
+
+    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+
+    //POST TAG
+    function addItem() {
+
+        const tagName = document.getElementById('add-name');
+
+        const item = {
+
+            userId: userId,
+            tagName: tagName.value.trim()
+
+        };
+
+        fetch("api/Tags", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(response => response.json())
+            .then(() => location.reload())
+            .catch(error => console.error('Unable to add item.', error));
+    }
+
+
+    //DELETE TAG
+    function deleteItem(itemId) {
+
+            fetch(`api/Tags/${itemId}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                //.then(() => $("#").toggle())
+            .then(() => location.reload())
+            .catch(error => console.error('Unable to delete item.', error));
+
+   
+
+    }
+
+</script>

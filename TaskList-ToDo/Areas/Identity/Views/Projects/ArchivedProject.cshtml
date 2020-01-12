@@ -1,0 +1,132 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject UserManager<IdentityUser> UserManagere
+@{
+    ViewData["Title"] = "ArchivedProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    <center>
+
+
+        <h1>Archived Projects</h1>
+
+        <br />
+
+        <!--Project Deletion Modal-->
+        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Project Deletion</h5>
+                    </div>
+                    <div class="modal-body bg-dark">
+                        This action will delete the project. Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
+                        <button id="btnDeleteProject" type="button" class="btn btn-danger" data-dismiss="modal">Delete Project</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @{
+            foreach (var item in Model)
+            {
+                <div id="projectItemAccordion@(item.ProjectItemID)">
+                    <div id="projectItemCard@(item.ProjectItemID)" class="card bg-dark border-secondary rounded-0">
+                        <div>
+                            <svg id="i-chevron-bottom@(item.ProjectItemID)" class="align-middle mr-4" data-toggle="collapse" data-target="#projectItemCollapse@(item.ProjectItemID)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M30 10 L16 26 2 10 Z" />
+                            </svg>
+                        </div>
+                        <div id="projectItemHeading@(item.ProjectItemID)" class="card-header bg-dark">
+                            <div class="d-flex flex-row">
+                                <div class="mb-0 float-left">
+                                    <h5 class="mx-2 mt-1">@(item.ProjectName)</h5>
+                                </div>
+                                <div class="ml-auto pr-5">Completion Date</div>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div id="creationTime@(item.ProjectItemID)" class="mr-auto pl-2">@(item.ProjectTotalTasks) Tasks</div>
+                                <div class="ml-auto pl-5">@(item.ProjectCompletionTime)</div>
+                            </div>
+                            <br />
+                        </div>
+                        <div id="projectItemCollapse@(item.ProjectItemID)" class="collapse" item-parent="#projectItemAccordion$">
+                            <div class="p-2">
+                                <textarea id="projectDescription@(item.ProjectItemID)" onfocusout="changeProjectDescription(${item.projectItemID})" class="form-control bg-dark border-0 text-white">@(item.ProjectDescription)</textarea>
+                                <hr />
+                                <button class="btn" type="button" onclick="unarchiveItem(@(item.ProjectItemID))" data-toggle="modal" data-target="#archiveConfirmationModal">
+                                    <svg id="i-reply" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                        <path d="M10 6 L3 14 10 22 M3 14 L18 14 C26 14 30 18 30 26" />
+                                    </svg>
+                                    <p class="text-white">Unarchive Project</p>
+                                </button>
+                                <button class="btn" type="button" onclick="deleteItem(@(item.ProjectItemID))" data-toggle="modal" data-target="#deleteConfirmationModal">
+                                    <svg id="i-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                        <path d="M2 30 L30 2 M30 30 L2 2" />
+                                    </svg>
+                                    <p class="text-white">Delete Project</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+
+            }
+
+        }
+
+
+    </center>
+</body>
+
+<script>
+
+    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+
+
+    function unarchiveItem(itemId) {
+
+            const item = {
+
+            projectItemID: parseInt(itemId, 10),
+            userId: userId
+            };
+
+            fetch(`api/ProjectItems/unarchiveProject/${userId}/${itemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+                .then(() => window.location.href = "@Url.Content("~/Identity/Projects/Project")")
+                .catch(error => console.error('Unable to delete item.', error));
+
+    }
+
+    //DELETE PROJECT
+    function deleteItem(itemId) {
+
+        $("#btnDeleteProject").on("click", function () {
+
+            fetch(`api/ProjectItems/${userId}/${itemId}`, {
+                method: 'DELETE'
+            })
+                .then(() => $(`#projectItemAccordion${itemId}`).remove())
+                .then(() => location.reload())
+                .catch(error => console.error('Unable to delete item.', error));
+
+        });
+
+    }
+
+
+</script>

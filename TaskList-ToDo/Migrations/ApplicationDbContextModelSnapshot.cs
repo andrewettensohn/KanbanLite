@@ -226,6 +226,9 @@ namespace TaskList_ToDo.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ProjectCompletionTime")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProjectCreationTime")
                         .HasColumnType("nvarchar(max)");
 
@@ -235,11 +238,17 @@ namespace TaskList_ToDo.Migrations
                     b.Property<bool?>("ProjectIsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("ProjectIsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ProjectName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProjectTotalTasks")
                         .HasColumnType("int");
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
@@ -247,6 +256,24 @@ namespace TaskList_ToDo.Migrations
                     b.HasKey("ProjectItemID");
 
                     b.ToTable("ProjectItems");
+                });
+
+            modelBuilder.Entity("TaskList_ToDo.Models.Tag", b =>
+                {
+                    b.Property<int>("TagID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagID");
+
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("TodoApi.Models.TodoItem", b =>
@@ -258,6 +285,9 @@ namespace TaskList_ToDo.Migrations
 
                     b.Property<int>("ProjectID")
                         .HasColumnType("int");
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");
@@ -279,6 +309,9 @@ namespace TaskList_ToDo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LabelName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubTaskDescription")
                         .HasColumnType("nvarchar(max)");

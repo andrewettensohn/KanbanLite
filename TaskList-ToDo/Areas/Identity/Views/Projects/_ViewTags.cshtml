@@ -1,0 +1,60 @@
+﻿@using TaskList_ToDo.Models;
+@model List<Tag>;
+
+@{
+    foreach (var tag in Model)
+    {
+
+        <div class="accordion" id="accordion @tag.TagID">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-dark" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn float-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <h4>
+                                <span class="badge badge-danger">New</span>
+                                <svg id="i-edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z" />
+                                </svg>
+                            </h4>
+                        </button>
+                        <button class="btn btn-danger float-right">Delete Tag</button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="d-flex flex-row">
+                            <div class="col-sm-3">
+                                <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="New Tag Name" />
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="dropdown">
+                                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Dropdown button
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">sdfsd</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <button class="btn btn-success float-right ml-3">Save Changes</button>
+                        <button class="btn border-secondary float-right text-white">Cancel</button>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+
+
+    }
+
+}
+
+
+

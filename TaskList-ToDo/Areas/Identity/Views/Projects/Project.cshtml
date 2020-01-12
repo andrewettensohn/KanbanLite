@@ -7,10 +7,18 @@
 <body class="text-white">
     <container>
         <center>
+
+            <!--Create New Project-->
             <div class="mb-3">
                 <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseExample">
                     + Create New Project
                 </button>
+                <a class="btn border-secondary text-white" href="@Url.Content("~/Identity/Projects/ArchivedProject")">
+                    Archive
+                    <svg id="i-archive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M4 10 L4 28 28 28 28 10 M2 4 L2 10 30 10 30 4 Z M12 15 L20 15" />
+                    </svg>
+                </a>
             </div>
             <div class="collapse" id="collapseExample">
                 <div class="card card-body bg-dark border-secondary">
@@ -27,12 +35,51 @@
 
             <br />
 
+            <!--Project Deletion Modal-->
+            <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Project Deletion</h5>
+                        </div>
+                        <div class="modal-body bg-dark">
+                            This action will delete the project. Are you sure?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
+                            <button id="btnDeleteProject" type="button" class="btn btn-danger" data-dismiss="modal">Delete Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Project Archive Modal-->
+            <div class="modal fade" id="archiveConfirmationModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Archive Project</h5>
+                        </div>
+                        <div class="modal-body bg-dark">
+                            <p>This action will archive the project. Are you sure?</p>
+                            <p>Archived projects are still available but only on your archived project page.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
+                            <button id="btnArchiveProject" type="button" class="btn btn-primary" data-dismiss="modal">Archive Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Output-->
             <div id="output">
 
             </div>
 
 
-           
+
 
         </center>
     </container>
@@ -111,19 +158,6 @@
 
     }
 
-
-    //DELETE PROJECT
-    function deleteItem(itemId) {
-
-       
-            fetch(uri + `/${userId}/${itemId}`, {
-                method: 'DELETE'
-            })
-                .then(() => $(`#projectItemAccordion${itemId}`).remove())
-                .catch(error => console.error('Unable to delete item.', error));
-
-    }
-
     //DISPLAY COLLAPSE
     function toggleCollapse(itemId) {
 
@@ -195,6 +229,49 @@
 
     }
 
+
+    //DELETE PROJECT
+    function deleteItem(itemId) {
+
+        $("#btnDeleteProject").on("click", function () {
+
+            fetch(uri + `/${userId}/${itemId}`, {
+                method: 'DELETE'
+            })
+            .then(() => $(`#projectItemAccordion${itemId}`).remove())
+            .then(() => getItems())
+            .catch(error => console.error('Unable to delete item.', error));
+
+        });
+
+    }
+
+    //ARCHIVE PROJECT
+    function archiveItem(itemId) {
+
+        $("#btnArchiveProject").on("click", function () {
+
+            const item = {
+
+            projectItemID: parseInt(itemId, 10),
+            userId: userId
+            };
+
+            fetch(uri + `/archiveProject/${userId}/${itemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+                    .then(() => $(`#projectItemAccordion${itemId}`).remove())
+                    .then(() => getItems())
+                    .catch(error => console.error('Unable to delete item.', error));
+        });
+
+    }
+
     //CREATE PROJECT HTML
     function displayItems(data) {
 
@@ -249,11 +326,17 @@
                                     <p class="text-white">Project Stories</p>
                                 </svg>
                             </button>
-                            <button class="btn" type="button" onclick="deleteItem(${item.projectItemID})">
+                            <button class="btn" type="button" onclick="archiveItem(${item.projectItemID})" type="button" data-toggle="modal" data-target="#archiveConfirmationModal">
                                 <svg id="i-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M2 20 L12 28 30 4" />
-                                    <p class="text-white">Finish Project</p>
+                                    <p class="text-white">Archive Project</p>
                                 </svg>
+                            </button>
+                            <button class="btn" type="button" onclick="deleteItem(${item.projectItemID})" type="button" data-toggle="modal" data-target="#deleteConfirmationModal">
+                                <svg id="i-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M2 30 L30 2 M30 30 L2 2" />
+                                </svg>
+                                    <p class="text-white">Delete Project</p>
                             </button>
                         </div>
                     </div>
