@@ -41,6 +41,15 @@ namespace TaskList_ToDo.Controllers
             return View();
         }
 
+        public IActionResult ArchivedProject()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var model = _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsArchived == true).ToList();
+
+            return View(model);
+        }
+
         public IActionResult Tags()
         {
 
@@ -52,15 +61,13 @@ namespace TaskList_ToDo.Controllers
 
         }
 
-        public IActionResult TagList()
+
+        public IActionResult Story()
         {
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var tagList = _context.Tag.Where(t => t.UserId == userId).ToList();
-
-            return PartialView("_ViewTags", tagList);
+            return View();
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

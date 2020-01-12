@@ -56,7 +56,9 @@ namespace TaskList_ToDo.Migrations
                     ProjectName = table.Column<string>(nullable: true),
                     ProjectDescription = table.Column<string>(nullable: true),
                     ProjectIsActive = table.Column<bool>(nullable: true),
+                    ProjectIsArchived = table.Column<bool>(nullable: false),
                     ProjectCreationTime = table.Column<string>(nullable: true),
+                    ProjectCompletionTime = table.Column<string>(nullable: true),
                     TagName = table.Column<string>(nullable: true),
                     ProjectTotalTasks = table.Column<int>(nullable: false)
                 },
@@ -89,6 +91,9 @@ namespace TaskList_ToDo.Migrations
                     ProjectID = table.Column<int>(nullable: false),
                     TaskName = table.Column<string>(nullable: true),
                     TaskStatus = table.Column<string>(nullable: true),
+                    TaskCreationTime = table.Column<string>(nullable: true),
+                    TaskInProgressTime = table.Column<string>(nullable: true),
+                    TaskCompletionTime = table.Column<string>(nullable: true),
                     TagName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

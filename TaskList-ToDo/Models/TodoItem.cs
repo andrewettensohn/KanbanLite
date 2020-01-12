@@ -20,6 +20,12 @@ namespace TodoApi.Models
 
         public string TaskStatus { get; set; }
 
+        public string TaskCreationTime { get; set; }
+
+        public string TaskInProgressTime { get; set; }
+
+        public string TaskCompletionTime { get; set; }
+
         public string TagName { get; set; }
 
         public List<TodoSubItem> TodoSubItems { get; set; }

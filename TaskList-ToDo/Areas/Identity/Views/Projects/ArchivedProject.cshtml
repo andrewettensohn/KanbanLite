@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewData["Title"] = "ArchivedProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    <center>
+
+
+        <h1>Archived Projects</h1>
+
+        @{
+            foreach (var item in Model)
+            {
+                <div id="projectItemAccordion@(item.ProjectItemID)">
+                    <div id="projectItemCard@(item.ProjectItemID)" class="card bg-dark border-secondary rounded-0">
+                        <div>
+                            <svg id="i-chevron-bottom@(item.ProjectItemID)" class="align-middle mr-4" data-toggle="collapse" data-target="#projectItemCollapse@(item.ProjectItemID)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M30 10 L16 26 2 10 Z" />
+                            </svg>
+                        </div>
+                        <div id="projectItemHeading@(item.ProjectItemID)" class="card-header bg-dark">
+                            <div class="d-flex flex-row">
+                                <div class="mb-0 float-left">
+                                    <h5 class="mx-2 mt-1">@(item.ProjectName)</h5>
+                                </div>
+                                <div class="ml-auto pr-5">Start Date</div>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div id="creationTime@(item.ProjectItemID)" class="mr-auto pl-2">@(item.ProjectTotalTasks) Tasks</div>
+                                <div class="ml-auto pl-5">@(item.ProjectCreationTime)</div>
+                            </div>
+                            <br />
+                        </div>
+                        <div id="projectItemCollapse@(item.ProjectItemID)" class="collapse" item-parent="#projectItemAccordion$">
+                            <div class="p-2">
+                                <textarea id="projectDescription@(item.ProjectItemID)" onfocusout="changeProjectDescription(${item.projectItemID})" class="form-control bg-dark border-0 text-white">@(item.ProjectDescription)</textarea>
+                                <hr />
+                                <button class="btn" type="button" onclick="archiveItem(${item.projectItemID})" data-toggle="modal" data-target="#archiveConfirmationModal">
+                                    <svg id="i-reply" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                        <path d="M10 6 L3 14 10 22 M3 14 L18 14 C26 14 30 18 30 26" />
+                                    </svg>
+                                    <p class="text-white">Unarchive Project</p>
+                                </button>
+                                <button class="btn" type="button" onclick="deleteItem(${item.projectItemID})" type="button" data-toggle="modal" data-target="#deleteConfirmationModal">
+                                    <svg id="i-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                        <path d="M2 30 L30 2 M30 30 L2 2" />
+                                    </svg>
+                                    <p class="text-white">Delete Project</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+
+            }
+
+
+
+
+
+        }
+
+
+    </center>
+</body>
+
+

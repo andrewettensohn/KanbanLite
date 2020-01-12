@@ -27,7 +27,7 @@ namespace ToDoApi.Controllers
         [HttpGet("ProjectList/{userId}")]
         public async Task<ActionResult<IEnumerable<ProjectItem>>> GetProjectItems(string userId)
         {
-            var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
+            var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsArchived == false).ToListAsync();
 
             projectsList = ProjectTaskStatsCalculator(projectsList);
 
@@ -139,6 +139,44 @@ namespace ToDoApi.Controllers
             }
 
             _context.Entry(activeProjectItem).State = EntityState.Detached;
+            return NoContent();
+        }
+
+        //PUT Projects/api/ProjectItems/ArchiveProject/UserId/5
+        [HttpPut("ArchiveProject/{userId}/{id}")]
+        public async Task<ActionResult<ProjectItem>> ArchiveProjectItem(string userId, int id, ProjectItem sentProjectItem)
+        {
+
+            if(id != sentProjectItem.ProjectItemID || userId != sentProjectItem.UserId)
+            {
+                return BadRequest();
+            }
+
+            var projectToArchive = await _context.ProjectItems.FindAsync(id);
+
+            projectToArchive.ProjectIsArchived = true;
+
+            projectToArchive.ProjectCompletionTime = DateTime.Now.ToLongDateString();
+
+            _context.Entry(projectToArchive).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProjectItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+
             return NoContent();
         }
 
