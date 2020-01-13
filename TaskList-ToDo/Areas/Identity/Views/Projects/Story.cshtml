@@ -4,5 +4,35 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <h1>Story</h1>
 
+<body>
+    <nav>
+        @{
+
+            foreach (var item in Model)
+            {
+                <ol class="breadcrumb bg-dark">
+                    <li class="breadcrumb-item active">@(item.ProjectCreationTime)</li>
+                    <li class="breadcrumb-item">Project Started</li>
+                </ol>
+
+                if (item.ProjectCompletionTime != null)
+                {
+                    <ol class="breadcrumb bg-dark">
+                        <li class="breadcrumb-item active">@(item.ProjectCompletionTime)</li>
+                        <li class="breadcrumb-item">Project Completed</li>
+                    </ol>
+                }
+
+            }
+
+        }
+
+    </nav>
+   
+
+
+</body>

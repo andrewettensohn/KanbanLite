@@ -64,9 +64,12 @@ namespace TaskList_ToDo.Controllers
 
         public IActionResult Story()
         {
-            return View();
-        }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            var model = _context.ProjectItems.Where(p => p.UserId == userId).ToList();
+
+            return View(model);
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

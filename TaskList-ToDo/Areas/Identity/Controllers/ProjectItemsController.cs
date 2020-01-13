@@ -158,7 +158,7 @@ namespace ToDoApi.Controllers
             {
                 projectToArchive.ProjectIsArchived = true;
 
-                projectToArchive.ProjectCompletionTime = DateTime.Now.ToLongDateString();
+                projectToArchive.ProjectCompletionTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
             }
             else if(state == "unarchiveProject")
             {
@@ -192,7 +192,7 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<ProjectItem>> PostProjectItem(string userId, ProjectItem projectItem)
         {
             projectItem.ProjectDescription = "Enter a project description here...";
-            projectItem.ProjectCreationTime = DateTime.Now.ToLongDateString();
+            projectItem.ProjectCreationTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
 
             var projectItemList = await _context.ProjectItems.Where(p => p.UserId == userId).ToListAsync();
 
