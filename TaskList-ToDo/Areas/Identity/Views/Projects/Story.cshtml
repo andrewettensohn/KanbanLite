@@ -12,17 +12,25 @@
     <nav>
         @{
 
-            foreach (var item in Model)
+            foreach (var projectItem in Model.ProjectItems)
             {
                 <ol class="breadcrumb bg-dark">
-                    <li class="breadcrumb-item active">@(item.ProjectCreationTime)</li>
+                    <li class="breadcrumb-item active">@(projectItem.ProjectCreationTime)</li>
                     <li class="breadcrumb-item">Project Started</li>
                 </ol>
 
-                if (item.ProjectCompletionTime != null)
+                foreach(var todoItem in Model.TodoItems)
+                {
+                    if(todoItem.ProjectID == projectItem.ProjectID)
+                    {
+
+                    }
+                }
+
+                if (projectItem.ProjectCompletionTime != null)
                 {
                     <ol class="breadcrumb bg-dark">
-                        <li class="breadcrumb-item active">@(item.ProjectCompletionTime)</li>
+                        <li class="breadcrumb-item active">@(projectItem.ProjectCompletionTime)</li>
                         <li class="breadcrumb-item">Project Completed</li>
                     </ol>
                 }
