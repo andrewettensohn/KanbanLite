@@ -20,9 +20,9 @@ namespace TaskList_ToDo.Models
 
         public bool ProjectIsArchived { get; set; }
 
-        public string ProjectCreationTime { get; set; }
+        public DateTime ProjectCreationTime { get; set; }
 
-        public string ProjectCompletionTime { get; set; }
+        public DateTime ProjectCompletionTime { get; set; }
 
         public string TagName { get; set; }
 

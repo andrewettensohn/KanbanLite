@@ -148,6 +148,15 @@ namespace ToDoApi.Controllers
             else if(updateType == "UpdateStatus")
             {
                 todoItem.TaskStatus = sentTodoItem.TaskStatus;
+
+                if(todoItem.TaskStatus == "In-Progress")
+                {
+                    todoItem.TaskInProgressTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+                }
+                else if(todoItem.TaskStatus == "Completed")
+                {
+                    todoItem.TaskCompletionTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+                }
             }
             else
             {
