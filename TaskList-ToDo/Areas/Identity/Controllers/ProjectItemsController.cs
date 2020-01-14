@@ -49,7 +49,7 @@ namespace ToDoApi.Controllers
         }
 
         // PUT: Projects/api/ProjectItems/userId/UpdateName/5
-        [HttpPut("{userId}/{updateType}/{id}")]
+        [HttpPut("{updateType}/{id}")]
         public async Task<IActionResult> PutProjectItem(string updateType, int id, ProjectItem sentProjectItem)
         {
             if (id != sentProjectItem.ProjectItemID)

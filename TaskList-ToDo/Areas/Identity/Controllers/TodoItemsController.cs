@@ -131,15 +131,24 @@ namespace ToDoApi.Controllers
         }
 
         // PUT: Projects/TodoItems/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(int id, TodoItem sentTodoItem)
+        [HttpPut("{updateType}/{id}")]
+        public async Task<IActionResult> PutTodoItem(string updateType, int id, TodoItem sentTodoItem)
         {
             if (id != sentTodoItem.TodoItemID)
             {
                 return BadRequest();
             }
 
-            var todoItem = await _context.TodoItems.Where(t => t.TodoItemID == id).First();
+            var todoItem = _context.TodoItems.Where(t => t.TodoItemID == id).First();
+
+            if(updateType == "NameChange")
+            {
+                todoItem.TaskName = sentTodoItem.TaskName;
+            }
+            else if(updateType == "StatusChange")
+            {
+                todoItem.TaskStatus = sentTodoItem.TaskStatus;
+            }
 
             if (todoItem.TaskName == "" || todoItem.TaskName is null)
             {
@@ -176,6 +185,8 @@ namespace ToDoApi.Controllers
             {
                 todoItem.TaskName = "Untitled";
             }
+
+            todoItem.TaskCreationTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
 
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();

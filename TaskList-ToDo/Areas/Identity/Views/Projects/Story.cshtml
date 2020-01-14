@@ -2,18 +2,18 @@
 @{
     ViewData["Title"] = "Story";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var activeprojectItem = Model.ActiveProjectItem;
+    var todoItems = Model.TodoItems;
 }
 
 
 
-<h1>Story</h1>
+<h3>Story for @(activeprojectItem.ProjectName)</h3>
 
 <body>
     <nav>
         @{
-
-            var activeprojectItem = Model.ActiveProjectItem;
-            var todoItems = Model.TodoItems;
 
             <ol class="breadcrumb bg-dark">
                 <li class="breadcrumb-item active">@(activeprojectItem.ProjectCreationTime)</li>

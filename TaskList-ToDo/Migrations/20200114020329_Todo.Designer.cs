@@ -10,7 +10,7 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200112170714_Todo")]
+    [Migration("20200114020329_Todo")]
     partial class Todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -289,6 +289,15 @@ namespace TaskList_ToDo.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskCompletionTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskCreationTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskInProgressTime")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TaskName")

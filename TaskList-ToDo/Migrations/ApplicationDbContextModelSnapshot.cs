@@ -289,6 +289,15 @@ namespace TaskList_ToDo.Migrations
                     b.Property<string>("TagName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TaskCompletionTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskCreationTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskInProgressTime")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");
 
