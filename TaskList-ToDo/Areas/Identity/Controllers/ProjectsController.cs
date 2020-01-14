@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TaskList_ToDo.Models;
 using TaskList_ToDo.Data;
-
+using TodoApi.Models;
 
 namespace TaskList_ToDo.Controllers
 {
@@ -68,9 +68,9 @@ namespace TaskList_ToDo.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            model.ActiveProjectItem = _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsActive == true).First();
+            model.TodoItems = _context.TodoItems.Where(t => t.UserId == userId && t.ProjectID == model.ActiveProjectItem.ProjectItemID).ToList();
             model.ProjectItems = _context.ProjectItems.Where(p => p.UserId == userId).ToList();
-
-            model.TodoItems = _context.TodoItems.Where(t => t.UserId == userId).ToList();
 
             return View(model);
         }

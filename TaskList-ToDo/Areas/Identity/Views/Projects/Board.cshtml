@@ -509,11 +509,7 @@
         } else if (isSubTask == false) {
 
             var newTaskName = $(`#inputNameChange${itemId}`).val();
-            newTaskName = newTaskName.toString();
-            if (newTaskName == "") { newTaskName = "Untitled" }
-
-            var taskStatus = $(`#hiddenTaskStatus${itemId}`).text();
-            var projectID = $(`#hiddenActiveProjectID`).text();   
+            newTaskName = newTaskName.toString(); 
 
             var taskNameElement = `taskNameHeader${itemId}`;
             var inputAreaElement = `areaInputNameChange${itemId}`;
@@ -524,14 +520,12 @@
             var item = {
                 todoItemID: parseInt(itemId, 10),
                 userId: userId,
-                taskStatus: taskStatus,
                 taskName: newTaskName,
-                projectID: parseInt(projectID, 10)
             };
 
         }
 
-        fetch(`${uriType}/${idToSend}`, {
+        fetch(`api/TodoItems/${idToSend}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

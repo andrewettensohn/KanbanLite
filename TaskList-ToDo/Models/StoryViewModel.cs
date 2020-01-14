@@ -8,6 +8,8 @@ namespace TaskList_ToDo.Models
 {
     public class StoryViewModel
     {
+        public ProjectItem ActiveProjectItem { get; set; }
+
         public List<ProjectItem> ProjectItems { get; set; }
 
         public List<TodoItem> TodoItems { get; set; }

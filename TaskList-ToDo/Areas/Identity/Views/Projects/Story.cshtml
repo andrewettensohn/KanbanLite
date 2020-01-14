@@ -12,29 +12,44 @@
     <nav>
         @{
 
-            foreach (var projectItem in Model.ProjectItems)
+            var activeprojectItem = Model.ActiveProjectItem;
+            var todoItems = Model.TodoItems;
+
+            <ol class="breadcrumb bg-dark">
+                <li class="breadcrumb-item active">@(activeprojectItem.ProjectCreationTime)</li>
+                <li class="breadcrumb-item">Project Started</li>
+            </ol>
+
+            foreach (var todoItem in todoItems)
             {
                 <ol class="breadcrumb bg-dark">
-                    <li class="breadcrumb-item active">@(projectItem.ProjectCreationTime)</li>
-                    <li class="breadcrumb-item">Project Started</li>
+                    <li class="breadcrumb-item active">@(todoItem.TaskCreationTime)</li>
+                    <li class="breadcrumb-item">Task @(todoItem.TaskName) Created</li>
                 </ol>
 
-                foreach(var todoItem in Model.TodoItems)
-                {
-                    if(todoItem.ProjectID == projectItem.ProjectID)
-                    {
-
-                    }
-                }
-
-                if (projectItem.ProjectCompletionTime != null)
+                if (todoItem.TaskInProgressTime != null)
                 {
                     <ol class="breadcrumb bg-dark">
-                        <li class="breadcrumb-item active">@(projectItem.ProjectCompletionTime)</li>
-                        <li class="breadcrumb-item">Project Completed</li>
+                        <li class="breadcrumb-item active">@(todoItem.TaskInProgressTime)</li>
+                        <li class="breadcrumb-item">Task @(todoItem.TaskName) Moved to In-Progress</li>
                     </ol>
                 }
 
+                if (todoItem.TaskCompletionTime != null)
+                {
+                    <ol class="breadcrumb bg-dark">
+                        <li class="breadcrumb-item active">@(todoItem.TaskCompletionTime)</li>
+                        <li class="breadcrumb-item">Task @(todoItem.TaskName) Moved to Completed</li>
+                    </ol>
+                }
+            }
+
+            if (activeprojectItem.ProjectCompletionTime != null)
+            {
+                <ol class="breadcrumb bg-dark">
+                    <li class="breadcrumb-item active">@(activeprojectItem.ProjectCompletionTime)</li>
+                    <li class="breadcrumb-item">Project Completed</li>
+                </ol>
             }
 
         }
@@ -44,3 +59,8 @@
 
 
 </body>
+<script>
+
+    //Only show active project
+    //Filter button changes active project.
+</script>

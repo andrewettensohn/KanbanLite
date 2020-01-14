@@ -132,12 +132,14 @@ namespace ToDoApi.Controllers
 
         // PUT: Projects/TodoItems/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
+        public async Task<IActionResult> PutTodoItem(int id, TodoItem sentTodoItem)
         {
-            if (id != todoItem.TodoItemID)
+            if (id != sentTodoItem.TodoItemID)
             {
                 return BadRequest();
             }
+
+            var todoItem = await _context.TodoItems.Where(t => t.TodoItemID == id).First();
 
             if (todoItem.TaskName == "" || todoItem.TaskName is null)
             {
