@@ -424,7 +424,7 @@
 
         }
 
-        fetch(`api/TodoItems/updateStatus/${idToSend}`, {
+        fetch(`api/TodoItems/UpdateStatus/${idToSend}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -520,7 +520,7 @@
 
         }
 
-        fetch(`api/TodoItems/updateName/${idToSend}`, {
+        fetch(uri + `/UpdateName/${idToSend}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
