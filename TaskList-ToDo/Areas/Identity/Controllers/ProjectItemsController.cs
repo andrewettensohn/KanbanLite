@@ -29,9 +29,10 @@ namespace ToDoApi.Controllers
         {
             var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsArchived == false).ToListAsync();
 
-            foreach(var project in projectsList)
+            foreach (var project in projectsList)
             {
-                project.ProjectCreationTime.ToString("MM/dd/yyyy hh:mm tt");
+                project.ProjectCompletionTimeString = project.ProjectCompletionTime.ToString("MM/dd/yyyy hh:mm tt");
+                project.ProjectCreationTimeString = project.ProjectCreationTime.ToString("MM/dd/yyyy hh:mm tt");
             }
 
             projectsList = ProjectTaskStatsCalculator(projectsList);

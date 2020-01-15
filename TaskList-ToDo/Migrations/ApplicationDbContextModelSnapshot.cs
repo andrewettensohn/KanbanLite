@@ -226,11 +226,11 @@ namespace TaskList_ToDo.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ProjectCompletionTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ProjectCompletionTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ProjectCreationTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("ProjectCreationTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ProjectDescription")
                         .HasColumnType("nvarchar(max)");
@@ -289,14 +289,14 @@ namespace TaskList_ToDo.Migrations
                     b.Property<string>("TagName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TaskCompletionTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("TaskCompletionTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("TaskCreationTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("TaskCreationTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("TaskInProgressTime")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("TaskInProgressTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");

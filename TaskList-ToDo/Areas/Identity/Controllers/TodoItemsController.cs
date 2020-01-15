@@ -151,11 +151,11 @@ namespace ToDoApi.Controllers
 
                 if(todoItem.TaskStatus == "In-Progress")
                 {
-                    todoItem.TaskInProgressTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+                    todoItem.TaskInProgressTime = DateTime.Now;
                 }
                 else if(todoItem.TaskStatus == "Completed")
                 {
-                    todoItem.TaskCompletionTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+                    todoItem.TaskCompletionTime = DateTime.Now;
                 }
             }
             else
@@ -199,7 +199,7 @@ namespace ToDoApi.Controllers
                 todoItem.TaskName = "Untitled";
             }
 
-            todoItem.TaskCreationTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+            todoItem.TaskCreationTime = DateTime.Now;
 
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();

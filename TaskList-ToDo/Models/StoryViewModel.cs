@@ -14,5 +14,18 @@ namespace TaskList_ToDo.Models
 
         public List<TodoItem> TodoItems { get; set; }
 
+        public List<TaskStory> TaskStoryList { get; set; }
+
     }
+
+    public class TaskStory
+    {
+        public DateTime ActionTime { get; set; }
+
+        public string ActionType { get; set; }
+
+        public string TaskName { get; set; }
+
+    }
+
 }

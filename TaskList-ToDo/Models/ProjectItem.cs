@@ -22,7 +22,13 @@ namespace TaskList_ToDo.Models
 
         public DateTime ProjectCreationTime { get; set; }
 
+        [NotMapped]
+        public string ProjectCreationTimeString { get; set; }
+
         public DateTime ProjectCompletionTime { get; set; }
+
+        [NotMapped]
+        public string ProjectCompletionTimeString { get; set; }
 
         public string TagName { get; set; }
 
