@@ -4,85 +4,86 @@
 @{
     ViewData["Title"] = "Projects";
 }
+
+<h3>Projects</h3>
+
 <body class="text-white">
-    <container>
-        <center>
+    <center>
 
-            <!--Create New Project-->
-            <div class="mb-3">
-                <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseExample">
-                    + Create New Project
-                </button>
-                <a class="btn border-secondary text-white" href="@Url.Content("~/Identity/Projects/ArchivedProject")">
-                    Archive
-                    <svg id="i-archive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                        <path d="M4 10 L4 28 28 28 28 10 M2 4 L2 10 30 10 30 4 Z M12 15 L20 15" />
-                    </svg>
-                </a>
+        <!--Create New Project-->
+        <div class="d-flex justify-content-center">
+            <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseExample">
+                <b>+ PROJECT</b>
+            </button>
+            <a class="btn border-secondary text-white" href="@Url.Content("~/Identity/Projects/ArchivedProject")">
+                <b>ARCHIVE</b>
+            </a>
+        </div>
+
+        <br />
+
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body bg-dark border-secondary">
+                <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+                    <div class="input-group mb-3 col-md-8">
+                        <input id="add-name" type="text" maxlength="25" autocomplete="off" class="form-control" placeholder="New Project Name">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary text-white form-control" type="submit" value="add">Add Project</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="collapse" id="collapseExample">
-                <div class="card card-body bg-dark border-secondary">
-                    <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
-                        <div class="input-group mb-3 col-md-8">
-                            <input id="add-name" type="text" maxlength="25" autocomplete="off" class="form-control" placeholder="New Project Name">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary text-white form-control" type="submit" value="add">Add Project</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        </div>
 
-            <br />
+        <br />
 
-            <!--Project Deletion Modal-->
-            <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content bg-dark">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Project Deletion</h5>
-                        </div>
-                        <div class="modal-body bg-dark">
-                            This action will delete the project. Are you sure?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
-                            <button id="btnDeleteProject" type="button" class="btn btn-danger" data-dismiss="modal">Delete Project</button>
-                        </div>
+        <!--Project Deletion Modal-->
+        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Project Deletion</h5>
+                    </div>
+                    <div class="modal-body bg-dark">
+                        This action will delete the project. Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
+                        <button id="btnDeleteProject" type="button" class="btn btn-danger" data-dismiss="modal">Delete Project</button>
                     </div>
                 </div>
             </div>
+        </div>
 
 
-            <!--Project Archive Modal-->
-            <div class="modal fade" id="archiveConfirmationModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content bg-dark">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Archive Project</h5>
-                        </div>
-                        <div class="modal-body bg-dark">
-                            <p>This action will archive the project. Are you sure?</p>
-                            <p>Archived projects are still available but only on your archived project page.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
-                            <button id="btnArchiveProject" type="button" class="btn btn-primary" data-dismiss="modal">Archive Project</button>
-                        </div>
+        <!--Project Archive Modal-->
+        <div class="modal fade" id="archiveConfirmationModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Archive Project</h5>
+                    </div>
+                    <div class="modal-body bg-dark">
+                        <p>This action will archive the project. Are you sure?</p>
+                        <p>Archived projects are still available but only on your archived project page.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn border-secondary text-white" data-dismiss="modal">Cancel</button>
+                        <button id="btnArchiveProject" type="button" class="btn btn-primary" data-dismiss="modal">Archive Project</button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!--Output-->
-            <div id="output">
+        <!--Output-->
+        <div id="output">
 
-            </div>
-
-
+        </div>
 
 
-        </center>
-    </container>
+
+
+    </center>
 </body>
 
 <script type="text/javascript">

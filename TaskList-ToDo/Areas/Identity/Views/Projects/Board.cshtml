@@ -19,19 +19,23 @@
 <!--Active Project Header-->
 <div id="activeProjectHeaderArea">
     <h3 class="display-6" id="activeProjectHeader"></h3>
-    <hr />
 </div>
 
 <body class="text-light" id="taskBoard">
     <div class="container">
 
         <!-- Options -->
-        <div class="pt-3">
             <center>
                 <div class="d-flex justify-content-center">
+                    <button id="btnCreateNewTask" class="btn border-secondary text-white" data-toggle="collapse"
+                            href="#multiCollapseCreateNewTask" role="button"
+                            aria-expanded="false">
+
+                        <b>+ TASK</b>
+                    </button>
                     <div class="dropdown">
-                        <button class="btn border-secondary" type="button" id="btnFilter" data-toggle="dropdown">
-                            <svg class="float-left" id="i-filter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <button class="btn text-light border-secondary" type="button" id="btnFilter" data-toggle="dropdown">
+                            <svg class="float-left" id="i-filter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
                                 <path d="M2 5 C2 5 6 3 16 3 26 3 30 5 30 5 L19 18 19 27 13 30 13 18 2 5Z" />
                             </svg>
                         </button>
@@ -41,14 +45,9 @@
                             <a class="dropdown-item" href="#" id="filterCompleted" onclick="getItems('Completed', 'filterCompleted')">Completed</a>
                         </div>
                     </div>
-                    <button id="btnCreateNewTask" class="btn border-secondary text-white" data-toggle="collapse"
-                            href="#multiCollapseCreateNewTask" role="button"
-                            aria-expanded="false">
-                        + Create New Task
-                    </button>
                     <div class="dropdown">
                         <button class="btn border-secondary" type="button" id="btnSelectProject" data-toggle="dropdown">
-                            <svg id="i-folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <svg id="i-folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
                                 <path d="M2 26 L30 26 30 7 14 7 10 4 2 4 Z M30 12 L2 12" />
                             </svg>
                         </button>
@@ -60,7 +59,6 @@
                     </div>
                 </div>
             </center>
-        </div>
 
         @*Hidden Active Project*@
         <p id="hiddenActiveProjectID" class="d-none"></p>
@@ -203,7 +201,7 @@
                 if (projectItem.projectIsActive) {
 
                     $(`#hiddenActiveProjectID`).text(projectItem.projectItemID);
-                    $(`#activeProjectHeader`).text(projectItem.projectName);
+                    $(`#activeProjectHeader`).text(`Board for ${projectItem.projectName}`);
 
                 }
 
@@ -680,12 +678,6 @@
                             <div>
                                 <svg class="" onclick="addSubItem(${item.todoItemID})" touchstart="addSubItem(${item.todoItemID})" id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M16 2 L16 30 M2 16 L30 16" />
-                                </svg>
-                            </div>
-                            <div>
-                                <svg id="btnAddTaskTag${item.todoItemID}" data-toggle="modal" data-target="#tagModal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="20" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                                    <circle cx="24" cy="8" r="2" />
-                                    <path d="M2 18 L18 2 30 2 30 14 14 30 Z" />
                                 </svg>
                             </div>
                             <div class="flex-fill mx-auto">
