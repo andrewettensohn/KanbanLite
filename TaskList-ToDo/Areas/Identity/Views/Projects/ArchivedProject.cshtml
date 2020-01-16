@@ -51,13 +51,13 @@
                             </div>
                             <div class="d-flex flex-row">
                                 <div id="creationTime@(item.ProjectItemID)" class="mr-auto pl-2">@(item.ProjectTotalTasks) Tasks</div>
-                                <div class="ml-auto pl-5">@(item.ProjectCompletionTime)</div>
+                                <div class="ml-auto pl-5">@(item.ProjectCompletionTimeString)</div>
                             </div>
                             <br />
                         </div>
                         <div id="projectItemCollapse@(item.ProjectItemID)" class="collapse" item-parent="#projectItemAccordion$">
                             <div class="p-2">
-                                <textarea id="projectDescription@(item.ProjectItemID)" onfocusout="changeProjectDescription(${item.projectItemID})" class="form-control bg-dark border-0 text-white">@(item.ProjectDescription)</textarea>
+                                <textarea id="projectDescription@(item.ProjectItemID)" class="form-control bg-dark border-0 text-white">@(item.ProjectDescription)</textarea>
                                 <hr />
                                 <button class="btn" type="button" onclick="unarchiveItem(@(item.ProjectItemID))" data-toggle="modal" data-target="#archiveConfirmationModal">
                                     <svg id="i-reply" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,11 +21,11 @@ namespace TodoApi.Models
 
         public string TaskStatus { get; set; }
 
-        //public string TaskCreationTime { get; set; }
+        public DateTime TaskCreationTime { get; set; }
 
-        //public string TaskInProgressTime { get; set; }
+        public DateTime TaskInProgressTime { get; set; }
 
-        //public string TaskCompletionTime { get; set; }
+        public DateTime TaskCompletionTime { get; set; }
 
         public string TagName { get; set; }
 

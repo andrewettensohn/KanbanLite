@@ -13,9 +13,15 @@
         body {
             font-family: Helvetica;
         }
-
     </style>
 </head>
+
+<!--Active Project Header-->
+<div id="activeProjectHeaderArea">
+    <h3 class="display-6" id="activeProjectHeader"></h3>
+    <hr />
+</div>
+
 <body class="text-light" id="taskBoard">
     <div class="container">
 
@@ -48,8 +54,7 @@
                         </button>
                         <form>
                             <div id="dropdownChooseProject" class="dropdown-menu">
-                                @*<hr />
-                                <button class="btn border-dark ml-2" data-toggle="collapse" href="#collapseSearchProjects" role="button">Search Projects</button>*@
+
                             </div>
                         </form>
                     </div>
@@ -96,12 +101,6 @@
                     </div>
                 </div>
                 <br />
-
-                <!--Active Project Header-->
-                <div id="activeProjectHeaderArea">
-                    <h2 class="display-6" id="activeProjectHeader"></h2>
-                    <hr />
-                </div>
 
                 <!--Loading Animation-->
                 <div id="loadingAnimationArea" class="d-none">
@@ -320,7 +319,7 @@
     function addItem() {
 
         const addNameTextbox = document.getElementById('add-name');
-        var projectID = $(`#hiddenActiveProjectID`).text();   
+        var projectID = $(`#hiddenActiveProjectID`).text();
 
         const item = {
             taskStatus: "Not Started",
@@ -392,7 +391,7 @@
 
             var parentTaskName = $(`#taskNameHeader${itemId}`).text();
             var parentTaskStatus = $(`#hiddenTaskStatus${itemId}`).text();
-            var projectID = $(`#hiddenActiveProjectID`).text();   
+            var projectID = $(`#hiddenActiveProjectID`).text();
 
             var item = {
                 todoItemID: parseInt(itemId, 10),
@@ -414,21 +413,17 @@
 
         } else if (isSubTask == false) {
 
-            var uriType = uri;
             var idToSend = itemId;
-            var projectID = $(`#hiddenActiveProjectID`).text();   
 
             var item = {
                 todoItemID: parseInt(itemId, 10),
                 userId: userId,
-                taskName: itemTaskName,
                 taskStatus: newStatus,
-                projectID: parseInt(projectID, 10)
             };
 
         }
 
-        fetch(`${uriType}/${idToSend}`, {
+        fetch(`api/TodoItems/UpdateStatus/${idToSend}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -510,28 +505,21 @@
 
             var newTaskName = $(`#inputNameChange${itemId}`).val();
             newTaskName = newTaskName.toString();
-            if (newTaskName == "") { newTaskName = "Untitled" }
-
-            var taskStatus = $(`#hiddenTaskStatus${itemId}`).text();
-            var projectID = $(`#hiddenActiveProjectID`).text();   
 
             var taskNameElement = `taskNameHeader${itemId}`;
             var inputAreaElement = `areaInputNameChange${itemId}`;
 
-            var uriType = uri;
             var idToSend = itemId;
 
             var item = {
                 todoItemID: parseInt(itemId, 10),
                 userId: userId,
-                taskStatus: taskStatus,
                 taskName: newTaskName,
-                projectID: parseInt(projectID, 10)
             };
 
         }
 
-        fetch(`${uriType}/${idToSend}`, {
+        fetch(uri + `/UpdateName/${idToSend}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

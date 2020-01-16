@@ -88,53 +88,77 @@ namespace ToDoApi.Controllers
         }
 
         // PUT: Projects/TodoItems/1/2
-        [HttpPut("{todoItemID}/{todoSubItemID}")]
-        public async Task<IActionResult> PutTodoItemAndSubItem(int todoItemID, int todoSubItemID, TodoItem todoItem)
-        {
+        //[HttpPut("{todoItemID}/{todoSubItemID}")]
+        //public async Task<IActionResult> PutTodoItemAndSubItem(int todoItemID, int todoSubItemID, TodoItem todoItem)
+        //{
 
-            if (todoItemID != todoItem.TodoItemID)
+        //    if (todoItemID != todoItem.TodoItemID)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    if (todoSubItemID != todoItem.TodoSubItems[0].TodoSubItemID)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    if (todoItem.TodoSubItems[0].SubTaskStatus == "In-Progress")
+        //    {
+        //        todoItem.TaskStatus = todoItem.TodoSubItems[0].SubTaskStatus;
+        //    }
+
+        //    _context.Entry(todoItem).State = EntityState.Modified;
+
+        //    _context.Entry(todoItem.TodoSubItems[0]).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!TodoItemExists(todoItemID))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
+
+        // PUT: Projects/TodoItems/UpdateName/5
+        [HttpPut("{updateType}/{id}")]
+        public async Task<IActionResult> PutTodoItem(string updateType, int id, TodoItem sentTodoItem)
+        {
+            if (id != sentTodoItem.TodoItemID)
             {
                 return BadRequest();
             }
 
-            if (todoSubItemID != todoItem.TodoSubItems[0].TodoSubItemID)
+            var todoItem = _context.TodoItems.Where(t => t.TodoItemID == id).First();
+
+            if(updateType == "UpdateName")
             {
-                return BadRequest();
+                todoItem.TaskName = sentTodoItem.TaskName;
             }
-
-            if (todoItem.TodoSubItems[0].SubTaskStatus == "In-Progress")
+            else if(updateType == "UpdateStatus")
             {
-                todoItem.TaskStatus = todoItem.TodoSubItems[0].SubTaskStatus;
-            }
+                todoItem.TaskStatus = sentTodoItem.TaskStatus;
 
-            _context.Entry(todoItem).State = EntityState.Modified;
-
-            _context.Entry(todoItem.TodoSubItems[0]).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TodoItemExists(todoItemID))
+                if(todoItem.TaskStatus == "In-Progress")
                 {
-                    return NotFound();
+                    todoItem.TaskInProgressTime = DateTime.Now;
                 }
-                else
+                else if(todoItem.TaskStatus == "Completed")
                 {
-                    throw;
+                    todoItem.TaskCompletionTime = DateTime.Now;
                 }
             }
-
-            return NoContent();
-        }
-
-        // PUT: Projects/TodoItems/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
-        {
-            if (id != todoItem.TodoItemID)
+            else
             {
                 return BadRequest();
             }
@@ -174,6 +198,8 @@ namespace ToDoApi.Controllers
             {
                 todoItem.TaskName = "Untitled";
             }
+
+            todoItem.TaskCreationTime = DateTime.Now;
 
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();

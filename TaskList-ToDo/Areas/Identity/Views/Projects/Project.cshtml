@@ -90,6 +90,7 @@
     const uri = "api/ProjectItems";
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
     const boardUrl = "@Url.Content("~/Identity/Projects/Board")";
+    const storyUrl = "@Url.Content("~/Identity/Projects/Story")";
 
     $(document).ready(getItems())
 
@@ -146,7 +147,7 @@
 
         };
 
-        fetch(uri + `/${userId}/UpdateDescription/${itemId}`, {
+        fetch(uri + `/UpdateDescription/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -193,7 +194,7 @@
 
             };
 
-        fetch(uri + `/${userId}/UpdateName/${itemId}`, {
+        fetch(uri + `/UpdateName/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -208,7 +209,17 @@
     }
 
     //PUT ACTIVE PROJECT STATUS
-    function setActiveProject(itemId) {
+    function setActiveProject(itemId, type) {
+
+        if (type == "board") {
+
+            typeUrl = boardUrl;
+
+        } else if (type == "story") {
+
+            typeUrl = storyUrl;
+
+        }
 
         const item = {
 
@@ -224,7 +235,7 @@
             },
             body: JSON.stringify(item)
         })
-            .then(() => window.location.href = boardUrl)
+            .then(() => window.location.href = typeUrl)
             .catch(error => console.error('Unable to delete item.', error));
 
     }
@@ -301,7 +312,7 @@
                         </div>
                         <div class="d-flex flex-row">
                             <div id="creationTime${item.projectItemID}" class="mr-auto pl-2">${item.projectTotalTasks} Tasks</div>
-                            <div class="ml-auto pl-5">${item.projectCreationTime}</div>
+                            <div class="ml-auto pl-5">${item.projectCreationTimeString}</div>
                         </div>
                         <br />
                         <div class="progress">
@@ -314,13 +325,13 @@
                         <div class="p-2">
                             <textarea id="projectDescription${item.projectItemID}" onfocusout="changeProjectDescription(${item.projectItemID})" class="form-control bg-dark border-0 text-white">${item.projectDescription}</textarea>
                             <hr />
-                            <button class="btn" type="button" onclick="setActiveProject(${item.projectItemID})">
+                            <button class="btn" type="button" onclick="setActiveProject(${item.projectItemID}, 'board')">
                                 <svg id="i-clipboard" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M12 2 L12 6 20 6 20 2 12 2 Z M11 4 L6 4 6 30 26 30 26 4 21 4" />
                                     <p class="text-white">Task Board</p>
                                 </svg>
                             </button>
-                            <button class="btn" type="button">
+                            <button class="btn" type="button" type="button" onclick="setActiveProject(${item.projectItemID}, 'story')">
                                 <svg id="i-book" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M16 7 C16 7 9 1 2 6 L2 28 C9 23 16 28 16 28 16 28 23 23 30 28 L30 6 C23 1 16 7 16 7 Z M16 7 L16 28" />
                                     <p class="text-white">Project Stories</p>
