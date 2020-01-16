@@ -1,4 +1,7 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject UserManager<IdentityUser> UserManager
+
 @{
     ViewData["Title"] = "Story";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,7 +14,31 @@
 
 <h3>Story for @(activeprojectItem.ProjectName)</h3>
 
-<body>
+
+<body class="container">
+    <div class="d-flex justify-content-end">
+        <div class="dropdown">
+            <button class="btn border-secondary" type="button" id="btnSelectProject" data-toggle="dropdown">
+                <svg id="i-folder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M2 26 L30 26 30 7 14 7 10 4 2 4 Z M30 12 L2 12" />
+                </svg>
+            </button>
+            <form>
+                <div id="dropdownChooseProject" class="dropdown-menu">
+                    @{
+                        foreach (var project in Model.ProjectItems)
+                        {
+                            <a class="dropdown-item" href="#" id="projectOption@(project.ProjectItemID)" onclick="setActiveProject(@(project.ProjectItemID))">@(project.ProjectName)</a>
+                        }
+                    }
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br />
+
     <nav>
         @{
 
@@ -26,7 +53,7 @@
                     <li class="breadcrumb-item active">@(taskStory.ActionTime)</li>
                     <li class="breadcrumb-item">Task @(taskStory.TaskName) @(taskStory.ActionType)</li>
                 </ol>
-                
+
             }
 
             if (activeprojectItem.ProjectCompletionTime > DateTime.MinValue)
@@ -40,12 +67,33 @@
         }
 
     </nav>
-   
+
 
 
 </body>
 <script>
 
-    //Only show active project
-    //Filter button changes active project.
+    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+
+    //PUT ACTIVE PROJECT STATUS
+    function setActiveProject(itemId) {
+
+        const item = {
+
+            projectItemID: parseInt(itemId, 10),
+            userId: userId
+        };
+
+        fetch(`api/ProjectItems/SetActiveProject/${userId}/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        })
+            .then(() => location.reload())
+            .catch(error => console.error('Unable to delete item.', error));
+
+    }
 </script>
