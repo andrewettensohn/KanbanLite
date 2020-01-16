@@ -17,7 +17,7 @@
 
             <ol class="breadcrumb bg-dark">
                 <li class="breadcrumb-item active">@(activeprojectItem.ProjectCreationTime)</li>
-                <li class="breadcrumb-item">Project Started</li>
+                <li class="breadcrumb-item">Project @(activeprojectItem.ProjectName) Started</li>
             </ol>
 
             foreach (var taskStory in taskStories)
@@ -29,11 +29,11 @@
                 
             }
 
-            if (activeprojectItem.ProjectCompletionTime != null)
+            if (activeprojectItem.ProjectCompletionTime > DateTime.MinValue)
             {
                 <ol class="breadcrumb bg-dark">
                     <li class="breadcrumb-item active">@(activeprojectItem.ProjectCompletionTime)</li>
-                    <li class="breadcrumb-item">Project Completed</li>
+                    <li class="breadcrumb-item">Project @(activeprojectItem.ProjectName) Completed</li>
                 </ol>
             }
 
