@@ -56,17 +56,6 @@ namespace TaskList_ToDo.Controllers
             return View(model);
         }
 
-        public IActionResult Tags()
-        {
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var model = _context.Tag.Where(t => t.UserId == userId).ToList();
-
-            return View(model);
-
-        }
-
 
         public IActionResult Story()
         {

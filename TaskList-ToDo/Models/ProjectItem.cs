@@ -30,8 +30,6 @@ namespace TaskList_ToDo.Models
         [NotMapped]
         public string ProjectCompletionTimeString { get; set; }
 
-        public string TagName { get; set; }
-
         public int ProjectTotalTasks { get; set; }
 
         [NotMapped]
