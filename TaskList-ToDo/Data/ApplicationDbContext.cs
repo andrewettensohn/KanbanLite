@@ -21,7 +21,5 @@ namespace TaskList_ToDo.Data
 
         public DbSet<ProjectItem> ProjectItems { get; set; }
 
-        public DbSet<TaskList_ToDo.Models.Tag> Tag { get; set; }
-
     }
 }

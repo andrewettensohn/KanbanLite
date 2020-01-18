@@ -22,14 +22,14 @@ namespace ToDoApi.Controllers
             _context = context;
         }
 
-        // GET: api/<controller>
+        // GET: api/TodoSubItems
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoSubItem>>> GetToDoSubItem()
         {
             return await _context.TodoSubItems.ToListAsync();
         }
 
-        // GET api/<controller>/5
+        // GET api/TodoSubItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoSubItem>> GetToDoItem(int id)
         {
@@ -43,24 +43,56 @@ namespace ToDoApi.Controllers
             return todoSubItem;
         }
 
-        // PUT Projects/api/TodoSubItems/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult<TodoSubItem>> PutTodoSubItem(int id, TodoSubItem todoSubItem)
+        // PUT api/TodoSubItems/5
+        [HttpPut("{updateType}/{id}")]
+        public async Task<ActionResult<TodoSubItem>> PutTodoSubItem(string updateType, int id, TodoSubItem sentTodoSubItem)
         {
 
-            if(id != todoSubItem.TodoSubItemID)
+            if(id != sentTodoSubItem.TodoSubItemID)
             {
                 return BadRequest();
             }
 
-            if (todoSubItem.SubTaskName == "" || todoSubItem.SubTaskName is null)
-            {
-                todoSubItem.SubTaskName = "Untitled";
-            }
+            TodoSubItem todoSubItem = _context.TodoSubItems.Find(id);
 
-            if (todoSubItem.SubTaskDescription is null)
+            if(updateType == "UpdateName")
             {
-                todoSubItem.SubTaskDescription = "";
+                if (todoSubItem.SubTaskName == "" || todoSubItem.SubTaskName is null)
+                {
+                    todoSubItem.SubTaskName = "Untitled";
+                }
+                else
+                {
+                    todoSubItem.SubTaskName = sentTodoSubItem.SubTaskName;
+                }
+
+            } 
+            else if (updateType == "UpdateDescription")
+            {
+                if (todoSubItem.SubTaskDescription is null)
+                {
+                    todoSubItem.SubTaskDescription = "";
+                }
+                else
+                {
+                    todoSubItem.SubTaskDescription = sentTodoSubItem.SubTaskDescription;
+                }
+            }
+            else if(updateType == "UpdateStatus")
+            {
+                todoSubItem.SubTaskStatus = sentTodoSubItem.SubTaskStatus;
+
+                //if(todoSubItem.SubTaskStatus == "In-Progress")
+                //{
+                //    TodoItem todoitem = _context.TodoItems.Find(todoSubItem.TodoItemID);
+
+                //    _context.Entry(todoitem).State = EntityState.Modified;
+                //    //Test this
+                //}
+            }
+            else
+            {
+                return BadRequest();
             }
 
             _context.Entry(todoSubItem).State = EntityState.Modified;
@@ -84,7 +116,7 @@ namespace ToDoApi.Controllers
             return todoSubItem;
         }
 
-        // POST api/<controller>
+        // POST api/TodoSubItems
         [HttpPost]
         public async Task<ActionResult<TodoSubItem>> PostTodoSubItem(TodoSubItem todoSubItem)
         {
@@ -100,7 +132,7 @@ namespace ToDoApi.Controllers
             return CreatedAtAction(nameof(GetToDoSubItem), new { id = todoSubItem.TodoSubItemID }, todoSubItem);
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/TodoSubItems/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<TodoSubItem>> DeleteTodoSubItem(int id)
         {

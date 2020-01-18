@@ -170,7 +170,6 @@
     const uri1 = 'api/TodoItems/Tasks';
     const uri2 = 'api/TodoSubItems';
     const uriProject = 'api/ProjectItems';
-    @*const userName = '@User.Identity.Name';*@
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
     $(document).ready(getProjectInfo());
@@ -373,41 +372,22 @@
 
         if (isSubTask) {
 
-            var uriType = uri + `/${itemId}`;
-            var idToSend = subItemId;
-            var subTaskDescription = $(`#subAreaTaskDescription${subItemId}`).val();
-
-            if (typeof subTaskDescription !== "undefined") {
-
-                subTaskDescription = subTaskDescription.toString();
-
-            } else {
-
-                subTaskDescription = "";
-
-            }
-
-            var parentTaskName = $(`#taskNameHeader${itemId}`).text();
-            var parentTaskStatus = $(`#hiddenTaskStatus${itemId}`).text();
-            var projectID = $(`#hiddenActiveProjectID`).text();
-
             var item = {
-                todoItemID: parseInt(itemId, 10),
-                projectID: parseInt(projectID, 10),
+                todoSubItemID: parseInt(subItemId, 10),
                 userId: userId,
-                taskName: parentTaskName,
-                taskStatus: parentTaskStatus,
-                todoSubItems: [
-                    {
-                        todoSubItemID: parseInt(subItemId, 10),
-                        todoItemID: parseInt(itemId, 10),
-                        userId: userId,
-                        subTaskName: itemTaskName,
-                        subTaskStatus: newStatus,
-                        subTaskDescription: subTaskDescription
-                    }
-                ]
+                subTaskStatus: newStatus
             };
+
+            fetch(`api/TodoSubItems/UpdateStatus/${subItemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+                .then(() => displayStatusChange())
+                .catch(error => console.error('Unable to delete item.', error));
 
         } else if (isSubTask == false) {
 
@@ -419,18 +399,17 @@
                 taskStatus: newStatus,
             };
 
+            fetch(`api/TodoItems/UpdateStatus/${idToSend}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+                .then(() => displayStatusChange())
+                .catch(error => console.error('Unable to delete item.', error));
         }
-
-        fetch(`api/TodoItems/UpdateStatus/${idToSend}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item)
-        })
-            .then(() => displayStatusChange())
-            .catch(error => console.error('Unable to delete item.', error));
 
         function displayStatusChange() {
 
@@ -466,38 +445,28 @@
 
             var newTaskName = $(`#subInputNameChange${subItemId}`).val();
             newTaskName = newTaskName.toString();
-            if (newTaskName == "") { newTaskName = "Untitled" }
-
-            var subTaskDescription = $(`#subAreaTaskDescription${subItemId}`).val();
-
-            if (typeof subTaskDescription !== "undefined") {
-
-                subTaskDescription = subTaskDescription.toString();
-
-            } else {
-
-                subTaskDescription = "";
-
-            }
-
-            var taskStatus = $(`#subHiddenTaskStatus${subItemId}`).text();
 
             var taskNameElement = `subTaskNameHeader${subItemId}`;
             var inputAreaElement = `subAreaInputNameChange${subItemId}`;
 
-            var uriType = uri2;
-            var idToSend = subItemId;
-
-
             var item = {
                 todoSubItemID: parseInt(subItemId, 10),
-                todoItemID: parseInt(itemId, 10),
                 userId: userId,
-                subTaskStatus: taskStatus,
                 subTaskName: newTaskName,
-                subTaskDescription: subTaskDescription
             };
 
+            fetch(`api/TodoSubItems/UpdateName/${subItemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+                .then(() => $(`#${taskNameElement}`).text(newTaskName))
+                .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
+                .then(() => $(`#${taskNameElement}`).toggleClass('d-none'))
+                .catch(error => console.error('Unable to delete item.', error));
 
         } else if (isSubTask == false) {
 
@@ -515,9 +484,7 @@
                 taskName: newTaskName,
             };
 
-        }
-
-        fetch(uri + `/UpdateName/${idToSend}`, {
+            fetch(`api/TodoItems/UpdateName/${idToSend}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -529,6 +496,7 @@
             .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
             .then(() => $(`#${taskNameElement}`).toggleClass('d-none'))
             .catch(error => console.error('Unable to delete item.', error));
+        }
     }
 
     //DISPLAY TASK INPUT
@@ -591,8 +559,8 @@
     //PUT SUB TASK DESCRIPTION
     function changeSubTaskDescription(itemId, subItemId, isNewDescription) {
 
-        var subTaskName = $(`#subTaskNameHeader${subItemId}`).text();
-        var subTaskStatus = $(`#subHiddenTaskStatus${subItemId}`).text();
+        //var subTaskName = $(`#subTaskNameHeader${subItemId}`).text();
+        //var subTaskStatus = $(`#subHiddenTaskStatus${subItemId}`).text();
 
         if (isNewDescription == true) {
 
@@ -615,7 +583,7 @@
             subTaskDescription: subTaskDescription
         };
 
-        fetch(`${uri2}/${subItemId}`, {
+        fetch(`api/TodoSubItems/UpdateDescription/${subItemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

@@ -59,26 +59,11 @@ namespace TaskList_ToDo.Migrations
                     ProjectIsArchived = table.Column<bool>(nullable: false),
                     ProjectCreationTime = table.Column<DateTime>(nullable: false),
                     ProjectCompletionTime = table.Column<DateTime>(nullable: false),
-                    TagName = table.Column<string>(nullable: true),
                     ProjectTotalTasks = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProjectItems", x => x.ProjectItemID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tag",
-                columns: table => new
-                {
-                    TagID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(nullable: true),
-                    TagName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tag", x => x.TagID);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,8 +78,7 @@ namespace TaskList_ToDo.Migrations
                     TaskStatus = table.Column<string>(nullable: true),
                     TaskCreationTime = table.Column<DateTime>(nullable: false),
                     TaskInProgressTime = table.Column<DateTime>(nullable: false),
-                    TaskCompletionTime = table.Column<DateTime>(nullable: false),
-                    TagName = table.Column<string>(nullable: true)
+                    TaskCompletionTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -217,8 +201,7 @@ namespace TaskList_ToDo.Migrations
                     UserId = table.Column<string>(nullable: true),
                     SubTaskName = table.Column<string>(nullable: true),
                     SubTaskStatus = table.Column<string>(nullable: true),
-                    SubTaskDescription = table.Column<string>(nullable: true),
-                    LabelName = table.Column<string>(nullable: true)
+                    SubTaskDescription = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -295,9 +278,6 @@ namespace TaskList_ToDo.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectItems");
-
-            migrationBuilder.DropTable(
-                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "TodoSubItems");

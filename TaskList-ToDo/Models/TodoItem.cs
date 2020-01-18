@@ -27,8 +27,6 @@ namespace TodoApi.Models
 
         public DateTime TaskCompletionTime { get; set; }
 
-        public string TagName { get; set; }
-
         public List<TodoSubItem> TodoSubItems { get; set; }
 
     }
