@@ -63,9 +63,23 @@ namespace TaskList_ToDo.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            model.ActiveProjectItem = _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsActive == true).First();
-            model.TodoItems = _context.TodoItems.Where(t => t.UserId == userId && t.ProjectID == model.ActiveProjectItem.ProjectItemID).ToList();
-            model.ProjectItems = _context.ProjectItems.Where(p => p.UserId == userId).ToList();
+            try
+            {
+                model.ActiveProjectItem = _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsActive == true).First();
+                model.TodoItems = _context.TodoItems.Where(t => t.UserId == userId && t.ProjectID == model.ActiveProjectItem.ProjectItemID).ToList();
+                model.ProjectItems = _context.ProjectItems.Where(p => p.UserId == userId).ToList();
+            }
+            catch(InvalidOperationException)
+            {
+                if(!ProjectItemsExist())
+                {
+                    return View("Project");
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             model.TaskStoryList = new List<TaskStory>();
 
@@ -106,6 +120,11 @@ namespace TaskList_ToDo.Controllers
 
 
             return View(model);
+        }
+
+        private bool ProjectItemsExist()
+        {
+            return _context.ProjectItems.Any();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
