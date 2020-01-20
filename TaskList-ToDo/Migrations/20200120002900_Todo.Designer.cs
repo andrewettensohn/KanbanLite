@@ -10,14 +10,14 @@ using TaskList_ToDo.Data;
 namespace TaskList_ToDo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200117021506_Todo")]
+    [Migration("20200120002900_Todo")]
     partial class Todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
