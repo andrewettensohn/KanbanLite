@@ -136,7 +136,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!--Tasks Output-->
                 <div id="output"></div>
 
@@ -147,10 +146,6 @@
 </body>
 <script type="text/javascript">
 
-    const uri = 'api/TodoItems';
-    const uri1 = 'api/TodoItems/Tasks';
-    const uri2 = 'api/TodoSubItems';
-    const uriProject = 'api/ProjectItems';
     const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
 
     $(document).ready(getProjectInfo());
@@ -160,10 +155,10 @@
 
         $(`#dropdownChooseProject`).empty();
 
-        fetch(uriProject + `/ProjectList/${userId}`)
+        fetch(`api/ProjectItems/ProjectList/${userId}`)
             .then(response => response.json())
             .then(data => displayProjectDropdownOptions(data))
-            .catch(error => console.error('Unable to get items.', error));
+            .catch(error => console.error('Unable to get project items', error));
 
         function displayProjectDropdownOptions(data) {
 
@@ -210,7 +205,7 @@
 
         };
 
-        fetch(uriProject + `/SetActiveProject/${userId}/${projectItemId}`, {
+        fetch(`api/ProjectItems/SetActiveProject/${userId}/${projectItemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -219,7 +214,7 @@
             body: JSON.stringify(item)
         })
             .then(() => getProjectInfo())
-            .catch(error => console.error('Unable to delete item.', error));
+            .catch(error => console.error('Unable to set the project item to active.', error));
 
     }
 
@@ -275,19 +270,19 @@
 
             $('#loadingAnimationArea').toggleClass('d-none');
 
-            fetch(uri + `/Filter/${userId}/${projectID}/${filterOption}`)
+            fetch(`api/TodoItems/Filter/${userId}/${projectID}/${filterOption}`)
                 .then(response => response.json())
                 .then(data => displayItems(data))
-                .catch(error => console.error('Unable to get items.', error));
+                .catch(error => console.error('Unable to get filtered todo items.', error));
 
         } else {
 
             $('#loadingAnimationArea').toggleClass('d-none');
 
-            fetch(uri1 + `/${userId}/${projectID}`)
+            fetch(`api/TodoItems/Tasks/${userId}/${projectID}`)
                 .then(response => response.json())
                 .then(data => displayItems(data))
-                .catch(error => console.error('Unable to get items.', error));
+                .catch(error => console.error('Unable to get unfiltered todo items', error));
 
         }
 
@@ -306,7 +301,7 @@
             projectID: parseInt(projectID, 10)
         };
 
-        fetch(uri, {
+        fetch("api/TodoItems", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -320,7 +315,7 @@
             .then(() => {
                 addNameTextbox.value = '';
             })
-            .catch(error => console.error('Unable to add item.', error));
+            .catch(error => console.error('Failed to enter todo item into database', error));
     }
 
     //POST SUB-TASK
@@ -335,7 +330,7 @@
             subTaskDescription: "",
         };
 
-        fetch(uri2, {
+        fetch("api/TodoSubItems", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -345,7 +340,7 @@
         })
             .then(response => response.json())
             .then(data => displaySubItems(data))
-            .catch(error => console.error('Unable to add item.', error));
+            .catch(error => console.error('Unable to enter todo sub item into database.', error));
     }
 
     //PUT STATUS CHANGE
@@ -368,7 +363,7 @@
                 body: JSON.stringify(item)
             })
                 .then(() => displayStatusChange())
-                .catch(error => console.error('Unable to delete item.', error));
+                .catch(error => console.error('Unable to update sub item status.', error));
 
         } else if (isSubTask == false) {
 
@@ -389,9 +384,9 @@
                 body: JSON.stringify(item)
             })
                 .then(() => displayStatusChange())
-                .catch(error => console.error('Unable to delete item.', error));
+                .catch(error => console.error('Unable to update item status.', error));
         }
-
+        //changes the icon and updates the text on the HTML elements for the status change
         function displayStatusChange() {
 
             if (isSubTask) {
@@ -447,7 +442,7 @@
                 .then(() => $(`#${taskNameElement}`).text(newTaskName))
                 .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
                 .then(() => $(`#${taskNameElement}`).toggleClass('d-none'))
-                .catch(error => console.error('Unable to delete item.', error));
+                .catch(error => console.error('Unable to update sub item name.', error));
 
         } else if (isSubTask == false) {
 
@@ -476,7 +471,7 @@
             .then(() => $(`#${taskNameElement}`).text(newTaskName))
             .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
             .then(() => $(`#${taskNameElement}`).toggleClass('d-none'))
-            .catch(error => console.error('Unable to delete item.', error));
+            .catch(error => console.error('Unable to update item name.', error));
         }
     }
 
@@ -513,14 +508,14 @@
                     method: 'DELETE'
                 })
                     .then(() => $(`#subAccordion${subItemId}`).remove())
-                    .catch(error => console.error('Unable to delete item.', error));
+                    .catch(error => console.error('Unable to delete sub item.', error));
 
 
 
             }
             else if (isSubTask == false) {
 
-                fetch(`${uri}/${itemId}`, {
+                fetch(`api/TodoItems/${itemId}`, {
                     method: 'DELETE'
                 })
                     .then(() => $(`#taskAccordion${itemId}`).remove())
@@ -570,7 +565,7 @@
             .then(response => response.json())
             .then(data => createSubTaskDescriptionHTML(data))
             .then(() => toggleCollapse(subItemId, true))
-            .catch(error => console.error('Unable to delete item.', error));
+            .catch(error => console.error('Unable to update sub task description.', error));
 
     }
 
