@@ -81,14 +81,6 @@ namespace ToDoApi.Controllers
             else if(updateType == "UpdateStatus")
             {
                 todoSubItem.SubTaskStatus = sentTodoSubItem.SubTaskStatus;
-
-                //if(todoSubItem.SubTaskStatus == "In-Progress")
-                //{
-                //    TodoItem todoitem = _context.TodoItems.Find(todoSubItem.TodoItemID);
-
-                //    _context.Entry(todoitem).State = EntityState.Modified;
-                //    //Test this
-                //}
             }
             else
             {

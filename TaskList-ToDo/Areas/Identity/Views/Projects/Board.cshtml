@@ -442,7 +442,7 @@
                 .then(() => $(`#${taskNameElement}`).text(newTaskName))
                 .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
                 .then(() => $(`#${taskNameElement}`).toggleClass('d-none'))
-                .catch(error => console.error('Unable to update sub item name.', error));
+                .catch(error => console.error('Unable to update it.', error));
 
         } else if (isSubTask == false) {
 
@@ -471,7 +471,7 @@
             .then(() => $(`#${taskNameElement}`).text(newTaskName))
             .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
             .then(() => $(`#${taskNameElement}`).toggleClass('d-none'))
-            .catch(error => console.error('Unable to update item name.', error));
+            .catch(error => console.error('Unable to delete item.', error));
         }
     }
 
@@ -504,11 +504,11 @@
 
             if (isSubTask == true) {
 
-                fetch(`${uri2}/${subItemId}`, {
+                fetch(`api/TodoSubItems/${subItemId}`, {
                     method: 'DELETE'
                 })
                     .then(() => $(`#subAccordion${subItemId}`).remove())
-                    .catch(error => console.error('Unable to delete sub item.', error));
+                    .catch(error => console.error('Unable to delete item.', error));
 
 
 
@@ -565,7 +565,7 @@
             .then(response => response.json())
             .then(data => createSubTaskDescriptionHTML(data))
             .then(() => toggleCollapse(subItemId, true))
-            .catch(error => console.error('Unable to update sub task description.', error));
+            .catch(error => console.error('Unable to delete item.', error));
 
     }
 
