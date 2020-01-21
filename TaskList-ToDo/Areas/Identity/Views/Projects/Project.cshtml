@@ -102,7 +102,7 @@
         fetch(`api/ProjectItems/ProjectList/${userId}`)
                 .then(response => response.json())
                 .then(data => displayItems(data))
-                .catch(error => console.error('Unable to get items.', error));
+                .catch(error => console.error('Unable to get project items.', error));
 
     }
 
@@ -132,7 +132,7 @@
             .then(() => {
                 projectName.value = '';
             })
-            .catch(error => console.error('Unable to add item.', error));
+            .catch(error => console.error('Unable to add project item.', error));
     }
 
     //PUT PROJECT DESCRIPTION
@@ -156,7 +156,7 @@
             },
             body: JSON.stringify(item)
         })
-            .catch(error => console.error('Unable to delete item.', error));
+            .catch(error => console.error('Unable to update project description.', error));
 
     }
 
@@ -206,7 +206,7 @@
             .then(() => $(`#${projectNameElement}`).text(newProjectName))
             .then(() => $(`#${inputAreaElement}`).toggleClass('d-none'))
             .then(() => $(`#${projectNameElement}`).toggleClass('d-none'))
-            .catch(error => console.error('Unable to delete item.', error));
+            .catch(error => console.error('Unable to update project name.', error));
     }
 
     //PUT ACTIVE PROJECT STATUS
@@ -237,7 +237,7 @@
             body: JSON.stringify(item)
         })
             .then(() => window.location.href = typeUrl)
-            .catch(error => console.error('Unable to delete item.', error));
+            .catch(error => console.error('Unable to set the project item to active.', error));
 
     }
 
@@ -252,7 +252,7 @@
             })
             .then(() => $(`#projectItemAccordion${itemId}`).remove())
             .then(() => getItems())
-            .catch(error => console.error('Unable to delete item.', error));
+            .catch(error => console.error('Unable to delete project item.', error));
 
         });
 
@@ -279,7 +279,7 @@
             })
                     .then(() => $(`#projectItemAccordion${itemId}`).remove())
                     .then(() => getItems())
-                    .catch(error => console.error('Unable to delete item.', error));
+                    .catch(error => console.error('Unable to archive project.', error));
         });
 
     }
