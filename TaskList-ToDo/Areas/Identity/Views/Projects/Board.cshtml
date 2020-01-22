@@ -68,37 +68,16 @@
             <center>
 
                 <!-- Inside Collapse | Create New Task -->
-                <div class="row">
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="multiCollapseCreateNewTask">
-                            <div class="card card-body bg-dark border-secondary">
-                                <form action="javascript:void(0);" method="POST" onsubmit="addItem()" class="input-group mb-3 col-md-8">
-                                    <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="New Task Name" id="add-name">
-                                    <div class="input-group-append">
-                                        <button type="submit" value="Add" class="btn btn-outline-secondary text-white">Add Task</button>
-                                    </div>
-                                </form>
+                <div class="collapse multi-collapse" id="multiCollapseCreateNewTask">
+                    <div class="card card-body bg-dark border-secondary">
+                        <form action="javascript:void(0);" method="POST" onsubmit="addItem()" class="input-group mb-3 col-md-8">
+                            <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="New Task Name" id="add-name">
+                            <div class="input-group-append">
+                                <button type="submit" value="Add" class="btn btn-outline-secondary text-white">Add Task</button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-
-                <!-- Inside Collapse | Create New Project -->
-                <div class="row">
-                    <div class="col">
-                        <div class="collapse multi-collapse" id="collapseSearchProjects">
-                            <div class="card card-body bg-dark border-secondary">
-                                <form action="javascript:void(0);" method="POST" onsubmit="addItem()" class="input-group mb-3 col-md-8">
-                                    <input autocomplete="off" maxlength="25" type="text" class="form-control" placeholder="Search for a Project" id="inputSearchProjects">
-                                    <div class="input-group-append">
-                                        <button type="submit" value="Add" class="btn btn-outline-secondary text-white">Add Task</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br />
 
                 <!--Loading Animation-->
                 <div id="loadingAnimationArea" class="d-none">
