@@ -55,6 +55,19 @@
             </div>
         </div>
 
+        <!--Loading Animation-->
+        <div id="loadingAnimationArea" class="d-none">
+            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <!--No Project Found -->
+        <div id="noProjectsFoundArea" class="d-none">
+            <h3>No projects found.</h3>
+            <p>Add one to start.</p>
+            <hr />
+        </div>
 
         <!--Project Archive Modal-->
         <div class="modal fade" id="archiveConfirmationModal" tabindex="-1" role="dialog">
@@ -99,10 +112,12 @@
 
         $("#output").empty();
 
+        $('#loadingAnimationArea').toggleClass('d-none');
+
         fetch(`api/ProjectItems/ProjectList/${userId}`)
-                .then(response => response.json())
-                .then(data => displayItems(data))
-                .catch(error => console.error('Unable to get project items.', error));
+            .then(response => response.json())
+            .then(data => displayItems(data))
+            .catch(error => console.error('Unable to get project items.', error));
 
     }
 
@@ -287,6 +302,17 @@
     //CREATE PROJECT HTML
     function displayItems(data) {
 
+        console.log(data)
+
+        if (data.status == 400 || data.length == 0) {
+
+            $("#noProjectsFoundArea").removeClass("d-none");
+            $('#loadingAnimationArea').toggleClass('d-none');
+            return;
+        }
+
+        $("#noProjectsFoundArea").addClass("d-none");
+
         data.forEach(item => {
 
             var projectItemHTML = `
@@ -363,6 +389,7 @@
             document.getElementById("output").appendChild(newDiv);
         });
 
+        $('#loadingAnimationArea').toggleClass('d-none');
     }
 
 
