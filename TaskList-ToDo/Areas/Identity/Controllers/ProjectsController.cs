@@ -68,6 +68,43 @@ namespace TaskList_ToDo.Controllers
                 model.ActiveProjectItem = _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsActive == true).First();
                 model.TodoItems = _context.TodoItems.Where(t => t.UserId == userId && t.ProjectID == model.ActiveProjectItem.ProjectItemID).ToList();
                 model.ProjectItems = _context.ProjectItems.Where(p => p.UserId == userId).ToList();
+
+                model.TaskStoryList = new List<TaskStory>();
+
+                foreach (TodoItem todoitem in model.TodoItems)
+                {
+                    TaskStory taskStory = new TaskStory
+                    {
+                        ActionTime = todoitem.TaskCreationTime,
+                        ActionType = "Created",
+                        TaskName = todoitem.TaskName
+                    };
+                    model.TaskStoryList.Add(taskStory);
+
+                    if (todoitem.TaskInProgressTime > DateTime.MinValue)
+                    {
+                        taskStory = new TaskStory
+                        {
+                            ActionTime = todoitem.TaskInProgressTime,
+                            ActionType = "Moved to In-Progress",
+                            TaskName = todoitem.TaskName
+                        };
+                        model.TaskStoryList.Add(taskStory);
+                    }
+
+                    if (todoitem.TaskCompletionTime > DateTime.MinValue)
+                    {
+                        taskStory = new TaskStory
+                        {
+                            ActionTime = todoitem.TaskCompletionTime,
+                            ActionType = "Moved to Completed",
+                            TaskName = todoitem.TaskName
+                        };
+                        model.TaskStoryList.Add(taskStory);
+                    }
+                }
+
+                model.TaskStoryList = model.TaskStoryList.OrderBy(x => x.ActionTime).ToList();
             }
             catch(InvalidOperationException)
             {
@@ -80,44 +117,6 @@ namespace TaskList_ToDo.Controllers
                     throw;
                 }
             }
-
-            model.TaskStoryList = new List<TaskStory>();
-
-            foreach(TodoItem todoitem in model.TodoItems)
-            {
-                TaskStory taskStory = new TaskStory
-                {
-                    ActionTime = todoitem.TaskCreationTime,
-                    ActionType = "Created",
-                    TaskName = todoitem.TaskName
-                };
-                model.TaskStoryList.Add(taskStory);
-
-                if(todoitem.TaskInProgressTime > DateTime.MinValue)
-                {
-                    taskStory = new TaskStory
-                    {
-                        ActionTime = todoitem.TaskInProgressTime,
-                        ActionType = "Moved to In-Progress",
-                        TaskName = todoitem.TaskName
-                    };
-                    model.TaskStoryList.Add(taskStory);
-                }
-
-                if(todoitem.TaskCompletionTime > DateTime.MinValue)
-                {
-                    taskStory = new TaskStory
-                    {
-                        ActionTime = todoitem.TaskCompletionTime,
-                        ActionType = "Moved to Completed",
-                        TaskName = todoitem.TaskName
-                    };
-                    model.TaskStoryList.Add(taskStory);
-                }
-            }
-
-            model.TaskStoryList = model.TaskStoryList.OrderBy(x => x.ActionTime).ToList();
-
 
             return View(model);
         }
