@@ -17,19 +17,19 @@ namespace ToDoApi.Controllers
     {
 
         private readonly ApplicationDbContext _context;
-        //private readonly string userId;
 
         public ProjectItemsController(ApplicationDbContext context)
         {
-            //userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _context = context;
         }
 
 
         // GET: Projects/api/ProjectItems/ProjectList/UserId
-        [HttpGet("ProjectList/{userId}")]
-        public async Task<ActionResult<IEnumerable<ProjectItem>>> GetProjectItems(string userId)
+        [HttpGet("ProjectList")]
+        public async Task<ActionResult<IEnumerable<ProjectItem>>> GetProjectItems()
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var projectsList = await _context.ProjectItems.Where(p => p.UserId == userId && p.ProjectIsArchived == false).ToListAsync();
 
             foreach (var project in projectsList)
@@ -61,12 +61,13 @@ namespace ToDoApi.Controllers
         [HttpPut("{updateType}/{id}")]
         public async Task<IActionResult> PutProjectItem(string updateType, int id, ProjectItem sentProjectItem)
         {
-            if (id != sentProjectItem.ProjectItemID)
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ProjectItem projectItem = await _context.ProjectItems.FindAsync(id);
+
+            if (id != sentProjectItem.ProjectItemID || userId != projectItem.UserId)
             {
                 return BadRequest();
             }
-
-            var projectItem = await _context.ProjectItems.FindAsync(id);
 
             if(updateType == "UpdateDescription")
             {
@@ -201,9 +202,12 @@ namespace ToDoApi.Controllers
         }
 
         //POST Projects/api/ProjectItems
-        [HttpPost("{userId}")]
-        public async Task<ActionResult<ProjectItem>> PostProjectItem(string userId, ProjectItem projectItem)
+        [HttpPost]
+        public async Task<ActionResult<ProjectItem>> PostProjectItem(ProjectItem projectItem)
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            projectItem.UserId = userId;
             projectItem.ProjectDescription = "Enter a project description here...";
             projectItem.ProjectCreationTime = DateTime.Now;
 

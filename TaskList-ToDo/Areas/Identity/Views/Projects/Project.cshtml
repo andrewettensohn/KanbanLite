@@ -114,7 +114,7 @@
 
         $('#loadingAnimationArea').toggleClass('d-none');
 
-        fetch(`api/ProjectItems/ProjectList/${userId}`)
+        fetch(`api/ProjectItems/ProjectList`)
             .then(response => response.json())
             .then(data => displayItems(data))
             .catch(error => console.error('Unable to get project items.', error));
@@ -128,12 +128,11 @@
 
         const item = {
 
-            userId: userId,
             projectName: projectName.value.trim()
 
         };
 
-        fetch(uri + `/${userId}`, {
+        fetch(uri, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -158,7 +157,7 @@
         const item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId,
+            //userId: userId,
             projectDescription: projectDescription
 
         };
