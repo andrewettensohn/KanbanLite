@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +17,11 @@ namespace ToDoApi.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        //private readonly string userId;
 
         public ProjectItemsController(ApplicationDbContext context)
         {
+            //userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _context = context;
         }
 
@@ -101,9 +104,11 @@ namespace ToDoApi.Controllers
         }
 
         // PUT: Projects/api/ProjectItems/SetActiveProject/userId/5
-        [HttpPut("SetActiveProject/{userId}/{id}")]
-        public async Task<IActionResult> setActiveProject(string userId, int id, ProjectItem sentProjectItem)
+        [HttpPut("SetActiveProject/{id}")]
+        public async Task<IActionResult> SetActiveProject(int id, ProjectItem sentProjectItem)
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (id != sentProjectItem.ProjectItemID)
             {
                 return BadRequest();
@@ -149,11 +154,13 @@ namespace ToDoApi.Controllers
         }
 
         //PUT Projects/api/ProjectItems/ArchiveProject/UserId/5
-        [HttpPut("{state}/{userId}/{id}")]
-        public async Task<ActionResult<ProjectItem>> ArchiveProjectItem(string state, string userId, int id, ProjectItem sentProjectItem)
+        [HttpPut("{state}/{id}")]
+        public async Task<ActionResult<ProjectItem>> ArchiveProjectItem(string state, int id, ProjectItem sentProjectItem)
         {
 
-            if(id != sentProjectItem.ProjectItemID || userId != sentProjectItem.UserId)
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (id != sentProjectItem.ProjectItemID || userId != sentProjectItem.UserId)
             {
                 return BadRequest();
             }

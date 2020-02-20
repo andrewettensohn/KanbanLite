@@ -1,7 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using System.Security.Claims;
-@inject UserManager<IdentityUser> UserManager
-
+﻿
 @{
     ViewData["Title"] = "Story";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -73,18 +70,16 @@
 </body>
 <script>
 
-    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
-
     //PUT ACTIVE PROJECT STATUS
     function setActiveProject(itemId) {
 
         const item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId
+
         };
 
-        fetch(`api/ProjectItems/SetActiveProject/${userId}/${itemId}`, {
+        fetch(`api/ProjectItems/SetActiveProject/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

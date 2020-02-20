@@ -10,9 +10,13 @@ namespace TaskList_ToDo.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseSqlite("Data Source=kanbanLiteDb.db");
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<TodoItem> TodoItems { get; set; }

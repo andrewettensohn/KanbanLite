@@ -22,7 +22,9 @@ namespace TaskList_ToDo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("KanbanLiteInMemoryDB")
+                options.UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection"))
+                //options.UseInMemoryDatabase("KanbanLiteInMemoryDB")
                 //options.UseSqlServer(
                 //    Configuration.GetConnectionString("DefaultConnection"))
                 );
