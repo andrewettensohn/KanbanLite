@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -47,13 +48,14 @@ namespace ToDoApi.Controllers
         [HttpPut("{updateType}/{id}")]
         public async Task<ActionResult<TodoSubItem>> PutTodoSubItem(string updateType, int id, TodoSubItem sentTodoSubItem)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if(id != sentTodoSubItem.TodoSubItemID)
+            TodoSubItem todoSubItem = _context.TodoSubItems.Find(id);
+
+            if (id != sentTodoSubItem.TodoSubItemID || todoSubItem.UserId != userId)
             {
                 return BadRequest();
             }
-
-            TodoSubItem todoSubItem = _context.TodoSubItems.Find(id);
 
             if(updateType == "UpdateName")
             {
@@ -80,7 +82,23 @@ namespace ToDoApi.Controllers
             }
             else if(updateType == "UpdateStatus")
             {
-                todoSubItem.SubTaskStatus = sentTodoSubItem.SubTaskStatus;
+                if(sentTodoSubItem.SubTaskStatus == "In-Progress")
+                {
+                    TodoItem todoItem = _context.TodoItems.Find(todoSubItem.TodoItemID);
+
+                    todoItem.TaskStatus = "In-Progress";
+
+                    _context.Entry(todoItem).State = EntityState.Modified;
+
+                    _context.SaveChanges();
+
+                    todoSubItem.SubTaskStatus = sentTodoSubItem.SubTaskStatus;
+
+                }
+                else
+                {
+                    todoSubItem.SubTaskStatus = sentTodoSubItem.SubTaskStatus;
+                }
             }
             else
             {
@@ -113,7 +131,9 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<TodoSubItem>> PostTodoSubItem(TodoSubItem todoSubItem)
         {
 
-            if(todoSubItem.SubTaskName == "" || todoSubItem.SubTaskName is null)
+            todoSubItem.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (todoSubItem.SubTaskName == "" || todoSubItem.SubTaskName is null)
             {
                 todoSubItem.SubTaskName = "Untitled";
             }
@@ -128,8 +148,11 @@ namespace ToDoApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<TodoSubItem>> DeleteTodoSubItem(int id)
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var todoSubItem = await _context.TodoSubItems.FindAsync(id);
-            if(todoSubItem == null)
+
+            if(todoSubItem == null || todoSubItem.UserId != userId)
             {
                 return NotFound();
             }

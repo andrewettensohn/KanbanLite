@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using System.Security.Claims;
-@inject UserManager<IdentityUser> UserManager
+﻿
 @{
     ViewData["Title"] = "Projects";
 }
@@ -12,7 +10,7 @@
 
         <!--Create New Project-->
         <div class="d-flex justify-content-center">
-            <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseExample">
+            <button class="btn border-secondary text-white" type="button" data-toggle="collapse" data-target="#collapseInput">
                 <b>+ PROJECT</b>
             </button>
             <a class="btn border-secondary text-white" href="@Url.Content("~/Identity/Projects/ArchivedProject")">
@@ -22,7 +20,7 @@
 
         <br />
 
-        <div class="collapse" id="collapseExample">
+        <div class="collapse" id="collapseInput">
             <div class="card card-body bg-dark border-secondary">
                 <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
                     <div class="input-group mb-3 col-md-8">
@@ -102,7 +100,6 @@
 <script type="text/javascript">
 
     const uri = "api/ProjectItems";
-    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
     const boardUrl = "@Url.Content("~/Identity/Projects/Board")";
     const storyUrl = "@Url.Content("~/Identity/Projects/Story")";
 
@@ -157,12 +154,11 @@
         const item = {
 
             projectItemID: parseInt(itemId, 10),
-            //userId: userId,
             projectDescription: projectDescription
 
         };
 
-        fetch(uri + `/UpdateDescription/${itemId}`, {
+        fetch(`api/ProjectItems/UpdateProject/UpdateDescription/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -204,12 +200,11 @@
         var item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId,
             projectName: newProjectName,
 
             };
 
-        fetch(uri + `/UpdateName/${itemId}`, {
+        fetch(`api/ProjectItems/UpdateProject/UpdateName/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -239,10 +234,9 @@
         const item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId
         };
 
-        fetch(uri + `/SetActiveProject/${userId}/${itemId}`, {
+        fetch(uri + `/SetActiveProject/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -261,7 +255,7 @@
 
         $("#btnDeleteProject").on("click", function () {
 
-            fetch(uri + `/${userId}/${itemId}`, {
+            fetch(`api/ProjectItems/${itemId}`, {
                 method: 'DELETE'
             })
             .then(() => $(`#projectItemAccordion${itemId}`).remove())
@@ -279,11 +273,11 @@
 
             const item = {
 
-            projectItemID: parseInt(itemId, 10),
-            userId: userId
+                projectItemID: parseInt(itemId, 10),
+
             };
 
-            fetch(uri + `/archiveProject/${userId}/${itemId}`, {
+            fetch(uri + `/archiveProject/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
