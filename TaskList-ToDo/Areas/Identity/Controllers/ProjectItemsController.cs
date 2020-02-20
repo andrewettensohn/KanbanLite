@@ -57,8 +57,8 @@ namespace ToDoApi.Controllers
             return projectItem;
         }
 
-        // PUT: Projects/api/ProjectItems/userId/UpdateName/5
-        [HttpPut("{updateType}/{id}")]
+        // PUT: Projects/api/ProjectItems/UpdateName/5
+        [HttpPut("UpdateProject/{updateType}/{id}")]
         public async Task<IActionResult> PutProjectItem(string updateType, int id, ProjectItem sentProjectItem)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -154,19 +154,18 @@ namespace ToDoApi.Controllers
             return NoContent();
         }
 
-        //PUT Projects/api/ProjectItems/ArchiveProject/UserId/5
+        //PUT Projects/api/ProjectItems/archiveProject/5
         [HttpPut("{state}/{id}")]
         public async Task<ActionResult<ProjectItem>> ArchiveProjectItem(string state, int id, ProjectItem sentProjectItem)
         {
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var projectToArchive = await _context.ProjectItems.FindAsync(id);
 
-            if (id != sentProjectItem.ProjectItemID || userId != sentProjectItem.UserId)
+            if (id != sentProjectItem.ProjectItemID || userId != projectToArchive.UserId)
             {
                 return BadRequest();
             }
-
-            var projectToArchive = await _context.ProjectItems.FindAsync(id);
 
             if(state == "archiveProject")
             {
@@ -230,12 +229,14 @@ namespace ToDoApi.Controllers
         }
 
         // DELETE: Projects/api/ProjectItems/userId/5
-        [HttpDelete("{userId}/{id}")]
-        public async Task<ActionResult<ProjectItem>> DeleteProjectItem(int id, string userId)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ProjectItem>> DeleteProjectItem(int id)
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var projectItem = await _context.ProjectItems.FindAsync(id);
 
-            if (projectItem == null)
+            if (projectItem == null || projectItem.UserId != userId)
             {
                 return NotFound();
             }

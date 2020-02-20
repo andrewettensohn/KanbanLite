@@ -162,7 +162,7 @@
 
         };
 
-        fetch(uri + `/UpdateDescription/${itemId}`, {
+        fetch(`api/ProjectItems/UpdateProject/UpdateDescription/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -204,12 +204,11 @@
         var item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId,
             projectName: newProjectName,
 
             };
 
-        fetch(uri + `/UpdateName/${itemId}`, {
+        fetch(`api/ProjectItems/UpdateProject/UpdateName/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -239,10 +238,9 @@
         const item = {
 
             projectItemID: parseInt(itemId, 10),
-            userId: userId
         };
 
-        fetch(uri + `/SetActiveProject/${userId}/${itemId}`, {
+        fetch(uri + `/SetActiveProject/${itemId}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -261,7 +259,7 @@
 
         $("#btnDeleteProject").on("click", function () {
 
-            fetch(uri + `/${userId}/${itemId}`, {
+            fetch(`api/ProjectItems/${itemId}`, {
                 method: 'DELETE'
             })
             .then(() => $(`#projectItemAccordion${itemId}`).remove())
@@ -279,11 +277,11 @@
 
             const item = {
 
-            projectItemID: parseInt(itemId, 10),
-            userId: userId
+                projectItemID: parseInt(itemId, 10),
+
             };
 
-            fetch(uri + `/archiveProject/${userId}/${itemId}`, {
+            fetch(uri + `/archiveProject/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',

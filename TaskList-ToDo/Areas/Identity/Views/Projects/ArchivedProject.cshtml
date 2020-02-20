@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using System.Security.Claims;
-@inject UserManager<IdentityUser> UserManagere
+﻿
 @{
     ViewData["Title"] = "ArchivedProject";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -88,18 +86,16 @@
 
 <script>
 
-    const userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
-
 
     function unarchiveItem(itemId) {
 
             const item = {
 
-            projectItemID: parseInt(itemId, 10),
-            userId: userId
+                projectItemID: parseInt(itemId, 10),
+    
             };
 
-            fetch(`api/ProjectItems/unarchiveProject/${userId}/${itemId}`, {
+            fetch(`api/ProjectItems/unarchiveProject/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -117,7 +113,7 @@
 
         $("#btnDeleteProject").on("click", function () {
 
-            fetch(`api/ProjectItems/${userId}/${itemId}`, {
+            fetch(`api/ProjectItems/${itemId}`, {
                 method: 'DELETE'
             })
                 .then(() => $(`#projectItemAccordion${itemId}`).remove())
