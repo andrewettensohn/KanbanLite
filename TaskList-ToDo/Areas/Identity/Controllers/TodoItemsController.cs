@@ -56,7 +56,7 @@ namespace ToDoApi.Controllers
 
         // GET: Projects/TodoItems/Filter/UserId/11/Not Started
         [HttpGet("Filter/{projectID}/{filterStatus}")]
-        public async Task<ActionResult<List<TodoItem>>> GetTodoItemsFiltered(int projectID, string filterStatus)
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemsFiltered(int projectID, string filterStatus)
         {
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -66,6 +66,8 @@ namespace ToDoApi.Controllers
                 t.UserId == userId && 
                 t.TaskStatus == filterStatus
             ).ToListAsync();
+
+            var todoSubItems = await _context.TodoSubItems.Where(todoItem => todoItem.UserId == userId).ToListAsync();
 
             return todoItemsFiltered;
         }
