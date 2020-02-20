@@ -21,12 +21,9 @@ namespace ToDoApi.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        private readonly UserManager<IdentityUser> _userManager;
-
-        public TodoItemsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public TodoItemsController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         // GET: Projects/TodoItems/5
@@ -44,9 +41,10 @@ namespace ToDoApi.Controllers
         }
 
         // GET: Projects/TodoItems/Tasks/userId/7
-        [HttpGet("Tasks/{userId}/{projectID}")]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(string userId, int projectID)
+        [HttpGet("Tasks/{projectID}")]
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItemAndSubItems(int projectID)
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var todoItems = await _context.TodoItems.Where(project => project.UserId == userId && project.ProjectID == projectID).ToListAsync();
 
@@ -57,9 +55,11 @@ namespace ToDoApi.Controllers
         }
 
         // GET: Projects/TodoItems/Filter/UserId/11/Not Started
-        [HttpGet("Filter/{userId}/{projectID}/{filterStatus}")]
-        public async Task<ActionResult<List<TodoItem>>> GetTodoItemsInProgress(string userId, int projectID, string filterStatus)
+        [HttpGet("Filter/{projectID}/{filterStatus}")]
+        public async Task<ActionResult<List<TodoItem>>> GetTodoItemsFiltered(int projectID, string filterStatus)
         {
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var todoItemsFiltered = await _context.TodoItems.Where(t => 
                 t.ProjectID == projectID && 
@@ -91,12 +91,14 @@ namespace ToDoApi.Controllers
         [HttpPut("{updateType}/{id}")]
         public async Task<IActionResult> PutTodoItem(string updateType, int id, TodoItem sentTodoItem)
         {
-            if (id != sentTodoItem.TodoItemID)
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var todoItem = _context.TodoItems.Where(t => t.TodoItemID == id).First();
+
+            if (id != sentTodoItem.TodoItemID || todoItem.UserId != userId)
             {
                 return BadRequest();
             }
-
-            var todoItem = _context.TodoItems.Where(t => t.TodoItemID == id).First();
 
             if(updateType == "UpdateName")
             {
@@ -151,6 +153,8 @@ namespace ToDoApi.Controllers
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
         {
 
+            todoItem.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (todoItem.TaskName == "" || todoItem.TaskName is null)
             {
                 todoItem.TaskName = "Untitled";
@@ -174,9 +178,12 @@ namespace ToDoApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<TodoItem>> DeleteTodoItem(int id)
         {
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+
             var todoItem = await _context.TodoItems.FindAsync(id);
 
-            if (todoItem == null)
+            if (todoItem == null || todoItem.UserId != userId)
             {
                 return NotFound();
             }
